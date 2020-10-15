@@ -41,16 +41,16 @@ public class Pixiv {
         return new JSONObject(res.body().string());
     }
 
-    public JSONObject rank(PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
+    public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
 
         if (content.equals(PixivRankContent.Overall)) {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&format=json";
+            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
         }/*else if (content.equals(PixivRankContent.Novel)) {
-            url = "https://www.pixiv.net/novel/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&format=json";
+            url = "https://www.pixiv.net/novel/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
         }*/else {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&date=" + date + "&format=json";
+            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
         }
 
         Request.Builder rb = new Request.Builder().url(url);
@@ -63,19 +63,19 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new JSONObject(res.body().string());
+        return new PixivRank(res.body().string());
     }
 
-    public JSONObject rank(PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
+    public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
 
         if (content.equals(PixivRankContent.Overall)) {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&format=json";
+            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&p=" + page + "&format=json";
         }/*else if (content.equals(PixivRankContent.Novel)) {
-            url = "https://www.pixiv.net/novel/ranking.php?mode=" + mode.toString().toLowerCase() + "&format=json";
+            url = "https://www.pixiv.net/novel/ranking.php?mode=" + mode.toString().toLowerCase() + "&p=" + page + "&format=json";
         }*/else {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&format=json";
+            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&p=" + page + "&format=json";
         }
 
         Request.Builder rb = new Request.Builder().url(url);
@@ -88,11 +88,11 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new JSONObject(res.body().string());
+        return new PixivRank(res.body().string());
     }
 
-    public JSONObject rank(String phpSession) throws IOException {
-        return rank(PixivRankMode.Daily, PixivRankContent.Overall, phpSession);
+    public PixivRank rank(int page) throws IOException {
+        return rank(page, PixivRankMode.Daily, PixivRankContent.Overall);
     }
 
     public int[] getUserArtworks(int id, @NotNull PixivUserArtworkType type) throws IOException {

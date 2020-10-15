@@ -9,7 +9,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class PixivArtwork {
 
@@ -32,7 +36,7 @@ public class PixivArtwork {
      * @param id 作品ID
      */
     @NotNull
-    private String getArtworkPageHtml(int id) throws Exception {
+    public String getArtworkPageHtml(int id) throws Exception {
         String url;
         if (this instanceof PixivIllustration) {
             url = "https://www.pixiv.net/artworks/" + id;
@@ -143,6 +147,15 @@ public class PixivArtwork {
     public String getCreateDate(int id) throws Exception {
         JSONObject json = getArtworkPreloadData(id);
         return json.getJSONObject(getArtworkType()).getJSONObject(String.valueOf(id)).getString("createDate");
+    }
+
+    public Calendar getCreateDateCalendar(int id) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+        Date date = sdf.parse(getCreateDate(id));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.setTimeZone(TimeZone.getTimeZone("JST"));
+        return calendar;
     }
 
     public String getUploadDate(int id) throws Exception {

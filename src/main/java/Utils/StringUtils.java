@@ -8,4 +8,11 @@ public class StringUtils {
         return string.subSequence(fromIndex, toIndex).toString().replace(from, "");
     }
 
+    public static String addZeroChar(int i) {
+        String string = String.valueOf(i);
+        if (string.length() == 1) {
+            return "0" + string;
+        }else
+            return string;
+    }
 }

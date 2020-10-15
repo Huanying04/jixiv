@@ -44,7 +44,8 @@ public class PixivNovel extends PixivArtwork {
         return res.body().bytes();
     }
 
-    public void download(@NotNull File file, int id) throws Exception {
+    public void downloadCover(String pathname, int id) throws Exception {
+        File file = new File(pathname);
         byte[] image = getCover(id);
         if (file.getParentFile() != null)
             file.getParentFile().mkdirs();
@@ -52,10 +53,6 @@ public class PixivNovel extends PixivArtwork {
         FileOutputStream out = new FileOutputStream(file);
         out.write(image);
         out.close();
-    }
-
-    public void download(String filePath, int id) throws Exception {
-        download(new File(filePath), id);
     }
 
 }
