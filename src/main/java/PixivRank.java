@@ -1,5 +1,6 @@
 import Enums.PixivRankMode;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PixivRank {
@@ -37,5 +38,43 @@ public class PixivRank {
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    public int getPageResultCount() {
+        return rankJson.getJSONArray("contents").length();
+    }
+
+    private JSONArray getResultData() {
+        return rankJson.getJSONArray("contents");
+    }
+
+    public int[] getIDs() {
+        int[] id = new int[getPageResultCount()];
+        for (int i = 0; i < getPageResultCount(); i++) {
+            id[i] = Integer.parseInt(getResultData().getJSONObject(i).getString("id"));
+        }
+        return id;
+    }
+
+    public int getPage() {
+        return rankJson.getInt("page");
+    }
+
+    public int getTotal() {
+        return rankJson.getInt("rank_total");
+    }
+
+    public boolean hasNextPage() {
+        if (rankJson.get("next") instanceof Boolean && !rankJson.getBoolean("next"))
+            return false;
+        else
+            return true;
+    }
+
+    public boolean hasPreviousPage() {
+        if (rankJson.get("prev") instanceof Boolean && !rankJson.getBoolean("prev"))
+            return false;
+        else
+            return true;
     }
 }

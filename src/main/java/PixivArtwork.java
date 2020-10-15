@@ -61,6 +61,9 @@ public class PixivArtwork {
 
     public JSONObject getArtworkPreloadData(int id) throws Exception {
         String html = this.getArtworkPageHtml(id);
+        if (html.contains("あなたの環境からはpixivにアクセスできません。")) {
+            throw new IllegalAccessException("There's something wrong with your PHP Session.");
+        }
         String from = "<meta name=\"preload-data\" id=\"meta-preload-data\" content='";
         String to = "'>";
 

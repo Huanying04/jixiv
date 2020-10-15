@@ -42,8 +42,7 @@ public class UserAgentUtils {
     };
 
     public static String getRandomUserAgent() {
-        //return userAgent[ThreadLocalRandom.current().nextInt(0, userAgent.length - 1)];
-        return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36";
+        return userAgent[ThreadLocalRandom.current().nextInt(0, userAgent.length - 1)];
     }
 
 }

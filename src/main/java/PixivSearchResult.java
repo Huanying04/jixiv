@@ -11,7 +11,7 @@ public class PixivSearchResult {
         this.dataType = dataType;
     }
 
-    private int getPageResultCount() {
+    public int getPageResultCount() {
         return searchResultJson.getJSONObject("body").getJSONObject(dataType).getJSONArray("data").length();
     }
 
