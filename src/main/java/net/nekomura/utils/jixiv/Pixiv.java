@@ -1,7 +1,8 @@
-import Enums.*;
-import Utils.Sort;
-import Utils.UserAgentUtils;
-import com.google.common.base.Charsets;
+package net.nekomura.utils.jixiv;
+
+import net.nekomura.utils.jixiv.Enums.*;
+import net.nekomura.utils.jixiv.Utils.Sort;
+import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
 import com.google.common.collect.Iterators;
 import com.google.common.net.UrlEscapers;
 import okhttp3.OkHttpClient;
@@ -11,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 public class Pixiv {
 

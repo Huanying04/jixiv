@@ -1,4 +1,6 @@
-import Utils.UserAgentUtils;
+package net.nekomura.utils.jixiv;
+
+import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -43,7 +45,7 @@ public class PixivArtwork {
         }else if (this instanceof PixivNovel) {
             url = "https://www.pixiv.net/novel/show.php?id=" + id;
         }else {
-            throw new Exception("The variable must be a PixivImage or a PixivNovel.");
+            throw new Exception("The variable must be a PixivImage or a net.nekomura.utils.jixiv.PixivNovel.");
         }
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -83,7 +85,7 @@ public class PixivArtwork {
         }else if (this instanceof PixivNovel) {
             return "novel";
         }else {
-            throw new Exception("The variable must be a PixivImage or a PixivNovel.");
+            throw new Exception("The variable must be a PixivImage or a net.nekomura.utils.jixiv.PixivNovel.");
         }
     }
 

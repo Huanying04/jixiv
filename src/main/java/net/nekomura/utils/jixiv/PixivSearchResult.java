@@ -1,10 +1,12 @@
+package net.nekomura.utils.jixiv;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PixivSearchResult {
 
-    private JSONObject searchResultJson;
-    private String dataType;
+    private final JSONObject searchResultJson;
+    private final String dataType;
 
     public PixivSearchResult(String searchResultJson, String dataType) {
         this.searchResultJson = new JSONObject(searchResultJson);

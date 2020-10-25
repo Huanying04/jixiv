@@ -1,7 +1,9 @@
-import Enums.PixivIllustrationType;
-import Enums.PixivImageUrlType;
-import Enums.PixivUserArtworkType;
-import Utils.StringUtils;
+package net.nekomura.utils.jixiv;
+
+import net.nekomura.utils.jixiv.Enums.PixivIllustrationType;
+import net.nekomura.utils.jixiv.Enums.PixivImageUrlType;
+import net.nekomura.utils.jixiv.Enums.PixivUserArtworkType;
+import net.nekomura.utils.jixiv.Utils.StringUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -10,10 +12,6 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 public class PixivIllustration extends PixivArtwork {
 

@@ -1,3 +1,5 @@
+package net.nekomura.utils.jixiv;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;

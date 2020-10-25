@@ -1,4 +1,4 @@
-package Utils;
+package net.nekomura.utils.jixiv.Utils;
 
 public class StringUtils {
 

@@ -1,6 +1,4 @@
-package Utils;
-
-import java.util.Arrays;
+package net.nekomura.utils.jixiv.Utils;
 
 public class Sort {
 
