@@ -168,6 +168,15 @@ public class PixivArtwork {
         return json.getJSONObject(getArtworkType()).getJSONObject(String.valueOf(id)).getString("uploadDate");
     }
 
+    public Calendar getUploadDateCalendar(int id) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+        Date date = sdf.parse(getUploadDate(id));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.setTimeZone(TimeZone.getTimeZone("JST"));
+        return calendar;
+    }
+
     public String getAuthorName(int id) throws Exception {
         JSONObject json = getArtworkPreloadData(id);
         return json.getJSONObject(getArtworkType()).getJSONObject(String.valueOf(id)).getString("userName");
