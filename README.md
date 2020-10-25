@@ -17,15 +17,15 @@
 
 (可暫時用jar代替)
 # 使用方法
-## PHPSESSION
-由於pixiv防爬蟲防得很嚴或是我的程式能力很弱，目前做不出帳號密碼模擬登入。可暫時藉由PHPSESSION來模擬登入。
+## PHPSESSID
+由於pixiv防爬蟲防得很嚴或是我的程式能力很弱，目前做不出帳號密碼模擬登入。可暫時藉由PHPSESSID來模擬登入。
 
 ![phpsession](https://github.com/Huanying04/Huanying04/blob/main/phpsession.png)
 
-在瀏覽器中找到pixiv cookie中的PHPSESSION即可用之來模擬登入。
+在瀏覽器中找到pixiv cookie中的PHPSESSID即可用之來模擬登入。
 ## 獲取插畫/漫畫信息
 ```java
-String phpSession = ""; //pixiv登入後cookie裡的PHPSESSION
+String phpSession = ""; //pixiv登入後cookie裡的PHPSESSID
 int id = 85209753; //插畫id
 PixivIllustration pi = new PixivIllustration(phpSession);
 //獲取插畫標題
