@@ -51,9 +51,9 @@ int id = 11387000; //小說id
 PixivNovel pn = new PixivNovel(phpSession);
 //獲取小說標題
 String title = pn.getTitle(id);
-//獲取插畫簡介
+//獲取小說簡介
 String description = pn.getRawDescription(id);
-//獲取插畫所有標籤名字
+//獲取小說所有標籤名字
 String[] tags = pn.getTags(id);
 //獲取頁數
 int pageCount = pn.getPageCount(id);
