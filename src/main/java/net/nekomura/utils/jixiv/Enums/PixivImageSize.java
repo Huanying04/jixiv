@@ -1,6 +1,6 @@
 package net.nekomura.utils.jixiv.Enums;
 
-public enum PixivImageUrlType {
+public enum PixivImageSize {
     Mini,
     Thumb,
     Small,

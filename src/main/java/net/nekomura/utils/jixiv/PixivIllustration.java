@@ -1,7 +1,7 @@
 package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.Enums.PixivIllustrationType;
-import net.nekomura.utils.jixiv.Enums.PixivImageUrlType;
+import net.nekomura.utils.jixiv.Enums.PixivImageSize;
 import net.nekomura.utils.jixiv.Enums.PixivUserArtworkType;
 import net.nekomura.utils.jixiv.Utils.StringUtils;
 import okhttp3.OkHttpClient;
@@ -25,7 +25,7 @@ public class PixivIllustration extends PixivArtwork {
     }
 
     @NotNull
-    private String getImageUrl(int id, int page, @NotNull PixivImageUrlType type) throws Exception {
+    private String getImageUrl(int id, int page, @NotNull PixivImageSize type) throws Exception {
         JSONObject json = getArtworkPreloadData(id);
         String pageZero = json.getJSONObject("illust").getJSONObject(String.valueOf(id)).getJSONObject("urls").getString(type.toString().toLowerCase());
         return pageZero.replace(id + "_p0", id + "_p" + page);
@@ -61,10 +61,10 @@ public class PixivIllustration extends PixivArtwork {
     }
 
     public byte[] getImage(int id, int page) throws Exception {
-        return getImage(id, page, PixivImageUrlType.Original);
+        return getImage(id, page, PixivImageSize.Original);
     }
 
-    public byte[] getImage(int id, int page, PixivImageUrlType type) throws Exception {
+    public byte[] getImage(int id, int page, PixivImageSize type) throws Exception {
 
         if (page > getPageCount(id) - 1)
             throw new IllegalArgumentException("The page is greater than the max page of the artwork .");
@@ -103,11 +103,11 @@ public class PixivIllustration extends PixivArtwork {
     }
 
     public String getImageFileFormat(int id, int page) throws Exception {
-        String[] filename = getImageUrl(id, page, PixivImageUrlType.Original).split("\\.");
+        String[] filename = getImageUrl(id, page, PixivImageSize.Original).split("\\.");
         return filename[filename.length - 1];
     }
 
-    public void download(String pathname, int id, int page, PixivImageUrlType type) throws Exception {
+    public void download(String pathname, int id, int page, PixivImageSize type) throws Exception {
         File file = new File(pathname);
         byte[] image = getImage(id, page, type);
         if (file.getParentFile() != null)
@@ -119,14 +119,14 @@ public class PixivIllustration extends PixivArtwork {
     }
 
     public void download(String pathname, int id, int page) throws Exception {
-        download(pathname, id, page, PixivImageUrlType.Original);
+        download(pathname, id, page, PixivImageSize.Original);
     }
 
     public void download(String pathname, int id) throws Exception {
-        download(pathname, id, 0, PixivImageUrlType.Original);
+        download(pathname, id, 0, PixivImageSize.Original);
     }
 
-    public void downloadAll(File folder, int id, PixivImageUrlType type) throws Exception {
+    public void downloadAll(File folder, int id, PixivImageSize type) throws Exception {
         int pageCount = getPageCount(id);
         folder.mkdirs();
 
@@ -139,18 +139,18 @@ public class PixivIllustration extends PixivArtwork {
         }
     }
 
-    public void downloadAll(String folderPath, int id, PixivImageUrlType type) throws Exception {
+    public void downloadAll(String folderPath, int id, PixivImageSize type) throws Exception {
         downloadAll(new File(folderPath), id, type);
     }
 
-    public void downloadUserAll(File folder, int userId, PixivImageUrlType type) throws Exception {
+    public void downloadUserAll(File folder, int userId, PixivImageSize type) throws Exception {
         int[] artworks = new Pixiv(getPhpSession()).getUserArtworks(userId, PixivUserArtworkType.Illusts);
         for (int id: artworks) {
             downloadAll(folder, id, type);
         }
     }
 
-    public void downloadUserAll(String folderPath, int userId, PixivImageUrlType type) throws Exception {
+    public void downloadUserAll(String folderPath, int userId, PixivImageSize type) throws Exception {
         int[] artworks = new Pixiv(getPhpSession()).getUserArtworks(userId, PixivUserArtworkType.Illusts);
         for (int id: artworks) {
             downloadAll(folderPath, id, type);
