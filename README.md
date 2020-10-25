@@ -88,14 +88,14 @@ int id = 85209753;  //插畫id
 PixivIllustration pi = new PixivIllustration(phpSession);
 pi.download(path, id);  //將id為85209753的插畫的第0頁下載到path
 ```
-## 下載插畫/漫畫所有頁數
+### 所有頁數
 ```java
 String path = "";  //資料夾位置
 int id = 85207001;  //插畫id
 PixivIllustration pi = new PixivIllustration(phpSession);
 pi.downloadAll(path, id, PixivImageSize.Original);  //將id中的所有插畫都下載到path裡
 ```
-## 下載使用者所有插畫
+### 使用者所有插畫
 ```java
 String path = "";  //資料夾位置
 int id = 5445450;  //使用者id
