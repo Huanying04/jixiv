@@ -159,4 +159,22 @@ String date = "20201001";  //日期
 PixivRank pr = p.rank(page, mode, content, date);
 ```
 ## 搜尋
-(待補充)
+可使用下面方法關鍵字搜尋插畫。
+```java
+Pixiv p = new Pixiv(phpSession);
+String keyword = "";  //關鍵字
+int page = 1;  //頁碼
+PixivSearchResult result = p.search(keyword, page);
+```
+或是使用下面方法搜尋。
+```java
+Pixiv p = new Pixiv(phpSession);
+String keyword = "";  //關鍵字
+int page = 1;  //頁碼
+PixivSearchArtistType artistType = PixivSearchArtistType.Illustrations;  //搜尋作品類別
+PixivSearchOrder order = PixivSearchOrder.NEW_TO_OLD;  //排序方式
+PixivSearchMode mode = PixivSearchMode.ALL;  //搜尋作品年齡分類
+PixivSearchSMode sMode = PixivSearchSMode.S_TAG;  //關鍵字搜尋方式
+PixivSearchType type = PixivSearchType.Illust;  //搜尋作品類別
+PixivSearchResult result = p.search(keyword, page, artistType, order, mode, sMode, type);
+```
