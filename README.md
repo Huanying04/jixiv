@@ -125,6 +125,23 @@ int id = 11387000; //小說id
 PixivNovel pn = new PixivNovel(phpSession);
 pn.downloadCover(path, id);
 ```
+## 作品是否為R-18或R-18G
+如果要判斷作品為成人限制作品，可使用下面方法判斷。
+```java
+PixivArtwork.isNSFW(id);
+```
+範例：
+```java
+PixivIllustration pi = new PixivIllustration(phpSession);  //插畫或漫畫
+PixivNovel pn = new PixivNovel(phpSession);  //小說
+pi.isNSFW(id);  //作品(插畫或漫畫)id是否為成人限制
+pn.isNSFW(id);  //作品(小說)id是否為成人限制
+```
+如果只要判斷R-18或R-18G則為
+```java
+PixivArtwork.isR18(id);  //作品id是否為R-18
+PixivArtwork.isR18G(id);  //作品id是否為R-18-G
+```
 ## 排行榜
 可使用下面的方式獲取今日綜合排行榜
 ```java
