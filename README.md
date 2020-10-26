@@ -8,9 +8,11 @@
 * 下載插畫
 * 下載動圖(zip 內含動圖所有影格)
 * 下載漫畫
-* 下載畫師所有插畫/漫畫
+* 下載畫師所有作品
 * 下載小說封面
 * 獲取小說內容
+* 排行榜
+* 搜尋
 * etc.
 # 配置方法
 (尚無，將會在完善後公開至Maven Central)
@@ -123,3 +125,21 @@ int id = 11387000; //小說id
 PixivNovel pn = new PixivNovel(phpSession);
 pn.downloadCover(path, id);
 ```
+## 排行榜
+可使用下面的方式獲取今日綜合排行榜
+```java
+Pixiv p = new Pixiv(phpSession);
+int page = 1;  //頁碼
+PixivRank pr = p.rank(page);
+```
+或是使用下列方法獲取指定排行榜
+```java
+Pixiv p = new Pixiv(phpSession);
+int page = 1;  //頁碼
+PixivRankMode mode = PixivRankMode.Daily;  //排行榜類別
+PixivRankContent content = PixivRankContent.Illust;  //作品形式
+String date = "20201001";  //日期
+PixivRank pr = p.rank(page, mode, content, date);
+```
+## 搜尋
+(待補充)
