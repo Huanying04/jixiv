@@ -1,6 +1,6 @@
 package net.nekomura.utils.jixiv.Enums;
 
-public enum PixivUserArtworkType {
+public enum PixivArtworkType {
     Illusts,
     Manga,
     Novels

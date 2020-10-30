@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.nekomura.utils.jixiv</groupId>
+    <groupId>net.nekomura.utils</groupId>
     <artifactId>jixiv</artifactId>
-    <version>0.0.1.0</version>
+    <version>0.0.1.1</version>
     <build>
         <plugins>
             <plugin>
@@ -19,6 +19,10 @@
             </plugin>
         </plugins>
     </build>
+
+    <name>jixiv</name>
+    <description>A application that can be uses to crawl Pixiv illustration and novel info.</description>
+    <url>https://github.com/Huanying04/jixiv</url>
 
     <dependencies>
         <dependency>
@@ -48,6 +52,26 @@
         </dependency>
     </dependencies>
 
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
+    <developers>
+        <developer>
+            <name>Nekomura Huanying</name>
+            <email>ken911230@gmail.com</email>
+            <organization>TEAM NEKOMURA</organization>
+            <organizationUrl>https://github.com/Huanying04</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/Huanying04/jixiv.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Huanying04/jixiv.git</developerConnection>
+        <url>https://github.com/Huanying04/jixiv</url>
+    </scm>
 
 </project>

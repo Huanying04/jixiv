@@ -11,18 +11,46 @@ import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Pixiv {
 
     private String phpSession;
+    private String userAgent;
 
     public Pixiv(String phpSession) {
         this.phpSession = phpSession;
     }
 
+    public Pixiv(String phpSession, String userAgent) {
+        this.phpSession = phpSession;
+        this.userAgent = userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
     public void setPhpSession(String phpSession) {
         this.phpSession = phpSession;
+    }
+
+    public String getPhpSession() {
+        return phpSession;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    private String userAgent() {
+        if (userAgent.isEmpty()) {
+            return UserAgentUtils.getRandomUserAgent();
+        }else {
+            return userAgent;
+        }
     }
 
     public JSONObject getUserProfileInfo(int id) throws IOException {
@@ -31,13 +59,27 @@ public class Pixiv {
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", UserAgentUtils.getRandomUserAgent());
+        rb.addHeader("user-agent", userAgent());
 
         rb.method("GET", null);
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new JSONObject(res.body().string());
+        return new JSONObject(Objects.requireNonNull(res.body()).string());
+    }
+
+    public void downloadUserAllIllustration(File folder, int userId, PixivImageSize type) throws Exception {
+        int[] artworks = getUserArtworks(userId, PixivArtworkType.Illusts);
+        for (int id: artworks) {
+            new PixivIllustration(phpSession).get(id).downloadAll(folder, type);
+        }
+    }
+
+    public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize type) throws Exception {
+        int[] artworks = getUserArtworks(userId, PixivArtworkType.Illusts);
+        for (int id: artworks) {
+            new PixivIllustration(phpSession).get(id).downloadAll(folderPath, type);
+        }
     }
 
     public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
@@ -56,13 +98,13 @@ public class Pixiv {
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", UserAgentUtils.getRandomUserAgent());
+        rb.addHeader("user-agent", userAgent());
 
         rb.method("GET", null);
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new PixivRank(res.body().string());
+        return new PixivRank(Objects.requireNonNull(res.body()).string());
     }
 
     public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
@@ -81,20 +123,20 @@ public class Pixiv {
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", UserAgentUtils.getRandomUserAgent());
+        rb.addHeader("user-agent", userAgent());
 
         rb.method("GET", null);
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new PixivRank(res.body().string());
+        return new PixivRank(Objects.requireNonNull(res.body()).string());
     }
 
     public PixivRank rank(int page) throws IOException {
         return rank(page, PixivRankMode.Daily, PixivRankContent.Overall);
     }
 
-    public int[] getUserArtworks(int id, @NotNull PixivUserArtworkType type) throws IOException {
+    public int[] getUserArtworks(int id, @NotNull PixivArtworkType type) throws IOException {
         JSONObject json = getUserProfileInfo(id);
         int keySize = Iterators.size(json.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys());
         int[] artworks = new int[keySize];
@@ -120,7 +162,7 @@ public class Pixiv {
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", UserAgentUtils.getRandomUserAgent());
+        rb.addHeader("user-agent", userAgent());
 
         rb.method("GET", null);
 
@@ -144,7 +186,7 @@ public class Pixiv {
         }
 
 
-        return new PixivSearchResult(res.body().string(), resultType);
+        return new PixivSearchResult(Objects.requireNonNull(res.body()).string(), resultType);
     }
 
     public PixivSearchResult search(String keywords, int page) throws IOException {
