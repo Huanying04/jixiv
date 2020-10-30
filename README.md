@@ -1,4 +1,4 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.huanying04.utils/jixiv/badge.svg)](https://search.maven.org/artifact/com.github.huanying04.utils/jixiv)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.huanying04.utils/jixiv/badge.svg?gav=true)](https://search.maven.org/artifact/com.github.huanying04.utils/jixiv)
 # jixiv
 用來實現pixiv爬蟲等的Java框架
 
