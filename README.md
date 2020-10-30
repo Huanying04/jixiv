@@ -16,6 +16,22 @@
 * etc.
 # 配置方法
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.huanying04.utils/jixiv/badge.svg)](https://search.maven.org/artifact/com.github.huanying04.utils/jixiv)
+## Maven
+```xml
+<dependencies>
+  <dependency>
+    <groupId>com.github.huanying04.utils</groupId>
+    <artifactId>jixiv</artifactId>
+    <version>0.0.1.2</version>
+  </dependency>
+</dependencies>
+```
+## Gradle
+```gradle
+dependencies {
+  compile group: 'com.github.huanying04.utils', name: 'jixiv', version: '0.0.1.2'
+}
+```
 # 使用方法
 ## PHPSESSID
 由於pixiv防爬蟲防得很嚴或是我的程式能力很弱，目前做不出帳號密碼模擬登入。可暫時藉由PHPSESSID來模擬登入。
