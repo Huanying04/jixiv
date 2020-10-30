@@ -15,9 +15,7 @@
 * 搜尋
 * etc.
 # 配置方法
-(尚無，將會在完善後公開至Maven Central)
-
-(可暫時用jar代替)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.huanying04.utils/jixiv/badge.svg)](https://search.maven.org/artifact/com.github.huanying04.utils/jixiv)
 # 使用方法
 ## PHPSESSID
 由於pixiv防爬蟲防得很嚴或是我的程式能力很弱，目前做不出帳號密碼模擬登入。可暫時藉由PHPSESSID來模擬登入。
