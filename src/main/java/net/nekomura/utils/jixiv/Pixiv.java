@@ -1,9 +1,7 @@
 package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.Enums.*;
-import net.nekomura.utils.jixiv.Utils.Sort;
 import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
-import com.google.common.collect.Iterators;
 import com.google.common.net.UrlEscapers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -53,7 +51,7 @@ public class Pixiv {
         }
     }
 
-    public JSONObject getUserProfileInfo(int id) throws IOException {
+    private JSONObject getUserProfile(int id) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "/profile/all");
 
@@ -64,19 +62,61 @@ public class Pixiv {
         rb.method("GET", null);
 
         Response res = okHttpClient.newCall(rb.build()).execute();
-
+        res.close();
         return new JSONObject(Objects.requireNonNull(res.body()).string());
     }
 
+    private JSONObject getUserPreloadData(int id) throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/users/" + id);
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
+        rb.addHeader("user-agent", userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+        res.close();
+
+        String from = "<meta name=\"preload-data\" id=\"meta-preload-data\" content='";
+        String to = "'>";
+
+        String html = Objects.requireNonNull(res.body()).string();
+
+        int fromIndex = html.indexOf(from);
+        if (fromIndex == -1)
+            throw new IllegalArgumentException("Work has been deleted or the ID does not exist.");
+        int toIndex = html.indexOf(to, fromIndex);
+        String targetJsonString = html.subSequence(fromIndex + from.length(), toIndex).toString().replace(from, "");
+        return new JSONObject(targetJsonString);
+    }
+
+    public PixivUserProfileInfo getUserInfo(int id) throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "/profile/all");
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
+        rb.addHeader("user-agent", userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+        res.close();
+
+        return new PixivUserProfileInfo(id, getUserProfile(id), getUserPreloadData(id));
+    }
+
     public void downloadUserAllIllustration(File folder, int userId, PixivImageSize type) throws Exception {
-        int[] artworks = getUserArtworks(userId, PixivArtworkType.Illusts);
+        int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
             new PixivIllustration(phpSession).get(id).downloadAll(folder, type);
         }
     }
 
     public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize type) throws Exception {
-        int[] artworks = getUserArtworks(userId, PixivArtworkType.Illusts);
+        int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
             new PixivIllustration(phpSession).get(id).downloadAll(folderPath, type);
         }
@@ -134,18 +174,6 @@ public class Pixiv {
 
     public PixivRank rank(int page) throws IOException {
         return rank(page, PixivRankMode.Daily, PixivRankContent.Overall);
-    }
-
-    public int[] getUserArtworks(int id, @NotNull PixivArtworkType type) throws IOException {
-        JSONObject json = getUserProfileInfo(id);
-        int keySize = Iterators.size(json.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys());
-        int[] artworks = new int[keySize];
-
-        for (int i = 0; i < keySize; i++) {
-            artworks[i] = Integer.parseInt(Iterators.get(json.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys(), i));
-        }
-
-        return Sort.bubbleNegativeWay(artworks);
     }
 
     public PixivSearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
