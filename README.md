@@ -22,14 +22,14 @@
   <dependency>
     <groupId>com.github.huanying04.utils</groupId>
     <artifactId>jixiv</artifactId>
-    <version>0.0.1.2</version>
+    <version>VERSION</version>
   </dependency>
 </dependencies>
 ```
 ## Gradle
 ```gradle
 dependencies {
-  compile group: 'com.github.huanying04.utils', name: 'jixiv', version: '0.0.1.2'
+  compile group: 'com.github.huanying04.utils', name: 'jixiv', version: 'VERSION'
 }
 ```
 # 使用方法
