@@ -96,7 +96,7 @@ public class Pixiv {
      * 獲取用戶資料物件
      * @param id 使用者id
      * @return 用戶資料物件
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public PixivUserProfileInfo getUserInfo(int id) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -119,7 +119,7 @@ public class Pixiv {
      * @param folder 資料夾位置
      * @param userId 用戶id
      * @param size 圖片大小
-     * @throws Exception
+     * @throws Exception 獲取失敗
      */
     public void downloadUserAllIllustration(File folder, int userId, PixivImageSize size) throws Exception {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
@@ -133,7 +133,7 @@ public class Pixiv {
      * @param folderPath 資料夾位置
      * @param userId 用戶id
      * @param size 圖片大小
-     * @throws Exception
+     * @throws Exception 獲取失敗
      */
     public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize size) throws Exception {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
@@ -149,7 +149,7 @@ public class Pixiv {
      * @param content 作品類別
      * @param date 排行榜日期
      * @return 排行榜物件
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -182,7 +182,7 @@ public class Pixiv {
      * @param mode 篩選模式
      * @param content 作品類別
      * @return 排行榜物件
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -213,7 +213,7 @@ public class Pixiv {
      * 獲取排行榜
      * @param page 頁碼
      * @return 排行榜物件
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public PixivRank rank(int page) throws IOException {
         return rank(page, PixivRankMode.Daily, PixivRankContent.Overall);
@@ -229,7 +229,7 @@ public class Pixiv {
      * @param sMode 關鍵字搜尋方式
      * @param type 搜尋作品類別
      * @return 搜尋結果物件
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public PixivSearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
         String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
@@ -277,7 +277,7 @@ public class Pixiv {
      * @param keywords 關鍵字
      * @param page 頁碼
      * @return 搜尋結果物件
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public PixivSearchResult search(String keywords, int page) throws IOException {
         return search(keywords, page, PixivSearchArtworkType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);

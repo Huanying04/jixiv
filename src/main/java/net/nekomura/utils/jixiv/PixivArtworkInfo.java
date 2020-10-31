@@ -177,7 +177,7 @@ public class PixivArtworkInfo {
     /**
      * 獲取作品創建日期
      * @return 作品創建日期
-     * @throws ParseException
+     * @throws ParseException 解讀日期錯誤
      */
     public Calendar getCreateDateCalendar() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
@@ -199,7 +199,7 @@ public class PixivArtworkInfo {
     /**
      * 獲取作品上傳日期
      * @return 作品上傳日期
-     * @throws ParseException
+     * @throws ParseException 解讀日期錯誤
      */
     public Calendar getUploadDateCalendar() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");

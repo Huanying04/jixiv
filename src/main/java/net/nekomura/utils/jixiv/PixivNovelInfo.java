@@ -45,7 +45,7 @@ public class PixivNovelInfo extends PixivArtworkInfo {
     /**
      * 獲取封面圖片
      * @return 封面圖片的byte array
-     * @throws Exception
+     * @throws Exception 獲取失敗
      */
     public byte[] getCover() throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -60,7 +60,7 @@ public class PixivNovelInfo extends PixivArtworkInfo {
     /**
      * 下載封面圖片
      * @param pathname 儲存位置
-     * @throws Exception
+     * @throws Exception 下載失敗
      */
     public void downloadCover(String pathname) throws Exception {
         File file = new File(pathname);

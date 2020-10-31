@@ -63,7 +63,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
     /**
      * 獲取該插畫作品之第一頁圖片
      * @return 該插畫作品之第一頁圖片的byte array
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public byte[] getImage() throws IOException {
         return getImage(0);
@@ -73,7 +73,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
      * 獲取該插畫作品之指定頁圖片
      * @param page 指定頁碼
      * @return 該插畫作品之指定頁圖片的byte array
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public byte[] getImage(int page) throws IOException {
         return getImage(page, PixivImageSize.Original);
@@ -84,10 +84,9 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
      * @param page 指定頁碼
      * @param size 圖片大小
      * @return 該插畫作品之指定頁圖片的byte array
-     * @throws IllegalArgumentException
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
-    public byte[] getImage(int page, PixivImageSize size) throws IllegalArgumentException, IOException {
+    public byte[] getImage(int page, PixivImageSize size) throws IOException {
         if (page > getPageCount() - 1)
             throw new IllegalArgumentException("The page is greater than the max page of the artwork .");
 
@@ -103,8 +102,8 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
     /**
      * 獲取該插畫動圖作品之所有幀之圖片之壓縮檔
      * @return 該插畫動圖作品之所有幀之圖片之壓縮檔的byte array
-     * @throws ParseException
-     * @throws IOException
+     * @throws ParseException 獲取動圖url失敗
+     * @throws IOException 獲取失敗
      */
     public byte[] getUgoiraZip() throws ParseException, IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -137,7 +136,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
     /**
      * 獲取該插畫作品之圖片格式
      * @param page 指定頁碼
-     * @return
+     * @return 插畫作品之圖片格式
      */
     public String getImageFileFormat(int page) {
         String[] filename = getImageUrl(page, PixivImageSize.Original).split("\\.");
@@ -149,7 +148,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
      * @param pathname 儲存位置
      * @param page 指定頁碼
      * @param size 圖片大小
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public void download(String pathname, int page, PixivImageSize size) throws IOException {
         File file = new File(pathname);
@@ -166,7 +165,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
      * 下載插畫圖片指定頁碼
      * @param pathname 儲存位置
      * @param page 指定頁碼
-     * @throws Exception
+     * @throws Exception 下載失敗
      */
     public void download(String pathname, int page) throws Exception {
         download(pathname, page, PixivImageSize.Original);
@@ -175,7 +174,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
     /**
      * 下載插畫首張圖片
      * @param pathname 儲存位置
-     * @throws Exception
+     * @throws Exception 下載失敗
      */
     public void download(String pathname) throws Exception {
         download(pathname, 0, PixivImageSize.Original);
@@ -185,7 +184,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
      * 下載插畫所有頁圖片
      * @param folder 儲存資料夾
      * @param size 圖片大小
-     * @throws IOException
+     * @throws IOException 下載失敗
      */
     public void downloadAll(File folder, PixivImageSize size) throws IOException {
         int pageCount = getPageCount();
@@ -204,7 +203,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
      * 下載插畫所有頁圖片
      * @param folderPath 儲存資料夾位置
      * @param type 圖片大小
-     * @throws IOException
+     * @throws IOException 下載失敗
      */
     public void downloadAll(String folderPath, PixivImageSize type) throws IOException {
         downloadAll(new File(folderPath), type);
@@ -213,7 +212,7 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
     /**
      * 下載該插畫動圖作品之所有幀之圖片之壓縮檔
      * @param pathname 儲存位置
-     * @throws Exception
+     * @throws Exception 下載失敗
      */
     public void downloadUgoiraZip(String pathname) throws Exception {
         if (!getIllustrationType().equals(PixivIllustrationType.Ugoira)) {

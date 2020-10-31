@@ -2,8 +2,8 @@ package net.nekomura.utils.jixiv.Utils;
 
 public class StringUtils {
     /**
-     * 使數字永遠保持兩個數字<br/>
-     * 如1會變成01<br/>
+     * 使數字永遠保持兩個數字<br>
+     * 如1會變成01<br>
      * 而11則保持11
      * @param i 欲保持兩位數字的數字
      * @return 兩位數字

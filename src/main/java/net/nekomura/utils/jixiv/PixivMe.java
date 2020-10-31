@@ -51,7 +51,7 @@ public class PixivMe {
      * 已關注用戶的最新作品
      * @param page 頁碼
      * @return 關注用戶的最新作品資訊物件
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public PixivFollowingNewWork getFollowingNewIllustrationWorks(int page) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();

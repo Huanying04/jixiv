@@ -29,7 +29,7 @@ public class PixivUserProfileInfo {
      * 獲取使用者指定作品類型所有作品id
      * @param type 作品類型
      * @return 使用者指定作品類型所有作品id
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
     public int[] getUserArtworks(@NotNull PixivArtworkType type) throws IOException {
         if (profile.getJSONObject("body").get(type.name().toLowerCase()) instanceof JSONObject) {
@@ -81,10 +81,9 @@ public class PixivUserProfileInfo {
     /**
      * 獲取使用者頭像
      * @return 使用者頭像
-     * @throws IllegalArgumentException
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
-    public byte[] getAvatarSmall() throws IllegalArgumentException, IOException {
+    public byte[] getAvatarSmall() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(getAvatarSmallUrl());
         rb.addHeader("Referer", "https://www.pixiv.net/artworks");
@@ -97,10 +96,9 @@ public class PixivUserProfileInfo {
     /**
      * 獲取使用者大頭像
      * @return 使用者大頭像
-     * @throws IllegalArgumentException
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
-    public byte[] getAvatarBig() throws IllegalArgumentException, IOException {
+    public byte[] getAvatarBig() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(getAvatarBigUrl());
         rb.addHeader("Referer", "https://www.pixiv.net/artworks");
@@ -157,10 +155,9 @@ public class PixivUserProfileInfo {
     /**
      * 獲取用戶頁背景圖片
      * @return 用戶頁背景圖片
-     * @throws IllegalArgumentException
-     * @throws IOException
+     * @throws IOException 獲取失敗
      */
-    public byte[] getBackground() throws IllegalArgumentException, IOException {
+    public byte[] getBackground() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(getBackgroundUrl());
         rb.addHeader("Referer", "https://www.pixiv.net/artworks");
