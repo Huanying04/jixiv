@@ -1,6 +1,6 @@
 package net.nekomura.utils.jixiv.Enums;
 
-public enum PixivSearchArtistType {
+public enum PixivSearchArtworkType {
     /**
      * 全部
      */

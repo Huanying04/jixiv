@@ -46,7 +46,7 @@ public class Pixiv {
     }
 
     private String userAgent() {
-        if (userAgent.isEmpty()) {
+        if (userAgent == null ||userAgent.isEmpty()) {
             return UserAgentUtils.getRandomUserAgent();
         }else {
             return userAgent;
@@ -148,7 +148,7 @@ public class Pixiv {
         return Sort.bubbleNegativeWay(artworks);
     }
 
-    public PixivSearchResult search(String keywords, int page, @NotNull PixivSearchArtistType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
+    public PixivSearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
         String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
                 artistType.toString().toLowerCase(),
                 UrlEscapers.urlFragmentEscaper().escape(keywords),
@@ -190,6 +190,6 @@ public class Pixiv {
     }
 
     public PixivSearchResult search(String keywords, int page) throws IOException {
-        return search(keywords, page, PixivSearchArtistType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);
+        return search(keywords, page, PixivSearchArtworkType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);
     }
 }

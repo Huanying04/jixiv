@@ -49,7 +49,7 @@ public class PixivArtwork {
     }
 
     private String userAgent() {
-        if (userAgent.isEmpty()) {
+        if (userAgent == null ||userAgent.isEmpty()) {
             return UserAgentUtils.getRandomUserAgent();
         }else {
             return userAgent;

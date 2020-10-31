@@ -3,6 +3,8 @@ package net.nekomura.utils.jixiv;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class PixivSearchResult {
 
     private final JSONObject searchResultJson;
@@ -21,7 +23,7 @@ public class PixivSearchResult {
         return searchResultJson.getJSONObject("body").getJSONObject(dataType).getJSONArray("data");
     }
 
-    public int[] getIDs() {
+    public int[] getIds() {
         int[] id = new int[getPageResultCount()];
         for (int i = 0; i < getPageResultCount(); i++) {
             id[i] = Integer.parseInt(getResultData().getJSONObject(i).getString("id"));
@@ -33,8 +35,11 @@ public class PixivSearchResult {
         return searchResultJson.getJSONObject("body").getJSONObject(dataType).getInt("total");
     }
 
-    public int getMaxPage() {
+    public int getLastPageIndex() {
         return (int) Math.ceil(getResultCount() / 60f);
     }
 
+    public boolean containId(int id) {
+        return Arrays.stream(getIds()).anyMatch(x -> x == id);
+    }
 }

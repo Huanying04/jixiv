@@ -4,20 +4,21 @@ import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class PixivMyAccount {
+public class PixivMe {
 
     private String phpSession;
     private String userAgent;
 
-    public PixivMyAccount(String phpSession) {
+    public PixivMe(String phpSession) {
         this.phpSession = phpSession;
     }
 
-    public PixivMyAccount(String phpSession, String userAgent) {
+    public PixivMe(String phpSession, String userAgent) {
         this.phpSession = phpSession;
         this.userAgent = userAgent;
     }
@@ -39,14 +40,14 @@ public class PixivMyAccount {
     }
 
     private String userAgent() {
-        if (userAgent.isEmpty()) {
+        if (userAgent == null ||userAgent.isEmpty()) {
             return UserAgentUtils.getRandomUserAgent();
         }else {
             return userAgent;
         }
     }
 
-    public PixivFollowingNewWork getFollowingNewWorks(int page) throws IOException {
+    public PixivFollowingNewWork getFollowingNewIllustrationWorks(int page) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/bookmark_new_illust.php");
 
@@ -61,12 +62,12 @@ public class PixivMyAccount {
         String html = Objects.requireNonNull(res.body()).string();
 
         String from = "<div id=\"js-mount-point-latest-following\"data-items=\"";
-        String to = "\"";
+        String to = "\"style=\"min-height: 1460px;\"></div>";
 
         int fromIndex = html.indexOf(from);
         int toIndex = html.indexOf(to, fromIndex);
-        String target = html.subSequence(fromIndex + from.length(), toIndex).toString().replace(from, "");
+        String target = html.subSequence(fromIndex, toIndex).toString().replace(from, "");
+        target = StringEscapeUtils.unescapeHtml4(target);
         return new PixivFollowingNewWork(target);
     }
-
 }

@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class PixivRank {
     private JSONObject rankJson;
 
@@ -50,7 +52,7 @@ public class PixivRank {
         return rankJson.getJSONArray("contents");
     }
 
-    public int[] getIDs() {
+    public int[] getIds() {
         int[] id = new int[getPageResultCount()];
         for (int i = 0; i < getPageResultCount(); i++) {
             id[i] = Integer.parseInt(getResultData().getJSONObject(i).getString("id"));
@@ -78,5 +80,13 @@ public class PixivRank {
             return false;
         else
             return true;
+    }
+
+    public RankInfoObject getInfo(int index) {
+        return new RankInfoObject(rankJson.getJSONArray("contents").getJSONObject(index));
+    }
+
+    public boolean containId(int id) {
+        return Arrays.stream(getIds()).anyMatch(x -> x == id);
     }
 }
