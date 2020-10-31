@@ -1,4 +1,4 @@
-![Maven Central](https://img.shields.io/maven-central/v/com.github.huanying04.utils/jixiv?color=%234c1)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.huanying04.utils/jixiv?color=%234c1)](https://search.maven.org/artifact/com.github.huanying04.utils/jixiv)
 # jixiv
 用來實現pixiv爬蟲等的Java框架
 
