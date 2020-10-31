@@ -10,6 +10,12 @@ public class PixivIllustration extends PixivArtwork {
         super(phpSession, userAgent);
     }
 
+    /**
+     * 獲取插畫作品之資訊物件
+     * @param id 插畫id
+     * @return 插畫作品之資訊物件
+     * @throws Exception
+     */
     public PixivIllustrationInfo get(int id) throws Exception {
         return super.get(id).toIllustrationInfo();
     }

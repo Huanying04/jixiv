@@ -11,6 +11,12 @@ public class PixivNovel extends PixivArtwork {
         super(phpSession, userAgent);
     }
 
+    /**
+     * 獲取小說作品之資訊物件
+     * @param id 小說id
+     * @return 小說作品之資訊物件
+     * @throws Exception
+     */
     public PixivNovelInfo get(int id) throws Exception {
         return super.get(id).toNovelInfo();
     }

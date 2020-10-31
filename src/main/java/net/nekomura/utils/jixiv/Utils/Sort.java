@@ -4,6 +4,8 @@ public class Sort {
 
     /**
      * 泡沫排列(小到大)
+     * @param arr 數組
+     * @return 經由泡沫排列排列完成的陣列(小到大)
      */
     public static int[] bubble(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
@@ -20,6 +22,8 @@ public class Sort {
 
     /**
      * 泡沫排列(大到小)
+     * @param arr 數組
+     * @return 經由泡沫排列排列完成的陣列(大到小)
      */
     public static int[] bubbleNegativeWay(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {

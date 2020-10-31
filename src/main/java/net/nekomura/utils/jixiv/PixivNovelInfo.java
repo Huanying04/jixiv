@@ -14,14 +14,26 @@ public class PixivNovelInfo extends PixivArtworkInfo {
         super(id, preloadData);
     }
 
+    /**
+     * 獲取小說內容
+     * @return 小說內容
+     */
     public String getContent() {
         return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getString("content");
     }
 
+    /**
+     * Get Marker Count
+     * @return Marker Count
+     */
     public int getMarkerCount() {
         return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getInt("markerCount");
     }
 
+    /**
+     * 獲取總字數
+     * @return 總字數
+     */
     public int getTextCount() {
         return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getJSONObject("userNovels").getJSONObject(String.valueOf(getId())).getInt("textCount");
     }
@@ -30,6 +42,11 @@ public class PixivNovelInfo extends PixivArtworkInfo {
         return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getString("coverUrl");
     }
 
+    /**
+     * 獲取封面圖片
+     * @return 封面圖片的byte array
+     * @throws Exception
+     */
     public byte[] getCover() throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(getCoverUrl());
@@ -40,6 +57,11 @@ public class PixivNovelInfo extends PixivArtworkInfo {
         return Objects.requireNonNull(res.body()).bytes();
     }
 
+    /**
+     * 下載封面圖片
+     * @param pathname 儲存位置
+     * @throws Exception
+     */
     public void downloadCover(String pathname) throws Exception {
         File file = new File(pathname);
         byte[] image = getCover();

@@ -92,6 +92,12 @@ public class Pixiv {
         return new JSONObject(targetJsonString);
     }
 
+    /**
+     * 獲取用戶資料物件
+     * @param id 使用者id
+     * @return 用戶資料物件
+     * @throws IOException
+     */
     public PixivUserProfileInfo getUserInfo(int id) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "/profile/all");
@@ -108,20 +114,43 @@ public class Pixiv {
         return new PixivUserProfileInfo(id, getUserProfile(id), getUserPreloadData(id));
     }
 
-    public void downloadUserAllIllustration(File folder, int userId, PixivImageSize type) throws Exception {
+    /**
+     * 下載用戶所有插圖及漫畫作品
+     * @param folder 資料夾位置
+     * @param userId 用戶id
+     * @param size 圖片大小
+     * @throws Exception
+     */
+    public void downloadUserAllIllustration(File folder, int userId, PixivImageSize size) throws Exception {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
-            new PixivIllustration(phpSession).get(id).downloadAll(folder, type);
+            new PixivIllustration(phpSession).get(id).downloadAll(folder, size);
         }
     }
 
-    public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize type) throws Exception {
+    /**
+     * 下載用戶所有插圖及漫畫作品
+     * @param folderPath 資料夾位置
+     * @param userId 用戶id
+     * @param size 圖片大小
+     * @throws Exception
+     */
+    public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize size) throws Exception {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
-            new PixivIllustration(phpSession).get(id).downloadAll(folderPath, type);
+            new PixivIllustration(phpSession).get(id).downloadAll(folderPath, size);
         }
     }
 
+    /**
+     * 獲取排行榜
+     * @param page 頁碼
+     * @param mode 篩選模式
+     * @param content 作品類別
+     * @param date 排行榜日期
+     * @return 排行榜物件
+     * @throws IOException
+     */
     public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
@@ -144,9 +173,17 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new PixivRank(Objects.requireNonNull(res.body()).string());
+        return new PixivRank(page, mode, content, date, Objects.requireNonNull(res.body()).string());
     }
 
+    /**
+     * 獲取排行榜
+     * @param page 頁碼
+     * @param mode 篩選模式
+     * @param content 作品類別
+     * @return 排行榜物件
+     * @throws IOException
+     */
     public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
@@ -169,13 +206,31 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new PixivRank(Objects.requireNonNull(res.body()).string());
+        return new PixivRank(page, mode, content, null, Objects.requireNonNull(res.body()).string());
     }
 
+    /**
+     * 獲取排行榜
+     * @param page 頁碼
+     * @return 排行榜物件
+     * @throws IOException
+     */
     public PixivRank rank(int page) throws IOException {
         return rank(page, PixivRankMode.Daily, PixivRankContent.Overall);
     }
 
+    /**
+     * 搜尋
+     * @param keywords 關鍵字
+     * @param page 頁碼
+     * @param artistType 搜尋作品類別
+     * @param order 排序方式
+     * @param mode 搜尋作品年齡分類
+     * @param sMode 關鍵字搜尋方式
+     * @param type 搜尋作品類別
+     * @return 搜尋結果物件
+     * @throws IOException
+     */
     public PixivSearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
         String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
                 artistType.toString().toLowerCase(),
@@ -217,6 +272,13 @@ public class Pixiv {
         return new PixivSearchResult(Objects.requireNonNull(res.body()).string(), resultType);
     }
 
+    /**
+     * 搜尋
+     * @param keywords 關鍵字
+     * @param page 頁碼
+     * @return 搜尋結果物件
+     * @throws IOException
+     */
     public PixivSearchResult search(String keywords, int page) throws IOException {
         return search(keywords, page, PixivSearchArtworkType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);
     }

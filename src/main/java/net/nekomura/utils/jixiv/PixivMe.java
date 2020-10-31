@@ -47,9 +47,15 @@ public class PixivMe {
         }
     }
 
+    /**
+     * 已關注用戶的最新作品
+     * @param page 頁碼
+     * @return 關注用戶的最新作品資訊物件
+     * @throws IOException
+     */
     public PixivFollowingNewWork getFollowingNewIllustrationWorks(int page) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/bookmark_new_illust.php");
+        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/bookmark_new_illust.php?p=" + page);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + phpSession);
@@ -68,6 +74,6 @@ public class PixivMe {
         int toIndex = html.indexOf(to, fromIndex);
         String target = html.subSequence(fromIndex, toIndex).toString().replace(from, "");
         target = StringEscapeUtils.unescapeHtml4(target);
-        return new PixivFollowingNewWork(target);
+        return new PixivFollowingNewWork(page, target);
     }
 }

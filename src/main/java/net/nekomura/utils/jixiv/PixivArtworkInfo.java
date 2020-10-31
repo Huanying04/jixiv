@@ -26,7 +26,7 @@ public class PixivArtworkInfo {
     }
 
     /**
-     * 獲得作品id
+     * 獲取作品id
      * @return 作品id
      */
     public int getId() {

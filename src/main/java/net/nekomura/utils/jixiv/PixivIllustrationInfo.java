@@ -22,6 +22,10 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
         super(id, preloadData);
     }
 
+    /**
+     * Get Response Count
+     * @return Response Count
+     */
     public int getResponseCount() {
         return getPreloadData().getJSONObject("illust").getJSONObject(String.valueOf(getId())).getInt("responseCount");
     }
@@ -56,20 +60,39 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
                 getId());
     }
 
+    /**
+     * 獲取該插畫作品之第一頁圖片
+     * @return 該插畫作品之第一頁圖片的byte array
+     * @throws IOException
+     */
     public byte[] getImage() throws IOException {
         return getImage(0);
     }
 
+    /**
+     * 獲取該插畫作品之指定頁圖片
+     * @param page 指定頁碼
+     * @return 該插畫作品之指定頁圖片的byte array
+     * @throws IOException
+     */
     public byte[] getImage(int page) throws IOException {
         return getImage(page, PixivImageSize.Original);
     }
 
-    public byte[] getImage(int page, PixivImageSize type) throws IllegalArgumentException, IOException {
+    /**
+     * 獲取該插畫作品之指定頁圖片
+     * @param page 指定頁碼
+     * @param size 圖片大小
+     * @return 該插畫作品之指定頁圖片的byte array
+     * @throws IllegalArgumentException
+     * @throws IOException
+     */
+    public byte[] getImage(int page, PixivImageSize size) throws IllegalArgumentException, IOException {
         if (page > getPageCount() - 1)
             throw new IllegalArgumentException("The page is greater than the max page of the artwork .");
 
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url(getImageUrl(page, type));
+        Request.Builder rb = new Request.Builder().url(getImageUrl(page, size));
         rb.addHeader("Referer", "https://www.pixiv.net/artworks");
         rb.method("GET", null);
 
@@ -77,6 +100,12 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
         return Objects.requireNonNull(res.body()).bytes();
     }
 
+    /**
+     * 獲取該插畫動圖作品之所有幀之圖片之壓縮檔
+     * @return 該插畫動圖作品之所有幀之圖片之壓縮檔的byte array
+     * @throws ParseException
+     * @throws IOException
+     */
     public byte[] getUgoiraZip() throws ParseException, IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(getUgoiraZipUrl());
@@ -87,6 +116,10 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
         return Objects.requireNonNull(res.body()).bytes();
     }
 
+    /**
+     * 獲取插畫作品類別
+     * @return 插畫作品類別
+     */
     public PixivIllustrationType getIllustrationType() {
         int typeNumber = getPreloadData().getJSONObject("illust").getJSONObject(String.valueOf(getId())).getInt("illustType");
         switch (typeNumber) {
@@ -101,14 +134,26 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
         }
     }
 
+    /**
+     * 獲取該插畫作品之圖片格式
+     * @param page 指定頁碼
+     * @return
+     */
     public String getImageFileFormat(int page) {
         String[] filename = getImageUrl(page, PixivImageSize.Original).split("\\.");
         return filename[filename.length - 1];
     }
 
-    public void download(String pathname, int page, PixivImageSize type) throws IOException {
+    /**
+     * 下載插畫圖片指定頁碼
+     * @param pathname 儲存位置
+     * @param page 指定頁碼
+     * @param size 圖片大小
+     * @throws IOException
+     */
+    public void download(String pathname, int page, PixivImageSize size) throws IOException {
         File file = new File(pathname);
-        byte[] image = getImage(page, type);
+        byte[] image = getImage(page, size);
         if (file.getParentFile() != null)
             file.getParentFile().mkdirs();
         file.createNewFile();
@@ -117,31 +162,59 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
         out.close();
     }
 
+    /**
+     * 下載插畫圖片指定頁碼
+     * @param pathname 儲存位置
+     * @param page 指定頁碼
+     * @throws Exception
+     */
     public void download(String pathname, int page) throws Exception {
         download(pathname, page, PixivImageSize.Original);
     }
 
+    /**
+     * 下載插畫首張圖片
+     * @param pathname 儲存位置
+     * @throws Exception
+     */
     public void download(String pathname) throws Exception {
         download(pathname, 0, PixivImageSize.Original);
     }
 
-    public void downloadAll(File folder, PixivImageSize type) throws IOException {
+    /**
+     * 下載插畫所有頁圖片
+     * @param folder 儲存資料夾
+     * @param size 圖片大小
+     * @throws IOException
+     */
+    public void downloadAll(File folder, PixivImageSize size) throws IOException {
         int pageCount = getPageCount();
         folder.mkdirs();
 
         for (int i = 0; i < pageCount; i++) {
             File file = new File(String.format("%s/%d_p%d.%s", folder, getId(), i, getImageFileFormat(i)));
-            byte[] image = getImage(i, type);
+            byte[] image = getImage(i, size);
             FileOutputStream out = new FileOutputStream(file);
             out.write(image);
             out.close();
         }
     }
 
+    /**
+     * 下載插畫所有頁圖片
+     * @param folderPath 儲存資料夾位置
+     * @param type 圖片大小
+     * @throws IOException
+     */
     public void downloadAll(String folderPath, PixivImageSize type) throws IOException {
         downloadAll(new File(folderPath), type);
     }
 
+    /**
+     * 下載該插畫動圖作品之所有幀之圖片之壓縮檔
+     * @param pathname 儲存位置
+     * @throws Exception
+     */
     public void downloadUgoiraZip(String pathname) throws Exception {
         if (!getIllustrationType().equals(PixivIllustrationType.Ugoira)) {
             throw new IllegalArgumentException("The Illustration is not an ugoira.");
