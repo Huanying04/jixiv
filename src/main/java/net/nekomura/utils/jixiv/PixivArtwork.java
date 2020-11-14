@@ -39,7 +39,7 @@ public class PixivArtwork {
 
     private String userAgent() {
         if (userAgent == null ||userAgent.isEmpty()) {
-            return UserAgentUtils.getRandomUserAgent();
+            return UserAgentUtils.random();
         }else {
             return userAgent;
         }
@@ -50,11 +50,11 @@ public class PixivArtwork {
      * @param id 作品ID
      */
     @NotNull
-    public String getArtworkPageHtml(int id) throws Exception {
+    private String getArtworkPageHtml(int id) throws Exception {
         String url;
-        if (this instanceof PixivIllustration) {
+        if (this instanceof Illustration) {
             url = "https://www.pixiv.net/artworks/" + id;
-        }else if (this instanceof PixivNovel) {
+        }else if (this instanceof Novel) {
             url = "https://www.pixiv.net/novel/show.php?id=" + id;
         }else {
             throw new Exception("The variable must be a PixivImage or a net.nekomura.utils.jixiv.PixivNovel.");
@@ -95,8 +95,8 @@ public class PixivArtwork {
      * @return 作品資訊物件
      * @throws Exception 獲取失敗
      */
-    public PixivArtworkInfo get(int id) throws Exception {
-        return new PixivArtworkInfo(id, getArtworkPreloadData(id));
+    public ArtworkInfo get(int id) throws Exception {
+        return new ArtworkInfo(id, getArtworkPreloadData(id));
     }
 
 }

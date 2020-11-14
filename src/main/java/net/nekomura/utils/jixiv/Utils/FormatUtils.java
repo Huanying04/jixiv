@@ -1,6 +1,6 @@
 package net.nekomura.utils.jixiv.Utils;
 
-public class StringUtils {
+public class FormatUtils {
     /**
      * 使數字永遠保持兩個數字<br>
      * 如1會變成01<br>

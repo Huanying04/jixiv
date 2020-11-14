@@ -1,12 +1,12 @@
 package net.nekomura.utils.jixiv;
 
-public class PixivIllustration extends PixivArtwork {
+public class Illustration extends PixivArtwork {
 
-    public PixivIllustration(String phpSession) {
+    public Illustration(String phpSession) {
         super(phpSession);
     }
 
-    public PixivIllustration(String phpSession, String userAgent) {
+    public Illustration(String phpSession, String userAgent) {
         super(phpSession, userAgent);
     }
 
@@ -16,7 +16,7 @@ public class PixivIllustration extends PixivArtwork {
      * @return 插畫作品之資訊物件
      * @throws Exception 獲取失敗
      */
-    public PixivIllustrationInfo get(int id) throws Exception {
+    public IllustrationInfo get(int id) throws Exception {
         return super.get(id).toIllustrationInfo();
     }
 

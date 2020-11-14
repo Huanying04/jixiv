@@ -9,8 +9,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Objects;
 
-public class PixivNovelInfo extends PixivArtworkInfo {
-    public PixivNovelInfo(int id, JSONObject preloadData) {
+public class NovelInfo extends ArtworkInfo {
+    public NovelInfo(int id, JSONObject preloadData) {
         super(id, preloadData);
     }
 

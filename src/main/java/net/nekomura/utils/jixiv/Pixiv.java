@@ -45,7 +45,7 @@ public class Pixiv {
 
     private String userAgent() {
         if (userAgent == null ||userAgent.isEmpty()) {
-            return UserAgentUtils.getRandomUserAgent();
+            return UserAgentUtils.random();
         }else {
             return userAgent;
         }
@@ -98,7 +98,7 @@ public class Pixiv {
      * @return 用戶資料物件
      * @throws IOException 獲取失敗
      */
-    public PixivUserProfileInfo getUserInfo(int id) throws IOException {
+    public User getUserInfo(int id) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "/profile/all");
 
@@ -111,7 +111,7 @@ public class Pixiv {
         Response res = okHttpClient.newCall(rb.build()).execute();
         res.close();
 
-        return new PixivUserProfileInfo(id, getUserProfile(id), getUserPreloadData(id));
+        return new User(id, getUserProfile(id), getUserPreloadData(id));
     }
 
     /**
@@ -124,7 +124,7 @@ public class Pixiv {
     public void downloadUserAllIllustration(File folder, int userId, PixivImageSize size) throws Exception {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
-            new PixivIllustration(phpSession).get(id).downloadAll(folder, size);
+            new Illustration(phpSession).get(id).downloadAll(folder, size);
         }
     }
 
@@ -138,7 +138,7 @@ public class Pixiv {
     public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize size) throws Exception {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
-            new PixivIllustration(phpSession).get(id).downloadAll(folderPath, size);
+            new Illustration(phpSession).get(id).downloadAll(folderPath, size);
         }
     }
 
@@ -151,15 +151,13 @@ public class Pixiv {
      * @return 排行榜物件
      * @throws IOException 獲取失敗
      */
-    public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
+    public Rank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
 
         if (content.equals(PixivRankContent.Overall)) {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
-        }/*else if (content.equals(PixivRankContent.Novel)) {
-            url = "https://www.pixiv.net/novel/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
-        }*/else {
+        }else {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
         }
 
@@ -173,7 +171,7 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new PixivRank(page, mode, content, date, Objects.requireNonNull(res.body()).string());
+        return new Rank(page, mode, content, date, Objects.requireNonNull(res.body()).string(), phpSession, userAgent());
     }
 
     /**
@@ -184,15 +182,13 @@ public class Pixiv {
      * @return 排行榜物件
      * @throws IOException 獲取失敗
      */
-    public PixivRank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
+    public Rank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
 
         if (content.equals(PixivRankContent.Overall)) {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&p=" + page + "&format=json";
-        }/*else if (content.equals(PixivRankContent.Novel)) {
-            url = "https://www.pixiv.net/novel/ranking.php?mode=" + mode.toString().toLowerCase() + "&p=" + page + "&format=json";
-        }*/else {
+        }else {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&p=" + page + "&format=json";
         }
 
@@ -206,7 +202,7 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new PixivRank(page, mode, content, null, Objects.requireNonNull(res.body()).string());
+        return new Rank(page, mode, content, null, Objects.requireNonNull(res.body()).string(), phpSession, userAgent());
     }
 
     /**
@@ -215,7 +211,7 @@ public class Pixiv {
      * @return 排行榜物件
      * @throws IOException 獲取失敗
      */
-    public PixivRank rank(int page) throws IOException {
+    public Rank rank(int page) throws IOException {
         return rank(page, PixivRankMode.Daily, PixivRankContent.Overall);
     }
 
@@ -231,7 +227,7 @@ public class Pixiv {
      * @return 搜尋結果物件
      * @throws IOException 獲取失敗
      */
-    public PixivSearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
+    public SearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
         String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
                 artistType.toString().toLowerCase(),
                 UrlEscapers.urlFragmentEscaper().escape(keywords),
@@ -269,7 +265,7 @@ public class Pixiv {
         }
 
 
-        return new PixivSearchResult(Objects.requireNonNull(res.body()).string(), resultType);
+        return new SearchResult(Objects.requireNonNull(res.body()).string(), resultType);
     }
 
     /**
@@ -279,7 +275,7 @@ public class Pixiv {
      * @return 搜尋結果物件
      * @throws IOException 獲取失敗
      */
-    public PixivSearchResult search(String keywords, int page) throws IOException {
+    public SearchResult search(String keywords, int page) throws IOException {
         return search(keywords, page, PixivSearchArtworkType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);
     }
 }

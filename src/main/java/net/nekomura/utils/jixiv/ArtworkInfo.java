@@ -1,7 +1,6 @@
 package net.nekomura.utils.jixiv;
 
 import com.google.common.collect.Iterators;
-import net.nekomura.utils.jixiv.Enums.PixivArtworkType;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,11 +15,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class PixivArtworkInfo {
+public class ArtworkInfo {
     private final int id;
     private final JSONObject preloadData;
 
-    public PixivArtworkInfo(int id, JSONObject preloadData) {
+    public ArtworkInfo(int id, JSONObject preloadData) {
         this.id = id;
         this.preloadData = preloadData;
     }
@@ -37,16 +36,16 @@ public class PixivArtworkInfo {
         return preloadData;
     }
 
-    public PixivIllustrationInfo toIllustrationInfo() {
+    public IllustrationInfo toIllustrationInfo() {
         if (Iterators.contains(preloadData.keys(), "illust"))
-            return new PixivIllustrationInfo(id, preloadData);
+            return new IllustrationInfo(id, preloadData);
         else
             throw new IllegalArgumentException("This is not a ");
     }
 
-    public PixivNovelInfo toNovelInfo() {
+    public NovelInfo toNovelInfo() {
         if (Iterators.contains(preloadData.keys(), "novel"))
-            return new PixivNovelInfo(id, preloadData);
+            return new NovelInfo(id, preloadData);
         else
             throw new IllegalArgumentException("This is not a ");
     }
@@ -54,9 +53,9 @@ public class PixivArtworkInfo {
     @NotNull
     @Contract(pure = true)
     private String artworkType() throws IllegalArgumentException {
-        if (this instanceof PixivIllustrationInfo) {
+        if (this instanceof IllustrationInfo) {
             return "illust";
-        }else if (this instanceof PixivNovelInfo) {
+        }else if (this instanceof NovelInfo) {
             return "novel";
         }else {
             throw new IllegalArgumentException("The variable must be a PixivImage or a net.nekomura.utils.jixiv.PixivNovel.");

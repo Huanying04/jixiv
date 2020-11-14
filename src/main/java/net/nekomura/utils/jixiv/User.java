@@ -2,8 +2,7 @@ package net.nekomura.utils.jixiv;
 
 import com.google.common.collect.Iterators;
 import net.nekomura.utils.jixiv.Enums.PixivArtworkType;
-import net.nekomura.utils.jixiv.Enums.PixivImageSize;
-import net.nekomura.utils.jixiv.Utils.Sort;
+import net.nekomura.utils.jixiv.Utils.SortUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -14,12 +13,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
-public class PixivUserProfileInfo {
+public class User {
     private final int id;
     private final JSONObject profile;
     private final JSONObject preloadData;
 
-    public PixivUserProfileInfo(int id, JSONObject profile, JSONObject preloadData) {
+    public User(int id, JSONObject profile, JSONObject preloadData) {
         this.id = id;
         this.profile = profile;
         this.preloadData = preloadData;
@@ -40,7 +39,7 @@ public class PixivUserProfileInfo {
             artworks[i] = Integer.parseInt(Iterators.get(profile.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys(), i));
         }
 
-        return Sort.bubbleNegativeWay(artworks);
+        return SortUtils.reverseBubbleSort(artworks);
         }else {
             return new int[0];
         }

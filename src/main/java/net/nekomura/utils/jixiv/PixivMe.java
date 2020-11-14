@@ -41,7 +41,7 @@ public class PixivMe {
 
     private String userAgent() {
         if (userAgent == null ||userAgent.isEmpty()) {
-            return UserAgentUtils.getRandomUserAgent();
+            return UserAgentUtils.random();
         }else {
             return userAgent;
         }
@@ -53,7 +53,7 @@ public class PixivMe {
      * @return 關注用戶的最新作品資訊物件
      * @throws IOException 獲取失敗
      */
-    public PixivFollowingNewWork getFollowingNewIllustrationWorks(int page) throws IOException {
+    public FollowingNewWork getFollowingNewWorks(int page) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/bookmark_new_illust.php?p=" + page);
 
@@ -74,6 +74,6 @@ public class PixivMe {
         int toIndex = html.indexOf(to, fromIndex);
         String target = html.subSequence(fromIndex, toIndex).toString().replace(from, "");
         target = StringEscapeUtils.unescapeHtml4(target);
-        return new PixivFollowingNewWork(page, target);
+        return new FollowingNewWork(page, target);
     }
 }

@@ -3,10 +3,10 @@ package net.nekomura.utils.jixiv;
 import net.nekomura.utils.jixiv.Enums.PixivIllustrationType;
 import org.json.JSONObject;
 
-public class RankInfoObject {
+public class RankArtwork {
     private final JSONObject data;
 
-    public RankInfoObject(JSONObject data) {
+    public RankArtwork(JSONObject data) {
         this.data = data;
     }
 

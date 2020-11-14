@@ -5,11 +5,11 @@ import org.json.JSONArray;
 
 import java.util.Arrays;
 
-public class PixivFollowingNewWork {
+public class FollowingNewWork {
     private final int page;
     private final JSONArray data;
 
-    public PixivFollowingNewWork(int page, @NotNull String data) {
+    public FollowingNewWork(int page, @NotNull String data) {
         this.page = page;
         this.data = new JSONArray(data);
     }
@@ -31,8 +31,8 @@ public class PixivFollowingNewWork {
      * @param index 第幾個作品
      * @return 關注作品資訊物件
      */
-    public FollowingInfoObject get(int index) {
-        return new FollowingInfoObject(data.getJSONObject(index));
+    public FollowingArtworkInfo get(int index) {
+        return new FollowingArtworkInfo(data.getJSONObject(index));
     }
 
     /**

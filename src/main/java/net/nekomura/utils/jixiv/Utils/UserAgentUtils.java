@@ -42,10 +42,10 @@ public class UserAgentUtils {
     };
 
     /**
-     * 從userAgent中隨機生成一組User-Agent
-     * @return 隨機User-Agent
+     * 隨機生成一組User Agent
+     * @return 隨機User Agent
      */
-    public static String getRandomUserAgent() {
+    public static String random() {
         return userAgent[ThreadLocalRandom.current().nextInt(0, userAgent.length - 1)];
     }
 

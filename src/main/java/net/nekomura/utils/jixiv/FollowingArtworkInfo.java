@@ -4,10 +4,10 @@ import net.nekomura.utils.jixiv.Enums.PixivIllustrationType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FollowingInfoObject {
+public class FollowingArtworkInfo {
     private final JSONObject data;
 
-    public FollowingInfoObject(JSONObject data) {
+    public FollowingArtworkInfo(JSONObject data) {
         this.data = data;
     }
 

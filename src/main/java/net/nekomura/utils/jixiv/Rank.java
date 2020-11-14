@@ -6,21 +6,33 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
-public class PixivRank {
+public class Rank {
     private final int page;
     private final PixivRankMode mode;
     private final PixivRankContent content;
     private final String date;
     private final JSONObject rankJson;
+    private final String phpSession;
+    private final String userAgent;
 
-    public PixivRank(int page, PixivRankMode mode, PixivRankContent content, String date, @NotNull String rankJson) {
+    public Rank(int page,
+                PixivRankMode mode,
+                PixivRankContent content,
+                String date,
+                @NotNull String rankJson,
+                String phpSession,
+                String userAgent) {
         this.page = page;
         this.mode = mode;
         this.content = content;
         this.date = date;
         this.rankJson = new JSONObject(rankJson);
+        this.phpSession = phpSession;
+        this.userAgent = userAgent;
     }
 
     /**
@@ -92,10 +104,7 @@ public class PixivRank {
      * @return 是否有下一頁
      */
     public boolean hasNextPage() {
-        if (rankJson.get("next") instanceof Boolean && !rankJson.getBoolean("next"))
-            return false;
-        else
-            return true;
+        return !(rankJson.get("next") instanceof Boolean) || rankJson.getBoolean("next");
     }
 
     /**
@@ -103,10 +112,25 @@ public class PixivRank {
      * @return 是否有上一頁
      */
     public boolean hasPreviousPage() {
-        if (rankJson.get("prev") instanceof Boolean && !rankJson.getBoolean("prev"))
-            return false;
-        else
-            return true;
+        return !(rankJson.get("prev") instanceof Boolean) || rankJson.getBoolean("prev");
+    }
+
+    /**
+     * 獲取下一頁的排行榜
+     * @return 下一頁的排行榜
+     * @throws IOException 獲取失敗
+     */
+    public Rank nextPage() throws IOException {
+        return new Pixiv(phpSession, userAgent).rank(rankJson.getInt("next"), mode, content, date);
+    }
+
+    /**
+     * 獲取上一頁的排行榜
+     * @return 上一頁的排行榜
+     * @throws IOException 獲取失敗
+     */
+    public Rank previousPage() throws IOException {
+        return new Pixiv(phpSession, userAgent).rank(rankJson.getInt("prev"), mode, content, date);
     }
 
     /**
@@ -114,8 +138,8 @@ public class PixivRank {
      * @param index 第幾項作品
      * @return 排行榜作品資訊物件
      */
-    public RankInfoObject getInfo(int index) {
-        return new RankInfoObject(rankJson.getJSONArray("contents").getJSONObject(index));
+    public RankArtwork getInfo(int index) {
+        return new RankArtwork(rankJson.getJSONArray("contents").getJSONObject(index));
     }
 
     /**

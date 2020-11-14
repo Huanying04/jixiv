@@ -1,9 +1,8 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.PixivArtworkType;
 import net.nekomura.utils.jixiv.Enums.PixivIllustrationType;
 import net.nekomura.utils.jixiv.Enums.PixivImageSize;
-import net.nekomura.utils.jixiv.Utils.StringUtils;
+import net.nekomura.utils.jixiv.Utils.FormatUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -17,8 +16,8 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class PixivIllustrationInfo extends PixivArtworkInfo {
-    public PixivIllustrationInfo(int id, JSONObject preloadData) {
+public class IllustrationInfo extends ArtworkInfo {
+    public IllustrationInfo(int id, JSONObject preloadData) {
         super(id, preloadData);
     }
 
@@ -44,11 +43,11 @@ public class PixivIllustrationInfo extends PixivArtworkInfo {
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
 
-        String monthString = StringUtils.addZeroChar(month + 1);
-        String dayString = StringUtils.addZeroChar(day);
-        String hourString = StringUtils.addZeroChar(hour);
-        String minuteString = StringUtils.addZeroChar(minute);
-        String secondString = StringUtils.addZeroChar(second);
+        String monthString = FormatUtils.addZeroChar(month + 1);
+        String dayString = FormatUtils.addZeroChar(day);
+        String hourString = FormatUtils.addZeroChar(hour);
+        String minuteString = FormatUtils.addZeroChar(minute);
+        String secondString = FormatUtils.addZeroChar(second);
 
         return String.format("https://i.pximg.net/img-zip-ugoira/img/%d/%s/%s/%s/%s/%s/%d_ugoira1920x1080.zip",
                 year,

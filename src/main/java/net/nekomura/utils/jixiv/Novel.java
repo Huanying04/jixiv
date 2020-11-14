@@ -1,13 +1,13 @@
 package net.nekomura.utils.jixiv;
 
 
-public class PixivNovel extends PixivArtwork {
+public class Novel extends PixivArtwork {
 
-    public PixivNovel(String phpSession) {
+    public Novel(String phpSession) {
         super(phpSession);
     }
 
-    public PixivNovel(String phpSession, String userAgent) {
+    public Novel(String phpSession, String userAgent) {
         super(phpSession, userAgent);
     }
 
@@ -17,7 +17,7 @@ public class PixivNovel extends PixivArtwork {
      * @return 小說作品之資訊物件
      * @throws Exception 獲取失敗
      */
-    public PixivNovelInfo get(int id) throws Exception {
+    public NovelInfo get(int id) throws Exception {
         return super.get(id).toNovelInfo();
     }
 }

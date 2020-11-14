@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class PixivSearchResult {
+public class SearchResult {
 
     private final JSONObject searchResultJson;
     private final String dataType;
 
-    public PixivSearchResult(String searchResultJson, String dataType) {
+    public SearchResult(String searchResultJson, String dataType) {
         this.searchResultJson = new JSONObject(searchResultJson);
         this.dataType = dataType;
     }

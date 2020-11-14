@@ -1,13 +1,13 @@
 package net.nekomura.utils.jixiv.Utils;
 
-public class Sort {
+public class SortUtils {
 
     /**
      * 泡沫排列(小到大)
      * @param arr 數組
      * @return 經由泡沫排列排列完成的陣列(小到大)
      */
-    public static int[] bubble(int[] arr) {
+    public static int[] bubbleSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = 0; j < arr.length - 1 - i; j++) {
                 if (arr[j] > arr[j + 1]) {
@@ -25,7 +25,7 @@ public class Sort {
      * @param arr 數組
      * @return 經由泡沫排列排列完成的陣列(大到小)
      */
-    public static int[] bubbleNegativeWay(int[] arr) {
+    public static int[] reverseBubbleSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = 0; j < arr.length - 1 - i; j++) {
                 if (arr[j] < arr[j + 1]) {
