@@ -45,8 +45,8 @@ Doc：https://huanying04.github.io/Jixiv-Wiki/
 String phpSession = ""; //pixiv登入後cookie裡的PHPSESSID
 String userAgent = "";  //你的User-Agent，如果沒有的話將會隨機生成
 int id = 85209753; //插畫id
-PixivIllustration pi = new PixivIllustration(phpSession, userAgent);
-PixivIllustrationInfo iInfo = pi.get(id);
+Illustration i = new Illustration(phpSession, userAgent);
+IllustrationInfo iInfo = i.get(id);
 //獲取插畫標題
 String title = iInfo.getTitle();
 //獲取插畫簡介
@@ -67,8 +67,8 @@ int commemtCount = iInfo.getCommentCount();
 ## 獲取小說信息
 ```java
 int id = 11387000; //小說id
-PixivNovel pn = new PixivNovel(phpSession, userAgent);
-PixivNovelInfo nInfo = pn.get(id);
+Novel n = new Novel(phpSession, userAgent);
+NovelInfo nInfo = n.get(id);
 //獲取小說標題
 String title = nInfo.getTitle();
 //獲取小說簡介
@@ -97,8 +97,8 @@ String path = "";  //儲存位置
 int id = 85209753;  //插畫id
 int page = 0;  //頁碼
 PixivImageSize size = PixivImageSize.Original;  //圖片大小
-PixivIllustration pi = new PixivIllustration(phpSession, userAgent);
-PixivIllustrationInfo iInfo = pi.get(id);
+Illustration i = new Illustration(phpSession, userAgent);
+IllustrationInfo iInfo = i.get(id);
 iInfo.download(path, page, size);  //將id為85209753的插畫的第0頁下載到path
 ```
 #### 簡易版
@@ -106,16 +106,16 @@ iInfo.download(path, page, size);  //將id為85209753的插畫的第0頁下載�
 ```java
 String path = "";  //儲存位置
 int id = 85209753;  //插畫id
-PixivIllustration pi = new PixivIllustration(phpSession, userAgent);
-PixivIllustrationInfo iInfo = pi.get(id);
+Illustration i = new Illustration(phpSession, userAgent);
+IllustrationInfo iInfo = i.get(id);
 iInfo.download(path);  //將id為85209753的插畫的第0頁下載到path
 ```
 ### 所有頁數
 ```java
 String path = "";  //資料夾位置
 int id = 85207001;  //插畫id
-PixivIllustration pi = new PixivIllustration(phpSession, userAgent);
-PixivIllustrationInfo iInfo = pi.get(id);
+Illustration i = new Illustration(phpSession, userAgent);
+IllustrationInfo iInfo = i.get(id);
 iInfo.downloadAll(path, PixivImageSize.Original);  //將id中的所有插畫都下載到path裡
 ```
 ## 下載使用者所有插畫
@@ -130,52 +130,52 @@ p.downloadUserAll(path, userId, size);  //將使用者id中的所有插畫及漫
 ```java
 String path = "";  //資料夾位置
 int id = 44298467;  //插畫id
-PixivIllustration pi = new PixivIllustration(phpSession, userAgent);
-PixivIllustrationInfo iInfo = pi.get(id);
+Illustration i = new Illustration(phpSession, userAgent);
+IllustrationInfo iInfo = i.get(id);
 iInfo.downloadUgoiraZip(path);
 ```
 ## 獲取小說內容
 ```java
 int id = 11387000; //小說id
-PixivNovel pn = new PixivNovel(phpSession, userAgent);
-PixivNovelInfo nInfo = pn.get(id);
+Novel n = new Novel(phpSession, userAgent);
+NovelInfo nInfo = n.get(id);
 String content = nInfo.getContent();  //小說內容
 ```
 ## 下載小說封面
 ```java
 String path = "";  //儲存位置
 int id = 11387000; //小說id
-PixivNovel pn = new PixivNovel(phpSession, userAgent);
-PixivNovelInfo nInfo = pn.get(id);
-pn.downloadCover(path);
+Novel n = new Novel(phpSession, userAgent);
+NovelInfo nInfo = n.get(id);
+n.downloadCover(path);
 ```
 ## 作品是否為R-18或R-18G
 如果要判斷作品為成人限制作品，可使用下面方法判斷。
 ```java
-PixivArtworkInfo.isNSFW();
+ArtworkInfo.isNSFW();
 ```
 範例：
 ```java
-PixivIllustration pi = new PixivIllustration(phpSession, userAgent);  //插畫或漫畫
-PixivIllustrationInfo iInfo = pi.get(id);
+Illustration i = new Illustration(phpSession, userAgent);  //插畫或漫畫
+IllustrationInfo iInfo = i.get(id);
 
-PixivNovel pn = new PixivNovel(phpSession, userAgent);  //小說
-PixivNovelInfo nInfo = pn.get(id);
+PixivNovel n = new PixivNovel(phpSession, userAgent);  //小說
+PixivNovelInfo nInfo = n.get(id);
 
 iInfo.isNSFW(id);  //作品(插畫或漫畫)id是否為成人限制
 nInfo.isNSFW(id);  //作品(小說)id是否為成人限制
 ```
 如果只要判斷R-18或R-18G則為
 ```java
-PixivArtworkInfo.isR18();  //作品id是否為R-18
-PixivArtworkInfo.isR18G();  //作品id是否為R-18-G
+ArtworkInfo.isR18();  //作品id是否為R-18
+ArtworkInfo.isR18G();  //作品id是否為R-18-G
 ```
 ## 排行榜
 可使用下面的方式獲取今日綜合排行榜
 ```java
 Pixiv p = new Pixiv(phpSession);
 int page = 1;  //頁碼
-PixivRank pr = p.rank(page);
+Rank rank = p.rank(page);
 ```
 或是使用下列方法獲取指定排行榜
 ```java
@@ -184,7 +184,7 @@ int page = 1;  //頁碼
 PixivRankMode mode = PixivRankMode.Daily;  //排行榜類別
 PixivRankContent content = PixivRankContent.Illust;  //作品形式
 String date = "20201001";  //日期
-PixivRank pr = p.rank(page, mode, content, date);
+Rank rank = p.rank(page, mode, content, date);
 ```
 ## 搜尋
 可使用下面方法關鍵字搜尋插畫。
@@ -192,7 +192,7 @@ PixivRank pr = p.rank(page, mode, content, date);
 Pixiv p = new Pixiv(phpSession);
 String keyword = "";  //關鍵字
 int page = 1;  //頁碼
-PixivSearchResult result = p.search(keyword, page);
+SearchResult result = p.search(keyword, page);
 ```
 或是使用下面方法搜尋。
 ```java
@@ -204,5 +204,5 @@ PixivSearchOrder order = PixivSearchOrder.NEW_TO_OLD;  //排序方式
 PixivSearchMode mode = PixivSearchMode.ALL;  //搜尋作品年齡分類
 PixivSearchSMode sMode = PixivSearchSMode.S_TAG;  //關鍵字搜尋方式
 PixivSearchType type = PixivSearchType.Illust;  //搜尋作品類別
-PixivSearchResult result = p.search(keyword, page, artistType, order, mode, sMode, type);
+SearchResult result = p.search(keyword, page, artistType, order, mode, sMode, type);
 ```
