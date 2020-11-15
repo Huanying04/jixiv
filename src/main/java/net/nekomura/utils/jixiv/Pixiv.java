@@ -62,7 +62,7 @@ public class Pixiv {
         rb.method("GET", null);
 
         Response res = okHttpClient.newCall(rb.build()).execute();
-        res.close();
+
         return new JSONObject(Objects.requireNonNull(res.body()).string());
     }
 
@@ -77,7 +77,6 @@ public class Pixiv {
         rb.method("GET", null);
 
         Response res = okHttpClient.newCall(rb.build()).execute();
-        res.close();
 
         String from = "<meta name=\"preload-data\" id=\"meta-preload-data\" content='";
         String to = "'>";
@@ -109,7 +108,6 @@ public class Pixiv {
         rb.method("GET", null);
 
         Response res = okHttpClient.newCall(rb.build()).execute();
-        res.close();
 
         return new User(id, getUserProfile(id), getUserPreloadData(id));
     }

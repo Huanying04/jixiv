@@ -40,14 +40,14 @@ public class ArtworkInfo {
         if (Iterators.contains(preloadData.keys(), "illust"))
             return new IllustrationInfo(id, preloadData);
         else
-            throw new IllegalArgumentException("This is not a ");
+            throw new IllegalArgumentException("The variable is not an IllustrationInfo");
     }
 
     public NovelInfo toNovelInfo() {
         if (Iterators.contains(preloadData.keys(), "novel"))
             return new NovelInfo(id, preloadData);
         else
-            throw new IllegalArgumentException("This is not a ");
+            throw new IllegalArgumentException("The variable is not a NovelInfo");
     }
 
     @NotNull

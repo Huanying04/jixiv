@@ -93,7 +93,7 @@ public class PixivArtwork {
      * 獲取作品資訊物件
      * @param id 作品id
      * @return 作品資訊物件
-     * @throws Exception 獲取失敗
+     * @throws Exception 作品不存在或沒有權限等，獲取失敗
      */
     public ArtworkInfo get(int id) throws Exception {
         return new ArtworkInfo(id, getArtworkPreloadData(id));
