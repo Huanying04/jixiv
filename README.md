@@ -2,7 +2,8 @@
 # jixiv
 用來實現pixiv爬蟲等的Java框架
 
-![jixiv](https://github.com/Huanying04/jixiv/blob/master/image/jixiv.png)
+<p align="center"><img src="https://github.com/Huanying04/jixiv/blob/master/image/jixiv.png" width="50%"></p>
+
 # 功能
 * 獲取插畫/漫畫信息
 * 獲取小說信息
