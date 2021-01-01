@@ -1,5 +1,8 @@
-package net.nekomura.utils.jixiv.Enums;
+package net.nekomura.utils.jixiv.Enums.search;
 
+/**
+ * 搜尋作品年齡限制類別
+ */
 public enum PixivSearchMode {
     /**
      * 全部

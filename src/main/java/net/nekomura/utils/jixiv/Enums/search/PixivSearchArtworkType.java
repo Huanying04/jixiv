@@ -1,5 +1,8 @@
-package net.nekomura.utils.jixiv.Enums;
+package net.nekomura.utils.jixiv.Enums.search;
 
+/**
+ * 搜尋作品類別
+ */
 public enum PixivSearchArtworkType {
     /**
      * 全部

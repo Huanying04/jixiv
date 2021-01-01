@@ -1,5 +1,8 @@
-package net.nekomura.utils.jixiv.Enums;
+package net.nekomura.utils.jixiv.Enums.rank;
 
+/**
+ * 排行棒評分類別
+ */
 public enum PixivRankMode {
     /**
      * 今日

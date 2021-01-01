@@ -1,6 +1,6 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.PixivIllustrationType;
+import net.nekomura.utils.jixiv.Enums.artwork.PixivIllustrationType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

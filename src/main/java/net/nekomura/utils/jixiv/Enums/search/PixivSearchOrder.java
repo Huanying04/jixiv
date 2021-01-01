@@ -1,5 +1,8 @@
-package net.nekomura.utils.jixiv.Enums;
+package net.nekomura.utils.jixiv.Enums.search;
 
+/**
+ * 搜尋排序
+ */
 public enum PixivSearchOrder {
     /**
      * 按最新排序

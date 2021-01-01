@@ -1,5 +1,8 @@
-package net.nekomura.utils.jixiv.Enums;
+package net.nekomura.utils.jixiv.Enums.search;
 
+/**
+ * 搜尋關鍵字限制
+ */
 public enum PixivSearchSMode {
     /**
      * 完全相同(?待確認)

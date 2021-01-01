@@ -1,8 +1,10 @@
 package net.nekomura.utils.jixiv;
 
 import com.google.common.collect.Iterators;
-import net.nekomura.utils.jixiv.Enums.PixivArtworkType;
+import net.nekomura.utils.jixiv.Enums.artwork.PixivArtworkType;
+import net.nekomura.utils.jixiv.Enums.bookmark.BookmarkRestrict;
 import net.nekomura.utils.jixiv.Utils.SortUtils;
+import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -17,11 +19,23 @@ public class User {
     private final int id;
     private final JSONObject profile;
     private final JSONObject preloadData;
+    private String phpSession;
+    private String userAgent;
 
-    public User(int id, JSONObject profile, JSONObject preloadData) {
+    public User(int id, JSONObject profile, JSONObject preloadData, String phpSession, String userAgent) {
         this.id = id;
         this.profile = profile;
         this.preloadData = preloadData;
+        this.phpSession = phpSession;
+        this.userAgent = userAgent;
+    }
+
+    private String userAgent() {
+        if (userAgent == null ||userAgent.isEmpty()) {
+            return UserAgentUtils.random();
+        }else {
+            return userAgent;
+        }
     }
 
     /**
@@ -255,5 +269,60 @@ public class User {
      */
     public boolean isOfficial() {
         return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getBoolean("official");
+    }
+
+    /**
+     * 獲取用戶所有公開收藏
+     * @param page 頁數
+     * @return 此用戶的收藏第指定頁數
+     * @throws IOException
+     */
+    public Bookmark getBookmarkList(int page) throws IOException {
+        return getBookmarkList(page, BookmarkRestrict.SHOW, null);
+    }
+
+    /**
+     * 獲取用戶收藏
+     * @param page 頁數
+     * @param restrict 收藏限制。分為公開和非公開兩種。非公開僅限自己的收藏，其餘會顯示
+     * @return 此用戶的收藏第指定頁數
+     * @throws IOException
+     */
+    public Bookmark getBookmarkList(int page, BookmarkRestrict restrict) throws IOException {
+        return getBookmarkList(page, restrict, null);
+    }
+
+    /**
+     * 獲取用戶收藏
+     * @param page 頁數
+     * @param restrict 收藏限制。分為公開和非公開兩種。非公開僅限自己的收藏，其餘會顯示
+     * @param tag 收藏的標籤名稱
+     * @return 此用戶的收藏第指定頁數
+     * @throws IOException
+     */
+    public Bookmark getBookmarkList(int page, BookmarkRestrict restrict, String tag) throws IOException {
+        if (page < 0) {
+            throw new IllegalArgumentException("The arg 'page' must be a natural number.");
+        }
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder();
+        if (tag == null || tag.isEmpty()) {
+            rb = rb.url("https://www.pixiv.net/ajax/user/" + this.getId() +"/illusts/bookmarks?tag=&offset=" + (48 * (page - 1)) + "&limit=48&rest=" + restrict.toString().toLowerCase());
+        }else {
+            rb = rb.url("https://www.pixiv.net/ajax/user/" + this.getId() +"/illusts/bookmarks?tag=" + tag +"&offset=" + (48 * (page - 1)) + "&limit=48&rest=" + restrict.toString().toLowerCase());
+        }
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
+        rb.addHeader("user-agent", userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        String json = Objects.requireNonNull(res.body()).string();
+
+        return new Bookmark(page, new JSONObject(json));
     }
 }

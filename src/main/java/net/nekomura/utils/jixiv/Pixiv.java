@@ -1,6 +1,10 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.*;
+import net.nekomura.utils.jixiv.Enums.artwork.PixivArtworkType;
+import net.nekomura.utils.jixiv.Enums.artwork.PixivImageSize;
+import net.nekomura.utils.jixiv.Enums.rank.PixivRankContent;
+import net.nekomura.utils.jixiv.Enums.rank.PixivRankMode;
+import net.nekomura.utils.jixiv.Enums.search.*;
 import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
 import com.google.common.net.UrlEscapers;
 import okhttp3.OkHttpClient;
@@ -109,7 +113,7 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new User(id, getUserProfile(id), getUserPreloadData(id));
+        return new User(id, getUserProfile(id), getUserPreloadData(id), phpSession, userAgent);
     }
 
     /**

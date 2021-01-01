@@ -1,14 +1,13 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.PixivRankContent;
-import net.nekomura.utils.jixiv.Enums.PixivRankMode;
+import net.nekomura.utils.jixiv.Enums.rank.PixivRankContent;
+import net.nekomura.utils.jixiv.Enums.rank.PixivRankMode;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Rank {
     private final int page;
