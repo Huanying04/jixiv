@@ -20,7 +20,13 @@ public class SearchResult {
      * @return 該頁之作品總數
      */
     public int getPageResultCount() {
-        return searchResultJson.getJSONObject("body").getJSONObject(dataType).getJSONArray("data").length();
+        String ignore_true = "{\"isAdContainer\":true}";
+        String ignore_false = "{\"isAdContainer\":false}";
+        if (getResultData().toString().contains(ignore_true) || getResultData().toString().contains(ignore_false)) {
+            return getResultData().length() - 1;
+        }else {
+            return getResultData().length();
+        }
     }
 
     private JSONArray getResultData() {
@@ -33,7 +39,12 @@ public class SearchResult {
      */
     public int[] getIds() {
         int[] id = new int[getPageResultCount()];
+        System.out.println(getResultData());
         for (int i = 0; i < getPageResultCount(); i++) {
+            System.out.println(i);
+            if (getResultData().getJSONObject(i).has("isAdContainer")) {
+                continue;
+            }
             id[i] = Integer.parseInt(getResultData().getJSONObject(i).getString("id"));
         }
         return id;
