@@ -207,3 +207,5 @@ PixivSearchSMode sMode = PixivSearchSMode.S_TAG;  //關鍵字搜尋方式
 PixivSearchType type = PixivSearchType.Illust;  //搜尋作品類別
 SearchResult result = p.search(keyword, page, artistType, order, mode, sMode, type);
 ```
+# 示例
+* 依賴於**jixiv**及[Java Discord API](https://github.com/DV8FromTheWorld/JDA)開發之Discord機器人：https://github.com/Huanying04/Nekobot
