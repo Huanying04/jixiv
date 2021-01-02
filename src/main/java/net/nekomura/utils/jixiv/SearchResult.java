@@ -39,9 +39,7 @@ public class SearchResult {
      */
     public int[] getIds() {
         int[] id = new int[getPageResultCount()];
-        System.out.println(getResultData());
         for (int i = 0; i < getPageResultCount(); i++) {
-            System.out.println(i);
             if (getResultData().getJSONObject(i).has("isAdContainer")) {
                 continue;
             }
