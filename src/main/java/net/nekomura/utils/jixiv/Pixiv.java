@@ -230,10 +230,11 @@ public class Pixiv {
      * @throws IOException 獲取失敗
      */
     public SearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
-        String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
+        String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&mode=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
                 artistType.toString().toLowerCase(),
                 UrlEscapers.urlFragmentEscaper().escape(keywords),
                 UrlEscapers.urlFragmentEscaper().escape(keywords),
+                order.toString().toLowerCase(),
                 mode.toString().toLowerCase(),
                 page,
                 sMode.toString().toLowerCase(),

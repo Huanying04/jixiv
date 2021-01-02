@@ -11,6 +11,10 @@ public class Bookmark {
         this.data = data;
     }
 
+    /**
+     * 當前頁碼
+     * @return 當前頁碼
+     */
     public int getPage() {
         return page;
     }
@@ -19,12 +23,21 @@ public class Bookmark {
         return data;
     }
 
+    /**
+     * 顯示錯誤
+     * @throws Exception 錯誤
+     */
     private void showError() throws Exception {
         if (data.getBoolean("error")) {
             throw new Exception(data.getString("message"));
         }
     }
 
+    /**
+     * 獲取此頁中所有作品的id
+     * @return 此頁中所有作品的id
+     * @throws Exception
+     */
     public int[] getIDs() throws Exception {
         showError();
 
