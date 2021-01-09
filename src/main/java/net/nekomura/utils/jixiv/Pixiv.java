@@ -114,6 +114,32 @@ public class Pixiv {
         return new User(id, getUserProfile(id), getUserPreloadData(id), phpSession, userAgent);
     }
 
+    private String getToken() throws Exception {
+        String url = "https://www.pixiv.net/setting_user.php";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url(url);
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
+        rb.addHeader("user-agent", userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        String html = res.body().string();
+
+        if (html.contains("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"")) {
+            int index1 = html.indexOf("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"");
+            int length = "<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"".length();
+            String sub = html.substring(index1 + length);
+            int index2 = sub.indexOf("\"");
+            return html.substring(index1 + length, index1 + length + index2);
+        }else {
+            throw new Exception("Cannot get pixiv token");
+        }
+    }
+
     /**
      * 下載用戶所有插圖及漫畫作品
      * @param folder 資料夾位置
@@ -280,7 +306,13 @@ public class Pixiv {
         return search(keywords, page, PixivSearchArtworkType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);
     }
 
-    /*public int addBookmarkUser(int id) throws IOException {
+    /**
+     * 關注用戶
+     * @param id 用戶ID
+     * @return HTTP狀態碼
+     * @throws Exception
+     */
+    public int addBookmarkUser(int id) throws Exception {
         String url = "https://www.pixiv.net/bookmark_add.php";
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -300,15 +332,21 @@ public class Pixiv {
         rb.addHeader("referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + phpSession);
         rb.addHeader("user-agent", userAgent());
+        rb.addHeader("x-csrf-token", getToken());
 
         Request request = rb.build();
 
         Response response = okHttpClient.newCall(request).execute();
-        System.out.println(response.body().string());
         return response.code();
-    }*/
+    }
 
-    /*public int removeBookmarkUser(int id) throws IOException {
+    /**
+     * 取消關注用戶
+     * @param id 用戶ID
+     * @return HTTP狀態碼
+     * @throws Exception
+     */
+    public int removeBookmarkUser(int id) throws Exception {
         String url = "https://www.pixiv.net/rpc_group_setting.php";
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -325,10 +363,11 @@ public class Pixiv {
         rb.addHeader("referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + phpSession);
         rb.addHeader("user-agent", userAgent());
+        rb.addHeader("x-csrf-token", getToken());
 
         Request request = rb.build();
 
         Response response = okHttpClient.newCall(request).execute();
         return response.code();
-    }*/
+    }
 }
