@@ -2,8 +2,6 @@ package net.nekomura.utils.jixiv;
 
 import com.google.common.collect.Iterators;
 import org.apache.commons.text.StringEscapeUtils;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -17,11 +15,11 @@ import java.util.TimeZone;
 
 public class ArtworkInfo {
     private final int id;
-    private final JSONObject preloadData;
+    private final JSONObject data;
 
-    public ArtworkInfo(int id, JSONObject preloadData) {
+    public ArtworkInfo(int id, JSONObject data) {
         this.id = id;
-        this.preloadData = preloadData;
+        this.data = data;
     }
 
     /**
@@ -32,34 +30,22 @@ public class ArtworkInfo {
         return id;
     }
 
-    public JSONObject getPreloadData() {
-        return preloadData;
+    public JSONObject getData() {
+        return data;
     }
 
     public IllustrationInfo toIllustrationInfo() {
-        if (Iterators.contains(preloadData.keys(), "illust"))
-            return new IllustrationInfo(id, preloadData);
+        if (Iterators.contains(data.getJSONObject("body").keys(), "illustId"))
+            return new IllustrationInfo(id, data.getJSONObject("body"));
         else
             throw new IllegalArgumentException("The variable is not an IllustrationInfo");
     }
 
     public NovelInfo toNovelInfo() {
-        if (Iterators.contains(preloadData.keys(), "novel"))
-            return new NovelInfo(id, preloadData);
+        if (Iterators.contains(data.getJSONObject("body").keys(), "content"))
+            return new NovelInfo(id, data.getJSONObject("body"));
         else
             throw new IllegalArgumentException("The variable is not a NovelInfo");
-    }
-
-    @NotNull
-    @Contract(pure = true)
-    private String artworkType() throws IllegalArgumentException {
-        if (this instanceof IllustrationInfo) {
-            return "illust";
-        }else if (this instanceof NovelInfo) {
-            return "novel";
-        }else {
-            throw new IllegalArgumentException("The variable must be a PixivImage or a net.nekomura.utils.jixiv.PixivNovel.");
-        }
     }
 
     /**
@@ -67,7 +53,7 @@ public class ArtworkInfo {
      * @return 作品標題
      */
     public String getTitle() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getString("title");
+        return data.getString("title");
     }
 
     /**
@@ -75,7 +61,7 @@ public class ArtworkInfo {
      * @return 作品說明
      */
     public String getDescription() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getString("description");
+        return data.getString("description");
     }
 
     /**
@@ -91,7 +77,7 @@ public class ArtworkInfo {
      * @return 作品所有標籤之原文名字
      */
     public String[] getTags() {
-        JSONArray tagsJsonArray = preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getJSONObject("tags").getJSONArray("tags");
+        JSONArray tagsJsonArray = data.getJSONObject("tags").getJSONArray("tags");
 
         String[] tags = new String[tagsJsonArray.length()];
         for (int i = 0; i < tagsJsonArray.length(); i++) {
@@ -106,7 +92,7 @@ public class ArtworkInfo {
      * @return 作品總頁數
      */
     public int getPageCount() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getInt("pageCount");
+        return data.getInt("pageCount");
     }
 
     /**
@@ -114,7 +100,7 @@ public class ArtworkInfo {
      * @return 作品閱覽次數
      */
     public int getViewCount() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getInt("viewCount");
+        return data.getInt("viewCount");
     }
 
     /**
@@ -122,7 +108,7 @@ public class ArtworkInfo {
      * @return 作品收藏次數
      */
     public int getBookmarkCount() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getInt("bookmarkCount");
+        return data.getInt("bookmarkCount");
     }
 
     /**
@@ -130,7 +116,7 @@ public class ArtworkInfo {
      * @return 作品評論數
      */
     public int getCommentCount() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getInt("commentCount");
+        return data.getInt("commentCount");
     }
 
     /**
@@ -138,7 +124,7 @@ public class ArtworkInfo {
      * @return 作品讚數
      */
     public int getLikeCount() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getInt("likeCount");
+        return data.getInt("likeCount");
     }
 
     /**
@@ -146,7 +132,7 @@ public class ArtworkInfo {
      * @return 作品Image Response Count
      */
     public int getImageResponseCount() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getInt("imageResponseCount");
+        return data.getInt("imageResponseCount");
     }
 
     /**
@@ -154,7 +140,7 @@ public class ArtworkInfo {
      * @return 作者id
      */
     public int getAuthorID() {
-        return Integer.parseInt(preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getString("userId"));
+        return Integer.parseInt(data.getString("userId"));
     }
 
     /**
@@ -162,7 +148,7 @@ public class ArtworkInfo {
      * @return 作者用戶名稱
      */
     public String getAuthorName() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getString("userName");
+        return data.getString("userName");
     }
 
     /**
@@ -170,7 +156,7 @@ public class ArtworkInfo {
      * @return 作品創建日期
      */
     public String getCreateDate() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getString("createDate");
+        return data.getString("createDate");
     }
 
     /**
@@ -192,7 +178,7 @@ public class ArtworkInfo {
      * @return 作品上傳日期
      */
     public String getUploadDate() {
-        return preloadData.getJSONObject(artworkType()).getJSONObject(String.valueOf(id)).getString("uploadDate");
+        return data.getString("uploadDate");
     }
 
     /**

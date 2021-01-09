@@ -1,7 +1,7 @@
 package net.nekomura.utils.jixiv;
 
 
-public class Novel extends PixivArtwork {
+public class Novel extends Artwork {
 
     public Novel(String phpSession) {
         super(phpSession);

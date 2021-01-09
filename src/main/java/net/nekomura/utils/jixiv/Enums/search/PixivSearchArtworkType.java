@@ -8,6 +8,7 @@ public enum PixivSearchArtworkType {
      * 全部
      */
     All,
+
     /**
      * 插畫
      */

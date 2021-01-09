@@ -6,7 +6,7 @@
 
     <groupId>com.github.huanying04.utils</groupId>
     <artifactId>jixiv</artifactId>
-    <version>0.0.1.5-SNAPSHOT-5</version>
+    <version>0.0.1.5-SNAPSHOT-7</version>
     <build>
         <plugins>
             <plugin>

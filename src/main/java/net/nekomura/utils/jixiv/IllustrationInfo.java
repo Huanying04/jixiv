@@ -17,8 +17,8 @@ import java.util.Calendar;
 import java.util.Objects;
 
 public class IllustrationInfo extends ArtworkInfo {
-    public IllustrationInfo(int id, JSONObject preloadData) {
-        super(id, preloadData);
+    public IllustrationInfo(int id, JSONObject data) {
+        super(id, data);
     }
 
     /**
@@ -26,11 +26,11 @@ public class IllustrationInfo extends ArtworkInfo {
      * @return Response Count
      */
     public int getResponseCount() {
-        return getPreloadData().getJSONObject("illust").getJSONObject(String.valueOf(getId())).getInt("responseCount");
+        return getData().getInt("responseCount");
     }
 
     private String getImageUrl(int page, @NotNull PixivImageSize type) {
-        String pageZero = getPreloadData().getJSONObject("illust").getJSONObject(String.valueOf(getId())).getJSONObject("urls").getString(type.toString().toLowerCase());
+        String pageZero = getData().getJSONObject("urls").getString(type.toString().toLowerCase());
         return pageZero.replace(getId() + "_p0", getId() + "_p" + page);
     }
 
@@ -119,7 +119,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * @return 插畫作品類別
      */
     public PixivIllustrationType getIllustrationType() {
-        int typeNumber = getPreloadData().getJSONObject("illust").getJSONObject(String.valueOf(getId())).getInt("illustType");
+        int typeNumber = getData().getInt("illustType");
         switch (typeNumber) {
             case 0:
                 return PixivIllustrationType.Illustration;

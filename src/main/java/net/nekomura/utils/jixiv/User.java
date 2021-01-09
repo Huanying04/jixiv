@@ -31,7 +31,7 @@ public class User {
     }
 
     private String userAgent() {
-        if (userAgent == null ||userAgent.isEmpty()) {
+        if (userAgent == null || userAgent.isEmpty()) {
             return UserAgentUtils.random();
         }else {
             return userAgent;

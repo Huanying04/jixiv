@@ -1,6 +1,6 @@
 package net.nekomura.utils.jixiv;
 
-public class Illustration extends PixivArtwork {
+public class Illustration extends Artwork {
 
     public Illustration(String phpSession) {
         super(phpSession);

@@ -19,7 +19,7 @@ public class NovelInfo extends ArtworkInfo {
      * @return 小說內容
      */
     public String getContent() {
-        return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getString("content");
+        return getData().getString("content");
     }
 
     /**
@@ -27,7 +27,7 @@ public class NovelInfo extends ArtworkInfo {
      * @return Marker Count
      */
     public int getMarkerCount() {
-        return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getInt("markerCount");
+        return getData().getInt("markerCount");
     }
 
     /**
@@ -35,11 +35,11 @@ public class NovelInfo extends ArtworkInfo {
      * @return 總字數
      */
     public int getTextCount() {
-        return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getJSONObject("userNovels").getJSONObject(String.valueOf(getId())).getInt("textCount");
+        return getData().getJSONObject("userNovels").getJSONObject(String.valueOf(getId())).getInt("textCount");
     }
 
     private String getCoverUrl() {
-        return getPreloadData().getJSONObject("novel").getJSONObject(String.valueOf(getId())).getString("coverUrl");
+        return getData().getString("coverUrl");
     }
 
     /**

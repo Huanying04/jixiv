@@ -7,9 +7,7 @@ import net.nekomura.utils.jixiv.Enums.rank.PixivRankMode;
 import net.nekomura.utils.jixiv.Enums.search.*;
 import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
 import com.google.common.net.UrlEscapers;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -281,4 +279,56 @@ public class Pixiv {
     public SearchResult search(String keywords, int page) throws IOException {
         return search(keywords, page, PixivSearchArtworkType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);
     }
+
+    /*public int addBookmarkUser(int id) throws IOException {
+        String url = "https://www.pixiv.net/bookmark_add.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        RequestBody body = new FormBody.Builder()
+                .add("mode", "add")
+                .add("type", "user")
+                .add("user_id", String.valueOf(id))
+                .add("tag", "")
+                .add("restrict", "0")
+                .addEncoded("format", "json").build();
+
+        Request.Builder rb = new Request.Builder().url(url);
+
+        rb.method("POST", body);
+
+        rb.addHeader("referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
+        rb.addHeader("user-agent", userAgent());
+
+        Request request = rb.build();
+
+        Response response = okHttpClient.newCall(request).execute();
+        System.out.println(response.body().string());
+        return response.code();
+    }*/
+
+    /*public int removeBookmarkUser(int id) throws IOException {
+        String url = "https://www.pixiv.net/rpc_group_setting.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        RequestBody body = new FormBody.Builder()
+                .add("mode", "del")
+                .add("type", "bookuser")
+                .add("id", String.valueOf(id)).build();
+
+        Request.Builder rb = new Request.Builder().url(url);
+
+        rb.method("POST", body);
+
+        rb.addHeader("referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
+        rb.addHeader("user-agent", userAgent());
+
+        Request request = rb.build();
+
+        Response response = okHttpClient.newCall(request).execute();
+        return response.code();
+    }*/
 }

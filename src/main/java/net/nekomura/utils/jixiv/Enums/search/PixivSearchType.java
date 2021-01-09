@@ -5,6 +5,7 @@ public enum PixivSearchType {
      * 全部
      */
     All,
+
     /**
      * 插畫及動態插畫
      */
