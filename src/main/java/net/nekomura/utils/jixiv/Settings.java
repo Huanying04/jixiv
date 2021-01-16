@@ -1,7 +1,10 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
+import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import okhttp3.*;
+
+import java.io.IOException;
 
 public class Settings {
     private String phpSession;
@@ -24,7 +27,7 @@ public class Settings {
         }
     }
 
-    private String getToken() throws Exception {
+    private String getToken() throws IOException {
         String url = "https://www.pixiv.net/setting_user.php";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -46,11 +49,11 @@ public class Settings {
             int index2 = sub.indexOf("\"");
             return html.substring(index1 + length, index1 + length + index2);
         }else {
-            throw new Exception("Cannot get pixiv token");
+            throw new PixivException("Cannot get pixiv token");
         }
     }
 
-    private String getSubmit() throws Exception {
+    private String getSubmit() throws IOException {
         String url = "https://www.pixiv.net/setting_user.php";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -72,11 +75,11 @@ public class Settings {
             int index2 = sub.indexOf("\"");
             return html.substring(index1 + length, index1 + length + index2);
         }else {
-            throw new Exception("Cannot get pixiv submit string");
+            throw new PixivException("Cannot get pixiv submit string");
         }
     }
 
-    private String getLanguage() throws Exception {
+    private String getLanguage() throws IOException {
         String url = "https://www.pixiv.net/setting_user.php";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -98,7 +101,7 @@ public class Settings {
             int index2 = sub.indexOf("\"");
             return html.substring(index1 + length, index1 + length + index2);
         }else {
-            throw new Exception("Cannot get user language");
+            throw new PixivException("Cannot get user language");
         }
     }
 
@@ -107,9 +110,9 @@ public class Settings {
      * @param r18Restriction 是否可瀏覽R18作品
      * @param r18gRestriction 是否可瀏覽R18-G作品
      * @return HTTP 狀態碼
-     * @throws Exception
+     * @throws IOException 讀取網路資料失敗或修改失敗
      */
-    public int setViewRestriction(boolean r18Restriction, boolean r18gRestriction) throws Exception {
+    public int setViewRestriction(boolean r18Restriction, boolean r18gRestriction) throws IOException {
             String url = "https://www.pixiv.net/setting_user.php";
 
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -127,8 +130,6 @@ public class Settings {
             }else {
                 r18g = "1";
             }
-
-
 
             RequestBody body = new FormBody.Builder()
                                 .add("mode", "mod")

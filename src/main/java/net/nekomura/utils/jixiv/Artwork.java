@@ -1,9 +1,17 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
+import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
+import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Artwork {
 
@@ -43,14 +51,14 @@ public class Artwork {
         }
     }
 
-    private JSONObject getArtworkData(int id) throws Exception {
+    private JSONObject getArtworkData(int id) throws IOException {
         String url;
         if (this instanceof Illustration) {
             url = "https://www.pixiv.net/ajax/illust/" + id;
         }else if (this instanceof Novel) {
             url = "https://www.pixiv.net/ajax/novel/" + id;
         }else {
-            throw new Exception("The variable must be a Illustration or a Novel");
+            throw new IllegalArgumentException("The variable must be a Illustration or a Novel");
         }
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -66,12 +74,12 @@ public class Artwork {
         JSONObject json = new JSONObject(res.body().string());
 
         if (json.getBoolean("error")) {
-            throw new Exception(json.getString("message"));
+            throw new PixivException(json.getString("message"));
         }
         return json;
     }
 
-    private String getToken() throws Exception {
+    private String getToken() throws IOException {
         String url = "https://www.pixiv.net/setting_user.php";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -93,11 +101,11 @@ public class Artwork {
             int index2 = sub.indexOf("\"");
             return html.substring(index1 + length, index1 + length + index2);
         }else {
-            throw new Exception("Cannot get pixiv token");
+            throw new PixivException("Cannot get pixiv token");
         }
     }
 
-    private String getBookId(int id, String type) throws Exception {
+    private String getBookId(int id, String type) throws IOException {
         String url;
         if (type.equals("illust")) {
             url = "https://www.pixiv.net/bookmark_add.php?illust_id=" + id + "&type=illust";
@@ -125,18 +133,18 @@ public class Artwork {
             int index2 = sub.indexOf("\"");
             return html.substring(index1 + length, index1 + length + index2);
         }else {
-            throw new Exception("Cannot get Book ID []");
+            throw new PixivException("Cannot get Book ID");
         }
     }
 
-    private String getBookmarkRestriction(int id) throws Exception {
+    private String getBookmarkRestriction(int id) throws IOException {
         String url;
         if (this instanceof Illustration) {
             url = "https://www.pixiv.net/bookmark_add.php?illust_id=" + id + "&type=illust";
         }else if (this instanceof Novel) {
             url = "https://www.pixiv.net/novel/bookmark_add.php?id=" + id;
         }else {
-            throw new Exception("The variable must be a Illustration or a Novel");
+            throw new IllegalArgumentException("The variable must be a Illustration or a Novel");
         }
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -159,17 +167,30 @@ public class Artwork {
             int index2 = sub.indexOf("\"");
             return html.substring(index1 + length, index1 + length + index2);
         }else {
-            throw new Exception("Cannot get Bookmark Restriction");
+            throw new PixivException("Cannot get Bookmark Restriction");
         }
+    }
+
+
+    /**
+     * 獲取作品資訊物件
+     * @deprecated 請使用 {@link #getInfo(int)}
+     * @param id 作品id
+     * @return 作品資訊物件
+     * @throws IOException 讀取網路資料失敗
+     */
+    @Deprecated
+    public ArtworkInfo get(int id) throws IOException {
+        return getInfo(id);
     }
 
     /**
      * 獲取作品資訊物件
      * @param id 作品id
      * @return 作品資訊物件
-     * @throws Exception 作品不存在或沒有權限等，獲取失敗
+     * @throws IOException 讀取網路資料失敗
      */
-    public ArtworkInfo get(int id) throws Exception {
+    public ArtworkInfo getInfo(int id) throws IOException {
         return new ArtworkInfo(id, getArtworkData(id));
     }
 
@@ -177,9 +198,9 @@ public class Artwork {
      * 喜歡作品
      * @param id 作品id
      * @return HTTP狀態碼
-     * @throws Exception
+     * @throws IOException 讀取網路資料失敗
      */
-    public int like(int id) throws Exception {
+    public int like(int id) throws IOException {
         String url;
         JSONObject postData = new JSONObject();
         if (this instanceof Illustration) {
@@ -213,7 +234,7 @@ public class Artwork {
         JSONObject json = new JSONObject(response.body().string());
 
         if (json.getBoolean("error")) {
-            throw new Exception(json.getString("message"));
+            throw new PixivException(json.getString("message"));
         }
 
         return response.code();
@@ -223,9 +244,9 @@ public class Artwork {
      * 收藏作品
      * @param id 作品ID
      * @return HTTP狀態碼
-     * @throws Exception
+     * @throws IOException 讀取網路資料失敗
      */
-    public int addBookmark(int id) throws Exception {
+    public int addBookmark(int id) throws IOException {
         String url;
         JSONObject postData = new JSONObject();
         if (this instanceof Illustration) {
@@ -265,7 +286,7 @@ public class Artwork {
         JSONObject json = new JSONObject(response.body().string());
 
         if (json.getBoolean("error")) {
-            throw new Exception(json.getString("message"));
+            throw new PixivException(json.getString("message"));
         }
 
         return response.code();
@@ -275,9 +296,9 @@ public class Artwork {
      * 取消收藏作品
      * @param id 作品ID
      * @return HTTP狀態碼
-     * @throws Exception
+     * @throws IOException 讀取網路資料失敗
      */
-    public int removeBookmark(int id) throws Exception {
+    public int removeBookmark(int id) throws IOException {
         String url;
         String type = "";
         if (this instanceof Illustration) {
@@ -312,5 +333,50 @@ public class Artwork {
 
         Response response = okHttpClient.newCall(request).execute();
         return response.code();
+    }
+
+    /**
+     * 獲取作品評論
+     * @param id 作品id
+     * @return 作品所有評論
+     * @throws IOException 網路資料獲取失敗
+     */
+    public List<Comment> getComments(int id) throws IOException {
+        List<Comment> comments = new ArrayList<>();
+        String url;
+        PixivArtworkType type;
+
+        if (this instanceof Illustration) {
+            url = "https://www.pixiv.net/ajax/illusts/comments/roots?illust_id=" + id +"&offset=0&limit=" + this.getInfo(id).getCommentCount();
+            type = PixivArtworkType.Illusts;
+        }else if (this instanceof Novel) {
+            url = "https://www.pixiv.net/ajax/novels/comments/roots?novel_id=" + id + "&offset=0&limit=" + this.getInfo(id).getCommentCount();
+            type = PixivArtworkType.Novels;
+        }else {
+            throw new IllegalArgumentException("The variable must be a Illustration or a Novel");
+        }
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url(url);
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
+        rb.addHeader("user-agent", userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        JSONObject commentJson = new JSONObject(Objects.requireNonNull(res.body()).string());
+
+        if (commentJson.getBoolean("error")) {
+            throw new PixivException(commentJson.getString("message"));
+        }
+
+        for (int i = 0; i < commentJson.getJSONObject("body").getJSONArray("comments").length(); i++) {
+            comments.add(new Comment(commentJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), type, phpSession, userAgent()));
+        }
+
+        return comments;
     }
 }

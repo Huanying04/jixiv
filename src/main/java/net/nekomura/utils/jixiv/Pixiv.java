@@ -1,11 +1,12 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.artwork.PixivArtworkType;
-import net.nekomura.utils.jixiv.Enums.artwork.PixivImageSize;
-import net.nekomura.utils.jixiv.Enums.rank.PixivRankContent;
-import net.nekomura.utils.jixiv.Enums.rank.PixivRankMode;
-import net.nekomura.utils.jixiv.Enums.search.*;
-import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
+import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
+import net.nekomura.utils.jixiv.enums.artwork.PixivImageSize;
+import net.nekomura.utils.jixiv.enums.rank.PixivRankContent;
+import net.nekomura.utils.jixiv.enums.rank.PixivRankMode;
+import net.nekomura.utils.jixiv.enums.search.*;
+import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import com.google.common.net.UrlEscapers;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
@@ -114,7 +115,7 @@ public class Pixiv {
         return new User(id, getUserProfile(id), getUserPreloadData(id), phpSession, userAgent);
     }
 
-    private String getToken() throws Exception {
+    private String getToken() throws IOException {
         String url = "https://www.pixiv.net/setting_user.php";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -136,7 +137,7 @@ public class Pixiv {
             int index2 = sub.indexOf("\"");
             return html.substring(index1 + length, index1 + length + index2);
         }else {
-            throw new Exception("Cannot get pixiv token");
+            throw new PixivException("Cannot get pixiv token");
         }
     }
 
@@ -145,12 +146,12 @@ public class Pixiv {
      * @param folder 資料夾位置
      * @param userId 用戶id
      * @param size 圖片大小
-     * @throws Exception 獲取失敗
+     * @throws IOException 獲取失敗
      */
-    public void downloadUserAllIllustration(File folder, int userId, PixivImageSize size) throws Exception {
+    public void downloadUserAllIllustration(File folder, int userId, PixivImageSize size) throws IOException {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
-            new Illustration(phpSession).get(id).downloadAll(folder, size);
+            new Illustration(phpSession).getInfo(id).downloadAll(folder, size);
         }
     }
 
@@ -159,12 +160,12 @@ public class Pixiv {
      * @param folderPath 資料夾位置
      * @param userId 用戶id
      * @param size 圖片大小
-     * @throws Exception 獲取失敗
+     * @throws IOException 讀取網路資料失敗
      */
-    public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize size) throws Exception {
+    public void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize size) throws IOException {
         int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
         for (int id: artworks) {
-            new Illustration(phpSession).get(id).downloadAll(folderPath, size);
+            new Illustration(phpSession).getInfo(id).downloadAll(folderPath, size);
         }
     }
 
@@ -310,9 +311,9 @@ public class Pixiv {
      * 關注用戶
      * @param id 用戶ID
      * @return HTTP狀態碼
-     * @throws Exception
+     * @throws IOException 讀取網路資料失敗
      */
-    public int addBookmarkUser(int id) throws Exception {
+    public int addBookmarkUser(int id) throws IOException {
         String url = "https://www.pixiv.net/bookmark_add.php";
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -344,9 +345,9 @@ public class Pixiv {
      * 取消關注用戶
      * @param id 用戶ID
      * @return HTTP狀態碼
-     * @throws Exception
+     * @throws IOException 讀取網路資料失敗
      */
-    public int removeBookmarkUser(int id) throws Exception {
+    public int removeBookmarkUser(int id) throws IOException {
         String url = "https://www.pixiv.net/rpc_group_setting.php";
 
         OkHttpClient okHttpClient = new OkHttpClient();

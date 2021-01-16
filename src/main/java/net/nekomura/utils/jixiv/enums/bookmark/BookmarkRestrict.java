@@ -1,4 +1,4 @@
-package net.nekomura.utils.jixiv.Enums.bookmark;
+package net.nekomura.utils.jixiv.enums.bookmark;
 
 /**
  * 收藏公開設定類別

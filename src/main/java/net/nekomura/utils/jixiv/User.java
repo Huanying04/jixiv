@@ -1,10 +1,10 @@
 package net.nekomura.utils.jixiv;
 
 import com.google.common.collect.Iterators;
-import net.nekomura.utils.jixiv.Enums.artwork.PixivArtworkType;
-import net.nekomura.utils.jixiv.Enums.bookmark.BookmarkRestrict;
-import net.nekomura.utils.jixiv.Utils.SortUtils;
-import net.nekomura.utils.jixiv.Utils.UserAgentUtils;
+import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
+import net.nekomura.utils.jixiv.enums.bookmark.BookmarkRestrict;
+import net.nekomura.utils.jixiv.utils.SortUtils;
+import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

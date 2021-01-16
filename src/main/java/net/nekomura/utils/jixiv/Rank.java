@@ -1,7 +1,7 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.rank.PixivRankContent;
-import net.nekomura.utils.jixiv.Enums.rank.PixivRankMode;
+import net.nekomura.utils.jixiv.enums.rank.PixivRankContent;
+import net.nekomura.utils.jixiv.enums.rank.PixivRankMode;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;

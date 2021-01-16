@@ -1,8 +1,8 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.artwork.PixivIllustrationType;
-import net.nekomura.utils.jixiv.Enums.artwork.PixivImageSize;
-import net.nekomura.utils.jixiv.Utils.FormatUtils;
+import net.nekomura.utils.jixiv.enums.artwork.PixivIllustrationType;
+import net.nekomura.utils.jixiv.enums.artwork.PixivImageSize;
+import net.nekomura.utils.jixiv.utils.FormatUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -164,18 +164,18 @@ public class IllustrationInfo extends ArtworkInfo {
      * 下載插畫圖片指定頁碼
      * @param pathname 儲存位置
      * @param page 指定頁碼
-     * @throws Exception 下載失敗
+     * @throws IOException 獲取網路資料失敗導致下載失敗
      */
-    public void download(String pathname, int page) throws Exception {
+    public void download(String pathname, int page) throws IOException {
         download(pathname, page, PixivImageSize.Original);
     }
 
     /**
      * 下載插畫首張圖片
      * @param pathname 儲存位置
-     * @throws Exception 下載失敗
+     * @throws IOException 獲取網路資料失敗導致下載失敗
      */
-    public void download(String pathname) throws Exception {
+    public void download(String pathname) throws IOException {
         download(pathname, 0, PixivImageSize.Original);
     }
 
@@ -183,7 +183,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * 下載插畫所有頁圖片
      * @param folder 儲存資料夾
      * @param size 圖片大小
-     * @throws IOException 下載失敗
+     * @throws IOException 獲取網路資料失敗導致下載失敗
      */
     public void downloadAll(File folder, PixivImageSize size) throws IOException {
         int pageCount = getPageCount();
@@ -202,7 +202,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * 下載插畫所有頁圖片
      * @param folderPath 儲存資料夾位置
      * @param type 圖片大小
-     * @throws IOException 下載失敗
+     * @throws IOException 獲取網路資料失敗導致下載失敗
      */
     public void downloadAll(String folderPath, PixivImageSize type) throws IOException {
         downloadAll(new File(folderPath), type);
@@ -211,9 +211,10 @@ public class IllustrationInfo extends ArtworkInfo {
     /**
      * 下載該插畫動圖作品之所有幀之圖片之壓縮檔
      * @param pathname 儲存位置
-     * @throws Exception 下載失敗
+     * @throws IOException 獲取網路資料失敗導致下載失敗
+     * @throws ParseException 獲取動圖url失敗
      */
-    public void downloadUgoiraZip(String pathname) throws Exception {
+    public void downloadUgoiraZip(String pathname) throws IOException, ParseException {
         if (!getIllustrationType().equals(PixivIllustrationType.Ugoira)) {
             throw new IllegalArgumentException("The Illustration is not an ugoira.");
         }

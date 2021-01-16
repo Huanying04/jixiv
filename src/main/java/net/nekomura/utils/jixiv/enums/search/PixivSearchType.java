@@ -1,4 +1,4 @@
-package net.nekomura.utils.jixiv.Enums.search;
+package net.nekomura.utils.jixiv.enums.search;
 
 public enum PixivSearchType {
     /**

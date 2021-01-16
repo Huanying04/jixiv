@@ -6,7 +6,9 @@ import okhttp3.Response;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 public class NovelInfo extends ArtworkInfo {
@@ -45,9 +47,9 @@ public class NovelInfo extends ArtworkInfo {
     /**
      * 獲取封面圖片
      * @return 封面圖片的byte array
-     * @throws Exception 獲取失敗
+     * @throws IOException 獲取網路資料失敗
      */
-    public byte[] getCover() throws Exception {
+    public byte[] getCover() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(getCoverUrl());
         rb.addHeader("Referer", "https://www.pixiv.net/artworks");
@@ -60,9 +62,9 @@ public class NovelInfo extends ArtworkInfo {
     /**
      * 下載封面圖片
      * @param pathname 儲存位置
-     * @throws Exception 下載失敗
+     * @throws IOException 獲取網路資料失敗或文件處理錯誤
      */
-    public void downloadCover(String pathname) throws Exception {
+    public void downloadCover(String pathname) throws IOException {
         File file = new File(pathname);
         byte[] image = getCover();
         if (file.getParentFile() != null)

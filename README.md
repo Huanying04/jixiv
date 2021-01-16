@@ -52,7 +52,7 @@ String phpSession = ""; //pixiv登入後cookie裡的PHPSESSID
 String userAgent = "";  //你的User-Agent，如果沒有的話將會隨機生成
 int id = 85209753; //插畫id
 Illustration i = new Illustration(phpSession, userAgent);
-IllustrationInfo iInfo = i.get(id);
+IllustrationInfo iInfo = i.getInfo(id);
 //獲取插畫標題
 String title = iInfo.getTitle();
 //獲取插畫簡介
@@ -74,7 +74,7 @@ int commemtCount = iInfo.getCommentCount();
 ```java
 int id = 11387000; //小說id
 Novel n = new Novel(phpSession, userAgent);
-NovelInfo nInfo = n.get(id);
+NovelInfo nInfo = n.getInfo(id);
 //獲取小說標題
 String title = nInfo.getTitle();
 //獲取小說簡介

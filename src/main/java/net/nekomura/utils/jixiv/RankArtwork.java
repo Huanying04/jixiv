@@ -1,6 +1,6 @@
 package net.nekomura.utils.jixiv;
 
-import net.nekomura.utils.jixiv.Enums.artwork.PixivIllustrationType;
+import net.nekomura.utils.jixiv.enums.artwork.PixivIllustrationType;
 import org.json.JSONObject;
 
 public class RankArtwork {

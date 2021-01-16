@@ -1,4 +1,4 @@
-package net.nekomura.utils.jixiv.Enums.rank;
+package net.nekomura.utils.jixiv.enums.rank;
 
 /**
  * 排行棒評分類別

@@ -1,4 +1,4 @@
-package net.nekomura.utils.jixiv.Enums.artwork;
+package net.nekomura.utils.jixiv.enums.artwork;
 
 /**
  * 圖片大小類型

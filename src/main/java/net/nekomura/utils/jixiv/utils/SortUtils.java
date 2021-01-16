@@ -1,4 +1,4 @@
-package net.nekomura.utils.jixiv.Utils;
+package net.nekomura.utils.jixiv.utils;
 
 public class SortUtils {
 

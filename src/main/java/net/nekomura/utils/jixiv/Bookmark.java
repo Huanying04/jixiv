@@ -1,5 +1,6 @@
 package net.nekomura.utils.jixiv;
 
+import net.nekomura.utils.jixiv.exception.PixivException;
 import org.json.JSONObject;
 
 public class Bookmark {
@@ -25,20 +26,18 @@ public class Bookmark {
 
     /**
      * 顯示錯誤
-     * @throws Exception 錯誤
      */
-    private void showError() throws Exception {
+    private void showError() {
         if (data.getBoolean("error")) {
-            throw new Exception(data.getString("message"));
+            throw new PixivException(data.getString("message"));
         }
     }
 
     /**
      * 獲取此頁中所有作品的id
      * @return 此頁中所有作品的id
-     * @throws Exception
      */
-    public int[] getIDs() throws Exception {
+    public int[] getIDs() {
         showError();
 
         int[] ids = new int[48];
