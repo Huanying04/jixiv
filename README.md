@@ -46,8 +46,7 @@ Doc：https://huanying04.github.io/Jixiv-Wiki/
 ![phpsession](https://github.com/Huanying04/Huanying04/blob/main/phpsession.png)
 
 在瀏覽器中找到pixiv cookie中的PHPSESSID即可用之來模擬登入。
-## 模擬登入
-
+## 模擬登入(必要！)
 ```java
 String phpSession = "00000000_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; //pixiv登入後cookie裡的PHPSESSID
 String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36";  //你的User-Agent
