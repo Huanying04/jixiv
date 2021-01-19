@@ -35,7 +35,7 @@
 ## Gradle
 ```gradle
 dependencies {
-  compile group: 'com.github.huanying04.utils', name: 'jixiv', version: 'VERSION'
+    implementation 'com.github.huanying04.utils:jixiv:VERSION'
 }
 ```
 # 使用方法
