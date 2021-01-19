@@ -3,7 +3,7 @@ package net.nekomura.utils.jixiv;
 import java.util.List;
 
 public class Replies {
-    List<Reply> replies;
+    private final List<Reply> replies;
     private final boolean hasNext;
 
     public Replies(List<Reply> replies, boolean hasNext) {
@@ -26,5 +26,9 @@ public class Replies {
      */
     public boolean hasNext() {
         return this.hasNext;
+    }
+
+    public List<Reply> toList() {
+        return replies;
     }
 }

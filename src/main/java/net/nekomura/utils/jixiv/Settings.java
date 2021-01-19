@@ -1,66 +1,19 @@
 package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.exception.PixivException;
-import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import okhttp3.*;
 
 import java.io.IOException;
 
 public class Settings {
-    private String phpSession;
-    private String userAgent;
-
-    public Settings(String phpSession, String userAgent) {
-        this.phpSession = phpSession;
-        this.userAgent = userAgent;
-    }
-
-    public Settings(String phpSession) {
-        this.phpSession = phpSession;
-    }
-
-    private String userAgent() {
-        if (userAgent == null || userAgent.isEmpty()) {
-            return UserAgentUtils.random();
-        }else {
-            return userAgent;
-        }
-    }
-
-    private String getToken() throws IOException {
+    private static String getSubmit() throws IOException {
         String url = "https://www.pixiv.net/setting_user.php";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
-
-        rb.method("GET", null);
-
-        Response res = okHttpClient.newCall(rb.build()).execute();
-
-        String html = res.body().string();
-
-        if (html.contains("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"")) {
-            int index1 = html.indexOf("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"");
-            int length = "<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"".length();
-            String sub = html.substring(index1 + length);
-            int index2 = sub.indexOf("\"");
-            return html.substring(index1 + length, index1 + length + index2);
-        }else {
-            throw new PixivException("Cannot get pixiv token");
-        }
-    }
-
-    private String getSubmit() throws IOException {
-        String url = "https://www.pixiv.net/setting_user.php";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url(url);
-
-        rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 
@@ -79,14 +32,14 @@ public class Settings {
         }
     }
 
-    private String getLanguage() throws IOException {
+    private static String getLanguage() throws IOException {
         String url = "https://www.pixiv.net/setting_user.php";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 
@@ -112,7 +65,7 @@ public class Settings {
      * @return HTTP 狀態碼
      * @throws IOException 讀取網路資料失敗或修改失敗
      */
-    public int setViewRestriction(boolean r18Restriction, boolean r18gRestriction) throws IOException {
+    public static int setViewRestriction(boolean r18Restriction, boolean r18gRestriction) throws IOException {
             String url = "https://www.pixiv.net/setting_user.php";
 
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -133,7 +86,7 @@ public class Settings {
 
             RequestBody body = new FormBody.Builder()
                                 .add("mode", "mod")
-                                .add("tt", getToken())
+                                .add("tt", Pixiv.getToken())
                                 .add("r18", r18)
                                 .add("r18g", r18g)
                                 .add("user_language", getLanguage())
@@ -147,8 +100,8 @@ public class Settings {
 
 
             rb.addHeader("referer", "https://www.pixiv.net");
-            rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-            rb.addHeader("user-agent", userAgent());
+            rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+            rb.addHeader("user-agent", Jixiv.userAgent());
 
             Request request = rb.build();
 

@@ -1,18 +1,9 @@
 package net.nekomura.utils.jixiv;
 
-
 import java.io.IOException;
 
+@Deprecated
 public class Novel extends Artwork {
-
-    public Novel(String phpSession) {
-        super(phpSession);
-    }
-
-    public Novel(String phpSession, String userAgent) {
-        super(phpSession, userAgent);
-    }
-
     /**
      * 獲取小說作品之資訊物件
      * @param id 小說id

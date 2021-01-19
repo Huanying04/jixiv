@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 public class SearchResult {
-
     private final JSONObject searchResultJson;
     private final String dataType;
 

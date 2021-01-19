@@ -15,23 +15,17 @@ public class Rank {
     private final PixivRankContent content;
     private final String date;
     private final JSONObject rankJson;
-    private final String phpSession;
-    private final String userAgent;
 
     public Rank(int page,
                 PixivRankMode mode,
                 PixivRankContent content,
                 String date,
-                @NotNull String rankJson,
-                String phpSession,
-                String userAgent) {
+                @NotNull String rankJson) {
         this.page = page;
         this.mode = mode;
         this.content = content;
         this.date = date;
         this.rankJson = new JSONObject(rankJson);
-        this.phpSession = phpSession;
-        this.userAgent = userAgent;
     }
 
     /**
@@ -120,7 +114,7 @@ public class Rank {
      * @throws IOException 獲取失敗
      */
     public Rank nextPage() throws IOException {
-        return new Pixiv(phpSession, userAgent).rank(rankJson.getInt("next"), mode, content, date);
+        return Pixiv.rank(rankJson.getInt("next"), mode, content, date);
     }
 
     /**
@@ -129,7 +123,7 @@ public class Rank {
      * @throws IOException 獲取失敗
      */
     public Rank previousPage() throws IOException {
-        return new Pixiv(phpSession, userAgent).rank(rankJson.getInt("prev"), mode, content, date);
+        return Pixiv.rank(rankJson.getInt("prev"), mode, content, date);
     }
 
     /**

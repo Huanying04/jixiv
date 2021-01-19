@@ -2,9 +2,7 @@ package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.exception.PixivException;
-import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import okhttp3.*;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,44 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Deprecated
 public class Artwork {
-
-    private String phpSession;
-    private String userAgent;
-
-    public Artwork(String phpSession) {
-        this.phpSession = phpSession;
-    }
-
-    public Artwork(String phpSession, String userAgent) {
-        this.phpSession = phpSession;
-        this.userAgent = userAgent;
-    }
-
-    public void setPhpSession(String phpSession) {
-        this.phpSession = phpSession;
-    }
-
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
-    }
-
-    public String getPhpSession() {
-        return phpSession;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
-    }
-
-    private String userAgent() {
-        if (userAgent == null || userAgent.isEmpty()) {
-            return UserAgentUtils.random();
-        }else {
-            return userAgent;
-        }
-    }
-
     private JSONObject getArtworkData(int id) throws IOException {
         String url;
         if (this instanceof Illustration) {
@@ -64,8 +26,8 @@ public class Artwork {
         Request.Builder rb = new Request.Builder().url(url);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 
@@ -77,32 +39,6 @@ public class Artwork {
             throw new PixivException(json.getString("message"));
         }
         return json;
-    }
-
-    private String getToken() throws IOException {
-        String url = "https://www.pixiv.net/setting_user.php";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url(url);
-
-        rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
-
-        rb.method("GET", null);
-
-        Response res = okHttpClient.newCall(rb.build()).execute();
-
-        String html = res.body().string();
-
-        if (html.contains("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"")) {
-            int index1 = html.indexOf("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"");
-            int length = "<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"".length();
-            String sub = html.substring(index1 + length);
-            int index2 = sub.indexOf("\"");
-            return html.substring(index1 + length, index1 + length + index2);
-        }else {
-            throw new PixivException("Cannot get pixiv token");
-        }
     }
 
     private String getBookId(int id, String type) throws IOException {
@@ -117,8 +53,8 @@ public class Artwork {
         Request.Builder rb = new Request.Builder().url(url);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 
@@ -151,8 +87,8 @@ public class Artwork {
         Request.Builder rb = new Request.Builder().url(url);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 
@@ -190,6 +126,7 @@ public class Artwork {
      * @return 作品資訊物件
      * @throws IOException 讀取網路資料失敗
      */
+    @Deprecated
     public ArtworkInfo getInfo(int id) throws IOException {
         return new ArtworkInfo(id, getArtworkData(id));
     }
@@ -200,6 +137,7 @@ public class Artwork {
      * @return HTTP狀態碼
      * @throws IOException 讀取網路資料失敗
      */
+    @Deprecated
     public int like(int id) throws IOException {
         String url;
         JSONObject postData = new JSONObject();
@@ -223,9 +161,9 @@ public class Artwork {
         rb.post(body);
 
         rb.addHeader("referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
-        rb.addHeader("x-csrf-token", getToken());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+        rb.addHeader("x-csrf-token", Pixiv.getToken());
 
         Request request = rb.build();
 
@@ -246,6 +184,7 @@ public class Artwork {
      * @return HTTP狀態碼
      * @throws IOException 讀取網路資料失敗
      */
+    @Deprecated
     public int addBookmark(int id) throws IOException {
         String url;
         JSONObject postData = new JSONObject();
@@ -275,9 +214,9 @@ public class Artwork {
         rb.post(body);
 
         rb.addHeader("referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
-        rb.addHeader("x-csrf-token", getToken());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+        rb.addHeader("x-csrf-token", Pixiv.getToken());
 
         Request request = rb.build();
 
@@ -298,6 +237,7 @@ public class Artwork {
      * @return HTTP狀態碼
      * @throws IOException 讀取網路資料失敗
      */
+    @Deprecated
     public int removeBookmark(int id) throws IOException {
         String url;
         String type = "";
@@ -313,7 +253,7 @@ public class Artwork {
         OkHttpClient okHttpClient = new OkHttpClient();
 
         RequestBody body = new FormBody.Builder()
-                .add("tt", getToken())
+                .add("tt", Pixiv.getToken())
                 .add("p", "1")
                 .add("untagged", String.valueOf(id))
                 .add("rest", getBookmarkRestriction(id))
@@ -325,9 +265,9 @@ public class Artwork {
         rb.method("POST", body);
 
         rb.addHeader("referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
-        rb.addHeader("x-csrf-token", getToken());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+        rb.addHeader("x-csrf-token", Pixiv.getToken());
 
         Request request = rb.build();
 
@@ -338,19 +278,22 @@ public class Artwork {
     /**
      * 獲取作品評論
      * @param id 作品id
-     * @return 作品所有評論
+     * @param offset 起始位置
+     * @param limit 最多獲取幾個評論
+     * @return 指定數目及位置索引之作品評論
      * @throws IOException 網路資料獲取失敗
      */
-    public List<Comment> getComments(int id) throws IOException {
+    @Deprecated
+    public Comments getComments(int id, int offset, int limit) throws IOException {
         List<Comment> comments = new ArrayList<>();
         String url;
         PixivArtworkType type;
 
         if (this instanceof Illustration) {
-            url = "https://www.pixiv.net/ajax/illusts/comments/roots?illust_id=" + id +"&offset=0&limit=" + this.getInfo(id).getCommentCount();
+            url = "https://www.pixiv.net/ajax/illusts/comments/roots?illust_id=" + id +"&offset=" + offset + "&limit=" + limit;
             type = PixivArtworkType.Illusts;
         }else if (this instanceof Novel) {
-            url = "https://www.pixiv.net/ajax/novels/comments/roots?novel_id=" + id + "&offset=0&limit=" + this.getInfo(id).getCommentCount();
+            url = "https://www.pixiv.net/ajax/novels/comments/roots?novel_id=" + id + "&offset=" + offset + "&limit=" + limit;
             type = PixivArtworkType.Novels;
         }else {
             throw new IllegalArgumentException("The variable must be a Illustration or a Novel");
@@ -360,8 +303,8 @@ public class Artwork {
         Request.Builder rb = new Request.Builder().url(url);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 
@@ -374,9 +317,20 @@ public class Artwork {
         }
 
         for (int i = 0; i < commentJson.getJSONObject("body").getJSONArray("comments").length(); i++) {
-            comments.add(new Comment(commentJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), type, phpSession, userAgent()));
+            comments.add(new Comment(commentJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), type));
         }
 
-        return comments;
+        return new Comments(comments, commentJson.getJSONObject("body").getBoolean("hasNext"));
+    }
+
+    /**
+     * 獲取作品所有評論
+     * @param id 作品id
+     * @return 作品所有評論
+     * @throws IOException 網路資料獲取失敗
+     */
+    @Deprecated
+    public Comments getComments(int id) throws IOException {
+        return getComments(id, 0, this.getInfo(id).getCommentCount());
     }
 }

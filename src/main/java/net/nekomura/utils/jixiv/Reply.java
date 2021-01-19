@@ -2,20 +2,11 @@ package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.exception.PixivException;
-import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import org.json.JSONObject;
 
 public class Reply extends Comment{
-    public Reply(JSONObject reply, PixivArtworkType type, String phpSession, String userAgent) {
-        super(reply, type, phpSession, userAgent);
-    }
-
-    private String userAgent() {
-        if (userAgent == null || userAgent.isEmpty()) {
-            return UserAgentUtils.random();
-        }else {
-            return userAgent;
-        }
+    public Reply(JSONObject reply, PixivArtworkType type) {
+        super(reply, type);
     }
 
     /**

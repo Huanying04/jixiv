@@ -34,6 +34,7 @@ public class ArtworkInfo {
         return data;
     }
 
+    @Deprecated
     public IllustrationInfo toIllustrationInfo() {
         if (Iterators.contains(data.getJSONObject("body").keys(), "illustId"))
             return new IllustrationInfo(id, data.getJSONObject("body"));
@@ -41,6 +42,7 @@ public class ArtworkInfo {
             throw new IllegalArgumentException("The variable is not an IllustrationInfo");
     }
 
+    @Deprecated
     public NovelInfo toNovelInfo() {
         if (Iterators.contains(data.getJSONObject("body").keys(), "content"))
             return new NovelInfo(id, data.getJSONObject("body"));
@@ -217,6 +219,46 @@ public class ArtworkInfo {
      */
     public boolean isR18G() {
         return Arrays.asList(getTags()).contains("R-18G");
+    }
+
+    /**
+     * 是否喜歡該作品
+     * @return 是否喜歡該作品
+     */
+    public boolean isLiked() {
+        return data.getBoolean("likeData");
+    }
+
+    /**
+     * 是否收藏過該作品
+     * @return 是否收藏過該作品
+     */
+    public boolean isBookmarked() {
+        return data.get("bookmarkData") != null;
+    }
+
+    /**
+     * 獲取收藏id
+     * @return 收藏id
+     */
+    public long getBookmarkId() {
+        if (!isBookmarked()) {
+            throw new NullPointerException("你尚未收藏過這個作品");
+        }
+
+        return Long.parseLong(data.getJSONObject("bookmarkData").getString("id"));
+    }
+
+    /**
+     * 該作品的收藏是否為私人
+     * @return 該作品的收藏是否為私人
+     */
+    public boolean isBookmarkPrivate() {
+        if (!isBookmarked()) {
+            throw new NullPointerException("你尚未收藏過這個作品");
+        }
+
+        return data.getJSONObject("bookmarkData").getBoolean("private");
     }
 
 }

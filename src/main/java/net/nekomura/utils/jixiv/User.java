@@ -4,7 +4,6 @@ import com.google.common.collect.Iterators;
 import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.enums.bookmark.BookmarkRestrict;
 import net.nekomura.utils.jixiv.utils.SortUtils;
-import net.nekomura.utils.jixiv.utils.UserAgentUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -19,23 +18,11 @@ public class User {
     private final int id;
     private final JSONObject profile;
     private final JSONObject preloadData;
-    private String phpSession;
-    private String userAgent;
 
-    public User(int id, JSONObject profile, JSONObject preloadData, String phpSession, String userAgent) {
+    public User(int id, JSONObject profile, JSONObject preloadData) {
         this.id = id;
         this.profile = profile;
         this.preloadData = preloadData;
-        this.phpSession = phpSession;
-        this.userAgent = userAgent;
-    }
-
-    private String userAgent() {
-        if (userAgent == null || userAgent.isEmpty()) {
-            return UserAgentUtils.random();
-        }else {
-            return userAgent;
-        }
     }
 
     /**
@@ -314,8 +301,8 @@ public class User {
         }
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 

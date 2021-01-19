@@ -16,22 +16,10 @@ import java.util.*;
 public class Comment {
     JSONObject comment;
     private final PixivArtworkType type;
-    String phpSession;
-    String userAgent;
 
-    public Comment(JSONObject data, PixivArtworkType type, String phpSession, String userAgent) {
+    public Comment(JSONObject data, PixivArtworkType type) {
         this.comment = data;
         this.type = type;
-        this.phpSession = phpSession;
-        this.userAgent = userAgent;
-    }
-
-    private String userAgent() {
-        if (userAgent == null || userAgent.isEmpty()) {
-            return UserAgentUtils.random();
-        }else {
-            return userAgent;
-        }
     }
 
     /**
@@ -153,8 +141,8 @@ public class Comment {
         Request.Builder rb = new Request.Builder().url(url);
 
         rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + phpSession);
-        rb.addHeader("user-agent", userAgent());
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
 
@@ -167,7 +155,7 @@ public class Comment {
         }
 
         for (int i = 0; i < replyJson.getJSONObject("body").getJSONArray("comments").length(); i++) {
-            replies.add(new Reply(replyJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), type, phpSession, userAgent()));
+            replies.add(new Reply(replyJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), type));
         }
 
         return new Replies(replies, replyJson.getJSONObject("body").getBoolean("hasNext"));
