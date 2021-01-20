@@ -351,7 +351,7 @@ public class Pixiv {
         String html = Objects.requireNonNull(res.body()).string();
 
         String from = "<div id=\"js-mount-point-latest-following\"data-items=\"";
-        String to = "\"style=\"min-height: 1460px;\"></div>";
+        String to = "\"style=\"min-height";
 
         int fromIndex = html.indexOf(from);
         int toIndex = html.indexOf(to, fromIndex);
