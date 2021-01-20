@@ -359,4 +359,25 @@ public class Pixiv {
         target = StringEscapeUtils.unescapeHtml4(target);
         return new FollowingNewWork(page, target);
     }
+
+    public static JSONObject mainpageIllustrations() throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/top/illust?mode=all");
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        JSONObject data = new JSONObject(Objects.requireNonNull(res.body()).string());
+
+        if (data.getBoolean("error")) {
+            throw new PixivException(data.getString("message"));
+        }
+
+        return data.getJSONObject("body");
+    }
 }
