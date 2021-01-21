@@ -378,6 +378,8 @@ public class Pixiv {
             throw new PixivException(data.getString("message"));
         }
 
+        res.close();
+
         return data.getJSONObject("body");
     }
 }
