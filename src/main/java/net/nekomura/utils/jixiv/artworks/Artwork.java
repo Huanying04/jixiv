@@ -40,6 +40,8 @@ public class Artwork {
 
         JSONObject json = new JSONObject(res.body().string());
 
+        res.close();
+
         if (json.getBoolean("error")) {
             throw new PixivException(json.getString("message"));
         }
