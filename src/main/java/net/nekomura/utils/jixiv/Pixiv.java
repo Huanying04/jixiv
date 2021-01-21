@@ -65,7 +65,6 @@ public class Pixiv {
      * @throws IOException 獲取失敗
      */
     public static User getUserInfo(int id) throws IOException {
-        OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "/profile/all");
 
         rb.addHeader("Referer", "https://www.pixiv.net");
@@ -73,8 +72,6 @@ public class Pixiv {
         rb.addHeader("user-agent", Jixiv.userAgent());
 
         rb.method("GET", null);
-
-        Response res = okHttpClient.newCall(rb.build()).execute();
 
         return new User(id, getUserProfile(id), getUserPreloadData(id));
     }
@@ -92,7 +89,9 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        String html = res.body().string();
+        String html = Objects.requireNonNull(res.body()).string();
+
+        res.close();
 
         if (html.contains("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"")) {
             int index1 = html.indexOf("<meta name=\"global-data\" id=\"meta-global-data\" content='{\"token\":\"");
@@ -162,7 +161,11 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new Rank(page, mode, content, date, Objects.requireNonNull(res.body()).string());
+        String json = Objects.requireNonNull(res.body()).string();
+
+        res.close();
+
+        return new Rank(page, mode, content, date, json);
     }
 
     /**
@@ -193,7 +196,11 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        return new Rank(page, mode, content, null, Objects.requireNonNull(res.body()).string());
+        String json = Objects.requireNonNull(res.body()).string();
+
+        res.close();
+
+        return new Rank(page, mode, content, null, json);
     }
 
     /**
@@ -256,8 +263,11 @@ public class Pixiv {
                 throw new IllegalStateException("Unexpected value: " + artistType);
         }
 
+        String json = Objects.requireNonNull(res.body()).string();
 
-        return new SearchResult(Objects.requireNonNull(res.body()).string(), resultType);
+        res.close();
+
+        return new SearchResult(json, resultType);
     }
 
     /**
@@ -302,7 +312,12 @@ public class Pixiv {
         Request request = rb.build();
 
         Response response = okHttpClient.newCall(request).execute();
-        return response.code();
+
+        int code = response.code();
+
+        response.close();
+
+        return code;
     }
 
     /**
@@ -333,7 +348,11 @@ public class Pixiv {
         Request request = rb.build();
 
         Response response = okHttpClient.newCall(request).execute();
-        return response.code();
+
+        int code = response.code();
+
+        response.close();
+        return code;
     }
 
     public static FollowingNewWork getFollowingNewWorks(int page) throws IOException {
@@ -349,6 +368,8 @@ public class Pixiv {
         Response res = okHttpClient.newCall(rb.build()).execute();
 
         String html = Objects.requireNonNull(res.body()).string();
+
+        res.close();
 
         String from = "<div id=\"js-mount-point-latest-following\"data-items=\"";
         String to = "\"style=\"min-height";
