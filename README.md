@@ -252,4 +252,4 @@ SearchResult result = Pixiv.search(keyword, page, artistType, order, mode, sMode
 
 # 示例
 * [Pixiv Client](https://github.com/Huanying04/Pixiv-Client)
-* 依賴於**jixiv**及[Java Discord API](https://github.com/DV8FromTheWorld/JDA)開發之Discord機器人：https://github.com/Huanying04/Nekobot
+* 依賴於**jixiv**及[Java Discord API](https://github.com/DV8FromTheWorld/JDA)開發之Discord機器人[Nekobot](https://github.com/Huanying04/Nekobot)
