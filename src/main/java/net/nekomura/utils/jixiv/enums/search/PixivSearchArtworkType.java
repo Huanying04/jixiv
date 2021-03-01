@@ -7,20 +7,20 @@ public enum PixivSearchArtworkType {
     /**
      * 全部
      */
-    All,
+    ALL,
 
     /**
      * 插畫
      */
-    Illustrations,
+    ILLUSTRATIONS,
 
     /**
      * 漫畫
      */
-    Manga,
+    MANGA,
 
     /**
      * 小說
      */
-    Novels
+    NOVELS
 }

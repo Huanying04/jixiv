@@ -7,17 +7,17 @@ public enum PixivIllustrationType {
     /**
      * 插畫
      */
-    Illustration(0),
+    ILLUSTRATION(0),
 
     /**
      * 漫畫
      */
-    Manga(1),
+    MANGA(1),
 
     /**
      * 動圖
      */
-    Ugoira(2);
+    UGOIRA(2);
 
     private int numberFormat;
 

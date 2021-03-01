@@ -15,14 +15,14 @@ public class Artwork {
      * 獲取作品資訊
      * @param id 作品id
      * @param type 作品類別
-     * @return 作品資訊JSON Object
+     * @return 作品資訊的JSON Object
      * @throws IOException GET失敗
      */
     public static JSONObject getArtworkData(int id, PixivArtworkType type) throws IOException {
         String url;
-        if (type.equals(PixivArtworkType.Illusts)) {
+        if (type.equals(PixivArtworkType.ILLUSTS)) {
             url = "https://www.pixiv.net/ajax/illust/" + id;
-        }else if (type.equals(PixivArtworkType.Novels)) {
+        }else if (type.equals(PixivArtworkType.NOVELS)) {
             url = "https://www.pixiv.net/ajax/novel/" + id;
         }else {
             throw new IllegalArgumentException("The type must be PixivArtworkType.Illusts or PixivArtworkType.Novels");

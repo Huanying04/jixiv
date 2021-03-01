@@ -7,6 +7,7 @@ public class SortUtils {
      * @param arr 數組
      * @return 經由泡沫排列排列完成的陣列(小到大)
      */
+    @Deprecated
     public static int[] bubbleSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = 0; j < arr.length - 1 - i; j++) {
@@ -25,6 +26,7 @@ public class SortUtils {
      * @param arr 數組
      * @return 經由泡沫排列排列完成的陣列(大到小)
      */
+    @Deprecated
     public static int[] reverseBubbleSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = 0; j < arr.length - 1 - i; j++) {

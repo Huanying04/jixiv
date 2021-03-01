@@ -7,20 +7,20 @@ public enum PixivRankContent {
     /**
      * 綜合
      */
-    Overall,
+    OVERALL,
 
     /**
      * 插畫
      */
-    Illust,
+    ILLUST,
 
     /**
      * 動圖
      */
-    Ugoira,
+    UGOIRA,
 
     /**
      * 漫畫
      */
-    Manga
+    MANGA
 }

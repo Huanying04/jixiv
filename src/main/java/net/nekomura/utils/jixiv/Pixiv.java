@@ -112,7 +112,7 @@ public class Pixiv {
      * @throws IOException 獲取失敗
      */
     public static void downloadUserAllIllustration(File folder, int userId, PixivImageSize size) throws IOException {
-        int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
+        int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.ILLUSTS);
         for (int id: artworks) {
             Illustration.getInfo(id).downloadAll(folder, size);
         }
@@ -126,7 +126,7 @@ public class Pixiv {
      * @throws IOException 讀取網路資料失敗
      */
     public static void downloadUserAllIllustration(String folderPath, int userId, PixivImageSize size) throws IOException {
-        int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.Illusts);
+        int[] artworks = getUserInfo(userId).getUserArtworks(PixivArtworkType.ILLUSTS);
         for (int id: artworks) {
             Illustration.getInfo(id).downloadAll(folderPath, size);
         }
@@ -145,7 +145,7 @@ public class Pixiv {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
 
-        if (content.equals(PixivRankContent.Overall)) {
+        if (content.equals(PixivRankContent.OVERALL)) {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
         }else {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
@@ -180,7 +180,7 @@ public class Pixiv {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
 
-        if (content.equals(PixivRankContent.Overall)) {
+        if (content.equals(PixivRankContent.OVERALL)) {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&p=" + page + "&format=json";
         }else {
             url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&p=" + page + "&format=json";
@@ -210,7 +210,7 @@ public class Pixiv {
      * @throws IOException 獲取失敗
      */
     public static Rank rank(int page) throws IOException {
-        return rank(page, PixivRankMode.Daily, PixivRankContent.Overall);
+        return rank(page, PixivRankMode.DAILY, PixivRankContent.OVERALL);
     }
 
     /**
@@ -248,16 +248,16 @@ public class Pixiv {
 
         String resultType;
         switch (artistType) {
-            case All:
+            case ALL:
                 resultType = "illustManga";
                 break;
-            case Illustrations:
+            case ILLUSTRATIONS:
                 resultType = "illust";
                 break;
-            case Manga:
+            case MANGA:
                 resultType = "manga";
                 break;
-            case Novels: resultType = "novel";
+            case NOVELS: resultType = "novel";
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + artistType);
@@ -278,7 +278,7 @@ public class Pixiv {
      * @throws IOException 獲取失敗
      */
     public static SearchResult search(String keywords, int page) throws IOException {
-        return search(keywords, page, PixivSearchArtworkType.Illustrations, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.Illust);
+        return search(keywords, page, PixivSearchArtworkType.ILLUSTRATIONS, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.ILLUST);
     }
 
     /**
@@ -355,6 +355,12 @@ public class Pixiv {
         return code;
     }
 
+    /**
+     * 獲取已關注用戶的新作品
+     * @param page 頁碼
+     * @return 已關注用戶的新作品
+     * @throws IOException 讀取網路資料失敗
+     */
     public static FollowingNewWork getFollowingNewWorks(int page) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/bookmark_new_illust.php?p=" + page);
@@ -381,6 +387,11 @@ public class Pixiv {
         return new FollowingNewWork(page, target);
     }
 
+    /**
+     * 獲取首頁中與插畫相關的資訊
+     * @return 相關資訊的JSON Object
+     * @throws IOException 讀取網路資料失敗
+     */
     public static JSONObject mainpageIllustrations() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/top/illust?mode=all");

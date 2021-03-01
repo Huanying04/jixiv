@@ -22,7 +22,7 @@ public class Illustration {
      * @throws IOException 獲取網路資料失敗
      */
     public static IllustrationInfo getInfo(int id) throws IOException {
-        return new IllustrationInfo(id, Artwork.getArtworkData(id, PixivArtworkType.Illusts));
+        return new IllustrationInfo(id, Artwork.getArtworkData(id, PixivArtworkType.ILLUSTS));
     }
 
     /**
@@ -175,7 +175,7 @@ public class Illustration {
         }
 
         for (int i = 0; i < commentJson.getJSONObject("body").getJSONArray("comments").length(); i++) {
-            comments.add(new Comment(commentJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), PixivArtworkType.Illusts));
+            comments.add(new Comment(commentJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), PixivArtworkType.ILLUSTS));
         }
 
         return new Comments(comments, commentJson.getJSONObject("body").getBoolean("hasNext"));

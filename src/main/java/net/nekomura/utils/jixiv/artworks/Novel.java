@@ -22,7 +22,7 @@ public class Novel {
      * @throws IOException 獲取網路資料失敗
      */
     public static NovelInfo getInfo(int id) throws IOException {
-        return new NovelInfo(id, Artwork.getArtworkData(id, PixivArtworkType.Novels));
+        return new NovelInfo(id, Artwork.getArtworkData(id, PixivArtworkType.NOVELS));
     }
 
     /**
@@ -176,7 +176,7 @@ public class Novel {
         }
 
         for (int i = 0; i < commentJson.getJSONObject("body").getJSONArray("comments").length(); i++) {
-            comments.add(new Comment(commentJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), PixivArtworkType.Novels));
+            comments.add(new Comment(commentJson.getJSONObject("body").getJSONArray("comments").getJSONObject(i), PixivArtworkType.NOVELS));
         }
 
         return new Comments(comments, commentJson.getJSONObject("body").getBoolean("hasNext"));

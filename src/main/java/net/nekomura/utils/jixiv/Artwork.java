@@ -291,10 +291,10 @@ public class Artwork {
 
         if (this instanceof Illustration) {
             url = "https://www.pixiv.net/ajax/illusts/comments/roots?illust_id=" + id +"&offset=" + offset + "&limit=" + limit;
-            type = PixivArtworkType.Illusts;
+            type = PixivArtworkType.ILLUSTS;
         }else if (this instanceof Novel) {
             url = "https://www.pixiv.net/ajax/novels/comments/roots?novel_id=" + id + "&offset=" + offset + "&limit=" + limit;
-            type = PixivArtworkType.Novels;
+            type = PixivArtworkType.NOVELS;
         }else {
             throw new IllegalArgumentException("The variable must be a Illustration or a Novel");
         }

@@ -43,11 +43,11 @@ public class IllustrationInfo extends ArtworkInfo {
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
 
-        String monthString = FormatUtils.addZeroChar(month + 1);
-        String dayString = FormatUtils.addZeroChar(day);
-        String hourString = FormatUtils.addZeroChar(hour);
-        String minuteString = FormatUtils.addZeroChar(minute);
-        String secondString = FormatUtils.addZeroChar(second);
+        String monthString = addZeroChar(month + 1);
+        String dayString = addZeroChar(day);
+        String hourString = addZeroChar(hour);
+        String minuteString = addZeroChar(minute);
+        String secondString = addZeroChar(second);
 
         return String.format("https://i.pximg.net/img-zip-ugoira/img/%d/%s/%s/%s/%s/%s/%d_ugoira1920x1080.zip",
                 year,
@@ -75,7 +75,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * @throws IOException 獲取失敗
      */
     public byte[] getImage(int page) throws IOException {
-        return getImage(page, PixivImageSize.Original);
+        return getImage(page, PixivImageSize.ORIGINAL);
     }
 
     /**
@@ -122,11 +122,11 @@ public class IllustrationInfo extends ArtworkInfo {
         int typeNumber = getData().getInt("illustType");
         switch (typeNumber) {
             case 0:
-                return PixivIllustrationType.Illustration;
+                return PixivIllustrationType.ILLUSTRATION;
             case 1:
-                return PixivIllustrationType.Manga;
+                return PixivIllustrationType.MANGA;
             case 2:
-                return PixivIllustrationType.Ugoira;
+                return PixivIllustrationType.UGOIRA;
             default:
                 throw new IllegalArgumentException();
         }
@@ -138,7 +138,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * @return 插畫作品之圖片格式
      */
     public String getImageFileFormat(int page) {
-        String[] filename = getImageUrl(page, PixivImageSize.Original).split("\\.");
+        String[] filename = getImageUrl(page, PixivImageSize.ORIGINAL).split("\\.");
         return filename[filename.length - 1];
     }
 
@@ -167,7 +167,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * @throws IOException 獲取網路資料失敗導致下載失敗
      */
     public void download(String pathname, int page) throws IOException {
-        download(pathname, page, PixivImageSize.Original);
+        download(pathname, page, PixivImageSize.ORIGINAL);
     }
 
     /**
@@ -176,7 +176,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * @throws IOException 獲取網路資料失敗導致下載失敗
      */
     public void download(String pathname) throws IOException {
-        download(pathname, 0, PixivImageSize.Original);
+        download(pathname, 0, PixivImageSize.ORIGINAL);
     }
 
     /**
@@ -215,7 +215,7 @@ public class IllustrationInfo extends ArtworkInfo {
      * @throws ParseException 獲取動圖url失敗
      */
     public void downloadUgoiraZip(String pathname) throws IOException, ParseException {
-        if (!getIllustrationType().equals(PixivIllustrationType.Ugoira)) {
+        if (!getIllustrationType().equals(PixivIllustrationType.UGOIRA)) {
             throw new IllegalArgumentException("The Illustration is not an ugoira.");
         }
 
@@ -227,5 +227,20 @@ public class IllustrationInfo extends ArtworkInfo {
         FileOutputStream out = new FileOutputStream(file);
         out.write(bytes);
         out.close();
+    }
+
+    /**
+     * 使數字永遠保持兩個數字<br>
+     * 如1會變成01<br>
+     * 而11則保持11
+     * @param i 欲保持兩位數字的數字
+     * @return 兩位數字
+     */
+    private static String addZeroChar(int i) {
+        String string = String.valueOf(i);
+        if (string.length() == 1) {
+            return "0" + string;
+        }else
+            return string;
     }
 }

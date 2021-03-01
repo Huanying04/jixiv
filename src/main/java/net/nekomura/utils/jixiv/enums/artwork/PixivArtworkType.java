@@ -7,15 +7,15 @@ public enum PixivArtworkType {
     /**
      * 插畫
      */
-    Illusts,
+    ILLUSTS,
 
     /**
      * 漫畫
      */
-    Manga,
+    MANGA,
 
     /**
      * 小說
      */
-    Novels
+    NOVELS
 }

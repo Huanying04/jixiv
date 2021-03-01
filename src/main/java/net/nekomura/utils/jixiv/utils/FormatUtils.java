@@ -8,6 +8,7 @@ public class FormatUtils {
      * @param i 欲保持兩位數字的數字
      * @return 兩位數字
      */
+    @Deprecated
     public static String addZeroChar(int i) {
         String string = String.valueOf(i);
         if (string.length() == 1) {

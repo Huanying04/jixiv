@@ -4,25 +4,25 @@ public enum PixivSearchType {
     /**
      * 全部
      */
-    All,
+    ALL,
 
     /**
      * 插畫及動態插畫
      */
-    Illust_And_Ugoria,
+    ILLUST_AND_UGORIA,
 
     /**
      * 插畫
      */
-    Illust,
+    ILLUST,
 
     /**
      * 動態插畫
      */
-    Ugoria,
+    UGORIA,
 
     /**
      * 漫畫
      */
-    Manga
+    MANGA
 }

@@ -66,11 +66,11 @@ public class RankArtwork {
         String typeNumber = data.getString("illust_type");
         switch (typeNumber) {
             case "0":
-                return PixivIllustrationType.Illustration;
+                return PixivIllustrationType.ILLUSTRATION;
             case "1":
-                return PixivIllustrationType.Manga;
+                return PixivIllustrationType.MANGA;
             case "2":
-                return PixivIllustrationType.Ugoira;
+                return PixivIllustrationType.UGOIRA;
             default:
                 throw new IllegalArgumentException();
         }

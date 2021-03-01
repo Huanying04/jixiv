@@ -7,25 +7,25 @@ public enum PixivImageSize {
     /**
      * 迷你
      */
-    Mini,
+    MINI,
 
     /**
      * 預覽
      */
-    Thumb,
+    THUMB,
 
     /**
      * 小
      */
-    Small,
+    SMALL,
 
     /**
      * 一般
      */
-    Regular,
+    REGULAR,
 
     /**
      * 原圖
      */
-    Original
+    ORIGINAL
 }

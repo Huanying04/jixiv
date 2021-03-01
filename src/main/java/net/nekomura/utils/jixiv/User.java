@@ -40,7 +40,7 @@ public class User {
             artworks[i] = Integer.parseInt(Iterators.get(profile.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys(), i));
         }
 
-        return SortUtils.reverseBubbleSort(artworks);
+        return reverseBubbleSort(artworks);
         }else {
             return new int[0];
         }
@@ -311,5 +311,23 @@ public class User {
         String json = Objects.requireNonNull(res.body()).string();
 
         return new Bookmark(page, new JSONObject(json));
+    }
+
+    /**
+     * 泡沫排列(大到小)
+     * @param arr 數組
+     * @return 經由泡沫排列排列完成的陣列(大到小)
+     */
+    private static int[] reverseBubbleSort(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] < arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+        return arr;
     }
 }
