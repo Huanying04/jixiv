@@ -202,7 +202,7 @@ public class ArtworkInfo {
      * @return 作品是否為R18或R18-G
      */
     public boolean isNSFW() {
-        return Arrays.asList(getTags()).contains("R-18") || Arrays.asList(getTags()).contains("R-18G");
+        return data.getInt("xRestrict") > 0;
     }
 
     /**
@@ -210,7 +210,7 @@ public class ArtworkInfo {
      * @return 作品是否為R18
      */
     public boolean isR18() {
-        return Arrays.asList(getTags()).contains("R-18");
+        return data.getInt("xRestrict") == 1;
     }
 
     /**
@@ -218,7 +218,7 @@ public class ArtworkInfo {
      * @return 作品是否為R18-G
      */
     public boolean isR18G() {
-        return Arrays.asList(getTags()).contains("R-18G");
+        return data.getInt("xRestrict") == 2;
     }
 
     /**
