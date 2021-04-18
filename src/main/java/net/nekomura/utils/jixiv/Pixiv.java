@@ -33,9 +33,9 @@ public class Pixiv {
         return new JSONObject(Objects.requireNonNull(res.body()).string());
     }
 
-    private static JSONObject getUserPreloadData(int id) throws IOException {
+    private static JSONObject getUserData(int id) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/users/" + id);
+        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "?full=1");
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
@@ -45,17 +45,7 @@ public class Pixiv {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
 
-        String from = "<meta name=\"preload-data\" id=\"meta-preload-data\" content='";
-        String to = "'>";
-
-        String html = Objects.requireNonNull(res.body()).string();
-
-        int fromIndex = html.indexOf(from);
-        if (fromIndex == -1)
-            throw new IllegalArgumentException("Work has been deleted or the ID does not exist.");
-        int toIndex = html.indexOf(to, fromIndex);
-        String targetJsonString = html.subSequence(fromIndex + from.length(), toIndex).toString().replace(from, "");
-        return new JSONObject(targetJsonString);
+        return new JSONObject(Objects.requireNonNull(res.body()).string());
     }
 
     /**
@@ -73,7 +63,7 @@ public class Pixiv {
 
         rb.method("GET", null);
 
-        return new User(id, getUserProfile(id), getUserPreloadData(id));
+        return new User(id, getUserProfile(id), getUserData(id));
     }
 
     public static String getToken() throws IOException {

@@ -3,7 +3,6 @@ package net.nekomura.utils.jixiv;
 import com.google.common.collect.Iterators;
 import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.enums.bookmark.BookmarkRestrict;
-import net.nekomura.utils.jixiv.utils.SortUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -17,12 +16,12 @@ import java.util.Objects;
 public class User {
     private final int id;
     private final JSONObject profile;
-    private final JSONObject preloadData;
+    private final JSONObject data;
 
-    public User(int id, JSONObject profile, JSONObject preloadData) {
+    public User(int id, JSONObject profile, JSONObject data) {
         this.id = id;
         this.profile = profile;
-        this.preloadData = preloadData;
+        this.data = data;
     }
 
     /**
@@ -59,15 +58,15 @@ public class User {
      * @return 使用者名稱
      */
     public String getName() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getString("name");
+        return data.getJSONObject("body").getString("name");
     }
 
     /**
      * 獲取使用者頭像之url
      * @return 使用者頭像之url
      */
-    public String getAvatarSmallUrl() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getString("image");
+    public String getAvatarUrl() {
+        return data.getJSONObject("body").getString("image");
     }
 
     /**
@@ -75,7 +74,7 @@ public class User {
      * @return 使用者大頭像之url
      */
     public String getAvatarBigUrl() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getString("imageBig");
+        return data.getJSONObject("body").getString("imageBig");
     }
 
     /**
@@ -83,9 +82,9 @@ public class User {
      * @return 使用者頭像
      * @throws IOException 獲取失敗
      */
-    public byte[] getAvatarSmall() throws IOException {
+    public byte[] getAvatar() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url(getAvatarSmallUrl());
+        Request.Builder rb = new Request.Builder().url(getAvatarUrl());
         rb.addHeader("Referer", "https://www.pixiv.net/artworks");
         rb.method("GET", null);
 
@@ -113,7 +112,7 @@ public class User {
      * @return 使用者是否為Pixiv Premium
      */
     public boolean isPremium() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getBoolean("premium");
+        return data.getJSONObject("body").getBoolean("premium");
     }
 
     /**
@@ -121,15 +120,15 @@ public class User {
      * @return 是否已關注
      */
     public boolean isFollowed() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getBoolean("isFollowed");
+        return data.getJSONObject("body").getBoolean("isFollowed");
     }
 
     /**
      * 是否為我的pixiv
-     * @return 是否為我的pixiv
+     * @return 是否為My pixiv
      */
     public boolean isMyPixiv() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getBoolean("isMypixiv");
+        return data.getJSONObject("body").getBoolean("isMypixiv");
     }
 
     /**
@@ -137,7 +136,7 @@ public class User {
      * @return 是否加入黑名單
      */
     public boolean isBlocking() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getBoolean("isBlocking");
+        return data.getJSONObject("body").getBoolean("isBlocking");
     }
 
     /**
@@ -145,10 +144,10 @@ public class User {
      * @return 用戶頁背景圖片之url
      */
     public String getBackgroundUrl() {
-        if (preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).get("background") != null) {
-            return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getJSONObject("background").getString("url");
-        }else {
+        if (data.getJSONObject("body").get("background").equals(null)) {
             return null;
+        }else {
+            return data.getJSONObject("body").getJSONObject("background").getString("url");
         }
     }
 
@@ -172,7 +171,7 @@ public class User {
      * @return 關注數
      */
     public int getFollowingCount() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getInt("following");
+        return data.getJSONObject("body").getInt("following");
     }
 
     /**
@@ -180,7 +179,7 @@ public class User {
      * @return 是否互相關注
      */
     public boolean followedBack() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getBoolean("followedBack");
+        return data.getJSONObject("body").getBoolean("followedBack");
     }
 
     /**
@@ -188,7 +187,7 @@ public class User {
      * @return 自我介紹
      */
     public String getComment() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getString("comment");
+        return data.getJSONObject("body").getString("comment");
     }
 
     /**
@@ -196,7 +195,7 @@ public class User {
      * @return 自我介紹html文本
      */
     public String getCommentHtml() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getString("commentHtml");
+        return data.getJSONObject("body").getString("commentHtml");
     }
 
     /**
@@ -204,15 +203,117 @@ public class User {
      * @return 使用者主頁
      */
     public String getWebPage() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getString("webpage");
+        if (data.getJSONObject("body").get("webpage").equals(null)) {
+            return null;
+        }
+        return data.getJSONObject("body").getString("webpage");
     }
 
     /**
      * 獲取使用者的Workspace
      * @return 使用者的Workspace
      */
-    public String getWorkspace() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getString("workspace");
+    private JSONObject getWorkspace() {
+        if (data.getJSONObject("body").get("workspace") .equals(null)) {
+            return null;
+        }
+        return data.getJSONObject("body").getJSONObject("workspace");
+    }
+
+    /**
+     * 獲取使用者的工作環境的電腦系統
+     * @return 使用者的工作環境的電腦系統
+     */
+    public String getWorkspacePc() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspacePc");
+    }
+
+    /**
+     * 獲取使用者的工作環境的常用軟體
+     * @return 使用者的工作環境的常用軟體
+     */
+    public String getWorkspaceTool() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspaceTool");
+    }
+
+    /**
+     * 獲取使用者的工作環境的數位板
+     * @return 使用者的工作環境的數位板
+     */
+    public String getWorkspaceTablet() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspaceTablet");
+    }
+
+    /**
+     * 獲取使用者的工作環境的印表機
+     * @return 使用者的工作環境的印表機
+     */
+    public String getWorkspacePrinter() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspacePrinter");
+    }
+
+    /**
+     * 獲取使用者的工作環境的桌面物品
+     * @return 使用者的工作環境的桌面物品
+     */
+    public String getWorkspaceDesktop() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspaceDesktop");
+    }
+
+    /**
+     * 獲取使用者繪圖時聽的音樂
+     * @return 使用者繪圖時聽的音樂
+     */
+    public String getWorkspaceMusic() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspaceMusic");
+    }
+
+    /**
+     * 獲取使用者的工作環境的桌子
+     * @return 使用者的工作環境的桌子
+     */
+    public String getWorkspaceDesk() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspaceDesk");
+    }
+
+    /**
+     * 獲取使用者的工作環境的椅子
+     * @return 使用者的工作環境的椅子
+     */
+    public String getWorkspaceChair() {
+        JSONObject workspace = getWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getString("userWorkspaceChair");
     }
 
     /**
@@ -220,7 +321,18 @@ public class User {
      * @return 使用者的群組
      */
     private JSONArray getGroup() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getJSONArray("group");
+        return data.getJSONObject("body").getJSONArray("group");
+    }
+
+    /**
+     * 獲取使用者的群組量
+     * @return 使用者的群組量
+     */
+    public int getGroupCount() {
+        if (getGroup() == null) {
+            return 0;
+        }
+        return getGroup().length();
     }
 
     /**
@@ -228,8 +340,11 @@ public class User {
      * @param index 加入的第幾個群組
      * @return 群組id
      */
-    public int getGroupId(int index) {
-        return getGroup().getJSONObject(index).getInt("id");
+    public String getGroupId(int index) {
+        if (getGroup() == null) {
+            return null;
+        }
+        return getGroup().getJSONObject(index).getString("id");
     }
 
     /**
@@ -238,6 +353,9 @@ public class User {
      * @return 群組名稱
      */
     public String getGroupName(int index) {
+        if (getGroup() == null) {
+            return null;
+        }
         return getGroup().getJSONObject(index).getString("title");
     }
 
@@ -247,7 +365,93 @@ public class User {
      * @return 群組icon的url
      */
     public String getGroupIconUrl(int index) {
+        if (getGroup() == null) {
+            return null;
+        }
         return getGroup().getJSONObject(index).getString("iconUrl");
+    }
+
+    private JSONObject getSocial() {
+        if (data.getJSONObject("body").get("social") instanceof JSONArray) {
+            return null;
+        }
+        return data.getJSONObject("body").getJSONObject("social");
+    }
+
+    /**
+     * 獲取使用者的Twitter
+     * @return 使用者的Twitter
+     */
+    public String getTwitter() {
+        if (getSocial() == null || !getSocial().has("twitter")) {
+            return null;
+        }
+        return getSocial().getJSONObject("twitter").getString("url");
+    }
+
+    /**
+     * 獲取使用者的Tumblr
+     * @return 使用者的Tumblr
+     */
+    public String getTumblr() {
+        if (getSocial() == null || !getSocial().has("tumblr")) {
+            return null;
+        }
+        return getSocial().getJSONObject("tumblr").getString("url");
+    }
+
+    /**
+     * 獲取使用者的Pawoo
+     * @return 使用者的Pawoo
+     */
+    public String getPawoo() {
+        if (getSocial() == null || !getSocial().has("pawoo")) {
+            return null;
+        }
+        return getSocial().getJSONObject("pawoo").getString("url");
+    }
+
+    /**
+     * 獲取使用者的Circlems
+     * @return 使用者的Circlems
+     */
+    public String getCirclems() {
+        if (getSocial() == null || !getSocial().has("circlems")) {
+            return null;
+        }
+        return getSocial().getJSONObject("circlems").getString("url");
+    }
+
+    /**
+     * 獲取使用者地區
+     * @return 使用者的地區
+     */
+    public String getRegion() {
+        return data.getJSONObject("body").getJSONObject("region").getString("name");
+    }
+
+    /**
+     * 獲取使用者生日
+     * @return 使用者的生日
+     */
+    public String getBirthday() {
+        return data.getJSONObject("body").getJSONObject("birthDay").getString("name");
+    }
+
+    /**
+     * 獲取使用者性別
+     * @return 使用者的性別
+     */
+    public String getGender() {
+        return data.getJSONObject("body").getJSONObject("gender").getString("name");
+    }
+
+    /**
+     * 獲取使用者職業
+     * @return 使用者的職業
+     */
+    public String getJob() {
+        return data.getJSONObject("body").getJSONObject("job").getString("name");
     }
 
     /**
@@ -255,7 +459,7 @@ public class User {
      * @return 是否為官方帳號
      */
     public boolean isOfficial() {
-        return preloadData.getJSONObject("user").getJSONObject(String.valueOf(id)).getBoolean("official");
+        return data.getJSONObject("body").getBoolean("official");
     }
 
     /**
