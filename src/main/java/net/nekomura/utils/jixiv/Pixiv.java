@@ -217,7 +217,7 @@ public class Pixiv {
      * 搜尋
      * @param keywords 關鍵字
      * @param page 頁碼
-     * @param artistType 搜尋作品類別
+     * @param artworkType 搜尋作品類別
      * @param order 排序方式
      * @param mode 搜尋作品年齡分類
      * @param sMode 關鍵字搜尋方式
@@ -225,9 +225,9 @@ public class Pixiv {
      * @return 搜尋結果物件
      * @throws IOException 獲取失敗
      */
-    public static SearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artistType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
+    public static SearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artworkType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
         String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&mode=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
-                artistType.toString().toLowerCase(),
+                artworkType.toString().toLowerCase(),
                 UrlEscapers.urlFragmentEscaper().escape(keywords),
                 UrlEscapers.urlFragmentEscaper().escape(keywords),
                 order.toString().toLowerCase(),
@@ -247,8 +247,8 @@ public class Pixiv {
         Response res = okHttpClient.newCall(rb.build()).execute();
 
         String resultType;
-        switch (artistType) {
-            case ALL:
+        switch (artworkType) {
+            case ARTWORKS:
                 resultType = "illustManga";
                 break;
             case ILLUSTRATIONS:
@@ -260,7 +260,7 @@ public class Pixiv {
             case NOVELS: resultType = "novel";
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + artistType);
+                throw new IllegalStateException("Unexpected value: " + artworkType);
         }
 
         String json = Objects.requireNonNull(res.body()).string();

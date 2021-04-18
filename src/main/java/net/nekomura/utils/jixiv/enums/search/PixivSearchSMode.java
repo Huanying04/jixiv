@@ -5,12 +5,17 @@ package net.nekomura.utils.jixiv.enums.search;
  */
 public enum PixivSearchSMode {
     /**
-     * 完全相同(?待確認)
+     * 完全一致
      */
     S_TAG_FULL,
 
     /**
-     * 部分相同(?待確認)
+     * 部分一致
      */
-    S_TAG
+    S_TAG,
+
+    /**
+     * 標題、說明文字
+     */
+    S_TC
 }

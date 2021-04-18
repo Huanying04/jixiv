@@ -9,7 +9,7 @@ public enum PixivSearchType {
     /**
      * 插畫及動態插畫
      */
-    ILLUST_AND_UGORIA,
+    ILLUST_AND_UGOIRA,
 
     /**
      * 插畫
@@ -19,7 +19,7 @@ public enum PixivSearchType {
     /**
      * 動態插畫
      */
-    UGORIA,
+    UGOIRA,
 
     /**
      * 漫畫

@@ -5,9 +5,9 @@ package net.nekomura.utils.jixiv.enums.search;
  */
 public enum PixivSearchArtworkType {
     /**
-     * 全部
+     * 插畫和漫畫
      */
-    ALL,
+    ARTWORKS,
 
     /**
      * 插畫
