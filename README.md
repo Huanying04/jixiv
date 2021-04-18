@@ -5,8 +5,8 @@
 <p align="center"><img src="https://github.com/Huanying04/jixiv/blob/master/image/jixiv.png" width="50%"></p>
 
 # 功能
-* 獲取插畫/漫畫信息
-* 獲取小說信息
+* 獲取插畫/漫畫資訊
+* 獲取小說資訊
 * 喜歡作品
 * 添加/取消收藏作品
 * 下載插畫
@@ -55,7 +55,7 @@ Jixiv.loginByCookie(phpSession);
 Jixiv.setUserAgent(userAgent);
 ```
 
-## 獲取插畫/漫畫信息
+## 獲取插畫/漫畫資訊
 ```java
 int id = 85209753; //插畫id
 IllustrationInfo iInfo = Illustration.getInfo(id);  //注意這個Illustration是net.nekomura.utils.jixiv.artworks裡的
@@ -76,7 +76,7 @@ int likeCount = iInfo.getLikeCount();
 //獲取評論數
 int commemtCount = iInfo.getCommentCount();
 ```
-## 獲取小說信息
+## 獲取小說資訊
 ```java
 int id = 11387000; //小說id
 NovelInfo nInfo = Novel.getInfo(id);  //注意這個Novel是net.nekomura.utils.jixiv.artworks裡的
