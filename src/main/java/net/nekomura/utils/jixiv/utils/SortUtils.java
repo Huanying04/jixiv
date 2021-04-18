@@ -1,5 +1,6 @@
 package net.nekomura.utils.jixiv.utils;
 
+@Deprecated
 public class SortUtils {
 
     /**

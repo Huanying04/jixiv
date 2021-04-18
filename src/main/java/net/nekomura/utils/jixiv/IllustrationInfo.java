@@ -2,7 +2,6 @@ package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.enums.artwork.PixivIllustrationType;
 import net.nekomura.utils.jixiv.enums.artwork.PixivImageSize;
-import net.nekomura.utils.jixiv.utils.FormatUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

@@ -1,5 +1,6 @@
 package net.nekomura.utils.jixiv.utils;
 
+@Deprecated
 public class FormatUtils {
     /**
      * 使數字永遠保持兩個數字<br>
