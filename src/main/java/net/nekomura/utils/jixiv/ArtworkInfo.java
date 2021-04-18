@@ -234,7 +234,7 @@ public class ArtworkInfo {
      * @return 是否收藏過該作品
      */
     public boolean isBookmarked() {
-        return !data.get("bookmarkData").equals(null);
+        return !data.isNull("bookmarkData");
     }
 
     /**

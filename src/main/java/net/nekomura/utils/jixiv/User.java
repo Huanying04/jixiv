@@ -144,7 +144,7 @@ public class User {
      * @return 用戶頁背景圖片之url
      */
     public String getBackgroundUrl() {
-        if (data.getJSONObject("body").get("background").equals(null)) {
+        if (data.getJSONObject("body").isNull("background")) {
             return null;
         }else {
             return data.getJSONObject("body").getJSONObject("background").getString("url");
@@ -203,7 +203,7 @@ public class User {
      * @return 使用者主頁
      */
     public String getWebPage() {
-        if (data.getJSONObject("body").get("webpage").equals(null)) {
+        if (data.getJSONObject("body").isNull("webpage")) {
             return null;
         }
         return data.getJSONObject("body").getString("webpage");
@@ -214,7 +214,7 @@ public class User {
      * @return 使用者的Workspace
      */
     private JSONObject getWorkspace() {
-        if (data.getJSONObject("body").get("workspace") .equals(null)) {
+        if (data.getJSONObject("body").isNull("workspace")) {
             return null;
         }
         return data.getJSONObject("body").getJSONObject("workspace");
