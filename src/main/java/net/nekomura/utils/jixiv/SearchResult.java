@@ -3,7 +3,9 @@ package net.nekomura.utils.jixiv;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class SearchResult {
     private final JSONObject searchResultJson;
@@ -70,5 +72,14 @@ public class SearchResult {
      */
     public boolean containId(int id) {
         return Arrays.stream(getIds()).anyMatch(x -> x == id);
+    }
+
+    public List<String> getRelatedTags() {
+        JSONArray tags = searchResultJson.getJSONObject("body").getJSONArray("relatedTags");
+        List<String> l = new ArrayList<>();
+        for (Object o : tags) {
+            l.add(o.toString());
+        }
+        return l;
     }
 }

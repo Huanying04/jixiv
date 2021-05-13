@@ -79,7 +79,7 @@ public class Rank {
     public int[] getIds() {
         int[] id = new int[getPageResultCount()];
         for (int i = 0; i < getPageResultCount(); i++) {
-            id[i] = Integer.parseInt(getResultData().getJSONObject(i).getString("id"));
+            id[i] = getResultData().getJSONObject(i).getInt("illust_id");
         }
         return id;
     }

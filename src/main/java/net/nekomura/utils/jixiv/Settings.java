@@ -1,7 +1,9 @@
 package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.settings.Language;
 import okhttp3.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -107,5 +109,38 @@ public class Settings {
 
             Response response = okHttpClient.newCall(request).execute();
             return response.code();
+    }
+
+    /**
+     * 設定語言
+     * @param language 語言
+     * @return 返回訊息
+     * @throws IOException 讀取網路資料失敗或修改失敗
+     */
+    public static String setLanguage(Language language) throws IOException {
+        String url = "https://www.pixiv.net/ajax/user/language";
+        JSONObject postData = new JSONObject();
+        postData.put("code", language.getLanguageCode());
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(postData.toString(), MediaType.parse("application/json; charset=utf-8"));
+
+        Request.Builder rb = new Request.Builder();
+
+        rb.url(url);
+        rb.post(body);
+
+        rb.addHeader("referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+        rb.addHeader("x-csrf-token", Pixiv.getToken());
+
+        Request request = rb.build();
+
+        Response response = okHttpClient.newCall(request).execute();
+
+        JSONObject json = new JSONObject(response.body().string());
+        return json.getString("message");
     }
 }

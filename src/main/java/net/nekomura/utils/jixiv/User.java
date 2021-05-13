@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -178,7 +179,7 @@ public class User {
      * 是否互相關注
      * @return 是否互相關注
      */
-    public boolean followedBack() {
+    public boolean isFollowedBack() {
         return data.getJSONObject("body").getBoolean("followedBack");
     }
 
@@ -213,6 +214,7 @@ public class User {
      * 獲取使用者的Workspace
      * @return 使用者的Workspace
      */
+    @Nullable
     private JSONObject getWorkspace() {
         if (data.getJSONObject("body").isNull("workspace")) {
             return null;
@@ -371,6 +373,7 @@ public class User {
         return getGroup().getJSONObject(index).getString("iconUrl");
     }
 
+    @Nullable
     private JSONObject getSocial() {
         if (data.getJSONObject("body").get("social") instanceof JSONArray) {
             return null;
@@ -412,10 +415,10 @@ public class User {
     }
 
     /**
-     * 獲取使用者的Circlems
-     * @return 使用者的Circlems
+     * 獲取使用者的CircleMs
+     * @return 使用者的CircleMs
      */
-    public String getCirclems() {
+    public String getCircleMs() {
         if (getSocial() == null || !getSocial().has("circlems")) {
             return null;
         }

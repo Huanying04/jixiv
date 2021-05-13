@@ -1,6 +1,7 @@
 package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.enums.artwork.PixivIllustrationType;
+import net.nekomura.utils.jixiv.enums.rank.ContentType;
 import org.json.JSONObject;
 
 public class RankArtwork {
@@ -114,5 +115,66 @@ public class RankArtwork {
      */
     public int getViewCount() {
         return data.getInt("view_count");
+    }
+
+    private JSONObject getContentType() {
+        return data.getJSONObject("illust_content_type");
+    }
+
+    /**
+     * 獲取作品是否包含參數的內容
+     * @param type 內容種類
+     * @return 作品是否包含參數的內容
+     */
+    public boolean getContentType(ContentType type) {
+        return getContentType().getBoolean(type.toString().toLowerCase());
+    }
+
+    /**
+     * 獲取作品包含的性程度
+     * @return 作品包含的性程度
+     */
+    public int getContentTypeSexual() {
+        return getContentType().getInt("sexual");
+    }
+
+    /**
+     * 該作品是否已收藏
+     * @return 該作品是否已收藏
+     */
+    public boolean isBookmarked() {
+        return data.getBoolean("is_bookmarked");
+    }
+
+    /**
+     * 獲取插畫作品圖片長
+     * @return 插畫作品圖片長
+     */
+    public int getWidth() {
+        return data.getInt("width");
+    }
+
+    /**
+     * 獲取插畫作品圖片高
+     * @return 插畫作品圖片高
+     */
+    public int getHeight() {
+        return data.getInt("height");
+    }
+
+    /**
+     * 該作品是否為漫畫系列
+     * @return 該作品是否為漫畫系列
+     */
+    public boolean isSeries() {
+        return data.getBoolean("illust_series");
+    }
+
+    /**
+     * 獲取該作品的屬性
+     * @return 該作品的屬性
+     */
+    public String getAttr() {
+        return data.getString("attr");
     }
 }
