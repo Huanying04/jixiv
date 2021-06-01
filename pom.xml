@@ -6,7 +6,7 @@
 
     <groupId>com.github.huanying04.utils</groupId>
     <artifactId>jixiv</artifactId>
-    <version>0.1.0.8</version>
+    <version>0.1.0.9</version>
     <build>
         <plugins>
             <plugin>
