@@ -34,6 +34,9 @@ public class IllustrationInfo extends ArtworkInfo {
     }
 
     private String getUgoiraZipUrl() throws ParseException {
+        if (!getIllustrationType().equals(PixivIllustrationType.UGOIRA)) {
+            throw new IllegalArgumentException("The Illustration is not an ugoira.");
+        }
         Calendar calendar = getCreateDateCalendar();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -214,10 +217,6 @@ public class IllustrationInfo extends ArtworkInfo {
      * @throws ParseException 獲取動圖url失敗
      */
     public void downloadUgoiraZip(String pathname) throws IOException, ParseException {
-        if (!getIllustrationType().equals(PixivIllustrationType.UGOIRA)) {
-            throw new IllegalArgumentException("The Illustration is not an ugoira.");
-        }
-
         File file = new File(pathname);
         byte[] bytes = getUgoiraZip();
         if (file.getParentFile() != null)

@@ -5,6 +5,7 @@ import org.json.JSONArray;
 
 import java.util.Arrays;
 
+@Deprecated
 public class FollowingNewWork {
     private final int page;
     private final JSONArray data;

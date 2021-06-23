@@ -22,5 +22,26 @@ public enum PixivSearchOrder {
         public String toString() {
             return "date";
         }
+    },
+
+    POPULAR{
+        @Override
+        public String toString() {
+            return "popular_d";
+        }
+    },
+
+    POPULAR_MALE{
+        @Override
+        public String toString() {
+            return "popular_male_d";
+        }
+    },
+
+    POPULAR_FEMALE{
+        @Override
+        public String toString() {
+            return "popular_female_d";
+        }
     }
 }

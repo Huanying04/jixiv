@@ -347,10 +347,91 @@ public class Pixiv {
 
     /**
      * 獲取已關注用戶的新作品
+     * @param artworkType 作品類型
+     * @param searchMode 年齡限制
      * @param page 頁碼
      * @return 已關注用戶的新作品
      * @throws IOException 讀取網路資料失敗
      */
+    public static FollowingLatestWork getFollowingLatestArtwork(PixivArtworkType artworkType, PixivSearchMode searchMode, int page) throws IOException {
+        if (artworkType.equals(PixivArtworkType.MANGA)) {
+            throw new IllegalArgumentException("The type must be Illusts or Novels");
+        }
+        if (searchMode.equals(PixivSearchMode.SAFE)) {
+            throw new IllegalArgumentException("The mode must be SAFE or R18");
+        }
+        String type = artworkType.equals(PixivArtworkType.ILLUSTS) ? "illust" : "novel";
+        String mode = searchMode.equals(PixivSearchMode.ALL) ? "all" : "r18";
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/follow_latest/" + type + "?mode=" + mode + "&p=" + page);
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        JSONObject data = new JSONObject(Objects.requireNonNull(res.body()).string());
+
+        if (data.getBoolean("error")) {
+            throw new PixivException(data.getString("message"));
+        }
+
+        res.close();
+
+        return new FollowingLatestWork(data.getJSONObject("body"));
+    }
+
+    /**
+     * 獲取MyPixiv的新作品
+     * @param artworkType 作品類型
+     * @param searchMode 年齡限制
+     * @param page 頁碼
+     * @return 已關注用戶的新作品
+     * @throws IOException 讀取網路資料失敗
+     */
+    public static MyPixivLatestWork getMyPixivLatestArtwork(PixivArtworkType artworkType, PixivSearchMode searchMode, int page) throws IOException {
+        if (artworkType.equals(PixivArtworkType.MANGA)) {
+            throw new IllegalArgumentException("The type must be Illusts or Novels");
+        }
+        if (searchMode.equals(PixivSearchMode.SAFE)) {
+            throw new IllegalArgumentException("The mode must be SAFE or R18");
+        }
+        String type = artworkType.equals(PixivArtworkType.ILLUSTS) ? "illust" : "novel";
+        String mode = searchMode.equals(PixivSearchMode.ALL) ? "all" : "r18";
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/mypixiv_latest/" + type + "?mode=" + mode + "&p=" + page);
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        JSONObject data = new JSONObject(Objects.requireNonNull(res.body()).string());
+
+        if (data.getBoolean("error")) {
+            throw new PixivException(data.getString("message"));
+        }
+
+        res.close();
+
+        return new MyPixivLatestWork(data.getJSONObject("body"));
+    }
+
+    /**
+     * 獲取已關注用戶的新作品
+     * @param page 頁碼
+     * @return 已關注用戶的新作品
+     * @throws IOException 讀取網路資料失敗
+     */
+    @Deprecated
     public static FollowingNewWork getFollowingNewWorks(int page) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/bookmark_new_illust.php?p=" + page);

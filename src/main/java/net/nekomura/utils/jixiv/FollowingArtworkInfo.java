@@ -4,6 +4,7 @@ import net.nekomura.utils.jixiv.enums.artwork.PixivIllustrationType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@Deprecated
 public class FollowingArtworkInfo {
     private final JSONObject data;
 
