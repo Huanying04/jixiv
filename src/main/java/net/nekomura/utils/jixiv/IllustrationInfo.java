@@ -2,6 +2,7 @@ package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.enums.artwork.PixivIllustrationType;
 import net.nekomura.utils.jixiv.enums.artwork.PixivImageSize;
+import net.nekomura.utils.jixiv.exception.PixivException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -11,8 +12,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class IllustrationInfo extends ArtworkInfo {
@@ -28,37 +27,37 @@ public class IllustrationInfo extends ArtworkInfo {
         return getData().getInt("responseCount");
     }
 
+    private JSONObject getUgoiraMeta() throws IOException {
+        String url = "https://www.pixiv.net/ajax/illust/" + getId() + "/ugoira_meta";
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder().url(url);
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        JSONObject json = new JSONObject(res.body().string());
+
+        res.close();
+
+        if (json.getBoolean("error")) {
+            throw new PixivException(json.getString("message"));
+        }
+        return json.getJSONObject("body");
+    }
+
     private String getImageUrl(int page, @NotNull PixivImageSize type) {
         String pageZero = getData().getJSONObject("urls").getString(type.toString().toLowerCase());
         return pageZero.replace(getId() + "_p0", getId() + "_p" + page);
     }
 
-    private String getUgoiraZipUrl() throws ParseException {
-        if (!getIllustrationType().equals(PixivIllustrationType.UGOIRA)) {
-            throw new IllegalArgumentException("The Illustration is not an ugoira.");
-        }
-        Calendar calendar = getCreateDateCalendar();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
-
-        String monthString = addZeroChar(month + 1);
-        String dayString = addZeroChar(day);
-        String hourString = addZeroChar(hour);
-        String minuteString = addZeroChar(minute);
-        String secondString = addZeroChar(second);
-
-        return String.format("https://i.pximg.net/img-zip-ugoira/img/%d/%s/%s/%s/%s/%s/%d_ugoira1920x1080.zip",
-                year,
-                monthString,
-                dayString,
-                hourString,
-                minuteString,
-                secondString,
-                getId());
+    private String getUgoiraZipUrl() throws IOException {
+        return getUgoiraMeta().getString("originalSrc");
     }
 
     /**
@@ -103,10 +102,9 @@ public class IllustrationInfo extends ArtworkInfo {
     /**
      * 獲取該插畫動圖作品之所有幀之圖片之壓縮檔
      * @return 該插畫動圖作品之所有幀之圖片之壓縮檔的byte array
-     * @throws ParseException 獲取動圖url失敗
      * @throws IOException 獲取失敗
      */
-    public byte[] getUgoiraZip() throws ParseException, IOException {
+    public byte[] getUgoiraZip() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(getUgoiraZipUrl());
         rb.addHeader("Referer", "https://www.pixiv.net/artworks");
@@ -114,6 +112,10 @@ public class IllustrationInfo extends ArtworkInfo {
 
         Response res = okHttpClient.newCall(rb.build()).execute();
         return Objects.requireNonNull(res.body()).bytes();
+    }
+
+    public int getUgoiraPageDelay(int page) throws IOException {
+        return getUgoiraMeta().getJSONArray("frames").getJSONObject(page).getInt("delay");
     }
 
     /**
@@ -214,9 +216,8 @@ public class IllustrationInfo extends ArtworkInfo {
      * 下載該插畫動圖作品之所有幀之圖片之壓縮檔
      * @param pathname 儲存位置
      * @throws IOException 獲取網路資料失敗導致下載失敗
-     * @throws ParseException 獲取動圖url失敗
      */
-    public void downloadUgoiraZip(String pathname) throws IOException, ParseException {
+    public void downloadUgoiraZip(String pathname) throws IOException {
         File file = new File(pathname);
         byte[] bytes = getUgoiraZip();
         if (file.getParentFile() != null)
