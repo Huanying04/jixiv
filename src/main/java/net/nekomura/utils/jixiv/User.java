@@ -1,6 +1,5 @@
 package net.nekomura.utils.jixiv;
 
-import com.google.common.collect.Iterators;
 import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.enums.bookmark.BookmarkRestrict;
 import okhttp3.OkHttpClient;
@@ -12,7 +11,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class User {
     private final int id;
@@ -29,18 +32,17 @@ public class User {
      * 獲取使用者指定作品類型所有作品id
      * @param type 作品類型
      * @return 使用者指定作品類型所有作品id
-     * @throws IOException 獲取失敗
      */
-    public int[] getUserArtworks(@NotNull PixivArtworkType type) throws IOException {
+    public int[] getUserArtworks(@NotNull PixivArtworkType type) {
         if (profile.getJSONObject("body").get(type.name().toLowerCase()) instanceof JSONObject) {
-        int keySize = Iterators.size(profile.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys());
-        int[] artworks = new int[keySize];
+            Iterator<String> keys = profile.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys();
+            int[] artworks = new int[0];
+            while (keys.hasNext()) {
+                artworks = Arrays.copyOf(artworks, artworks.length + 1);
+                artworks[artworks.length - 1] = Integer.parseInt(keys.next());
+            }
 
-        for (int i = 0; i < keySize; i++) {
-            artworks[i] = Integer.parseInt(Iterators.get(profile.getJSONObject("body").getJSONObject(type.name().toLowerCase()).keys(), i));
-        }
-
-        return reverseBubbleSort(artworks);
+            return reverseBubbleSort(artworks);
         }else {
             return new int[0];
         }

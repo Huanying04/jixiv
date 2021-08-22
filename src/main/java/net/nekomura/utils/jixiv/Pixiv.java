@@ -7,7 +7,6 @@ import net.nekomura.utils.jixiv.enums.rank.PixivRankContent;
 import net.nekomura.utils.jixiv.enums.rank.PixivRankMode;
 import net.nekomura.utils.jixiv.enums.search.*;
 import net.nekomura.utils.jixiv.exception.PixivException;
-import com.google.common.net.UrlEscapers;
 import okhttp3.*;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +14,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class Pixiv {
@@ -218,8 +220,8 @@ public class Pixiv {
     public static SearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artworkType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
         String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&mode=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
                 artworkType.toString().toLowerCase(),
-                UrlEscapers.urlFragmentEscaper().escape(keywords),
-                UrlEscapers.urlFragmentEscaper().escape(keywords),
+                URLEncoder.encode(keywords, "UTF-8").replace("+", "%20"),
+                URLEncoder.encode(keywords, "UTF-8").replace("+", "%20"),
                 order.toString().toLowerCase(),
                 mode.toString().toLowerCase(),
                 page,

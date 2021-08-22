@@ -1,6 +1,5 @@
 package net.nekomura.utils.jixiv;
 
-import com.google.common.collect.Iterators;
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,10 +7,8 @@ import org.jsoup.Jsoup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ArtworkInfo {
     private final int id;
@@ -36,18 +33,34 @@ public class ArtworkInfo {
 
     @Deprecated
     public IllustrationInfo toIllustrationInfo() {
-        if (Iterators.contains(data.getJSONObject("body").keys(), "illustId"))
+        AtomicBoolean b = new AtomicBoolean(false);
+        Iterator<String> it = data.getJSONObject("body").keys();
+        it.forEachRemaining((x) -> {
+            if (x.equals("illustId")) {
+                b.set(true);
+            }
+        });
+        if (b.get()) {
             return new IllustrationInfo(id, data.getJSONObject("body"));
-        else
+        }else {
             throw new IllegalArgumentException("The variable is not an IllustrationInfo");
+        }
     }
 
     @Deprecated
     public NovelInfo toNovelInfo() {
-        if (Iterators.contains(data.getJSONObject("body").keys(), "content"))
+        AtomicBoolean b = new AtomicBoolean(false);
+        Iterator<String> it = data.getJSONObject("body").keys();
+        it.forEachRemaining((x) -> {
+            if (x.equals("content")) {
+                b.set(true);
+            }
+        });
+        if (b.get()) {
             return new NovelInfo(id, data.getJSONObject("body"));
-        else
+        }else {
             throw new IllegalArgumentException("The variable is not a NovelInfo");
+        }
     }
 
     /**
