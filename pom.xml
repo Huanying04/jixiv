@@ -6,7 +6,7 @@
 
     <groupId>com.github.huanying04.utils</groupId>
     <artifactId>jixiv</artifactId>
-    <version>0.1.0.11</version>
+    <version>0.1.0.13</version>
     <build>
         <plugins>
             <plugin>
@@ -87,11 +87,6 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20200518</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.13.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

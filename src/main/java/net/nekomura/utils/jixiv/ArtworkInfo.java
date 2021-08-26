@@ -1,9 +1,7 @@
 package net.nekomura.utils.jixiv;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -84,7 +82,7 @@ public class ArtworkInfo {
      * @return 作品說明明文
      */
     public String getRawDescription() {
-        return Jsoup.parse(StringEscapeUtils.unescapeHtml4(getDescription()).replaceAll("(?i)<br[^>]*>", "br2n")).text().replace("br2n", "\r\n");
+        return this.getDescription().replaceAll("<br />", "\r\n").replaceAll("(<)[^<>]+(>)", "");
     }
 
     /**
