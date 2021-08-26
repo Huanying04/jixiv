@@ -1,0 +1,10 @@
+net.nekomura.utils.jixiv
+net.nekomura.utils.jixiv.artworks
+net.nekomura.utils.jixiv.enums.artwork
+net.nekomura.utils.jixiv.enums.bookmark
+net.nekomura.utils.jixiv.enums.comment
+net.nekomura.utils.jixiv.enums.rank
+net.nekomura.utils.jixiv.enums.search
+net.nekomura.utils.jixiv.exception
+net.nekomura.utils.jixiv.settings
+net.nekomura.utils.jixiv.utils
