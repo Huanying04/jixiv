@@ -39,7 +39,7 @@ dependencies {
 }
 ```
 # 使用方法
-Doc：https://huanying04.github.io/Jixiv-Wiki/
+Doc：https://huanying04.github.io/jixiv/
 ## PHPSESSID
 由於pixiv防爬蟲防得很嚴或是我的程式能力很弱，目前做不出帳號密碼模擬登入。可暫時藉由PHPSESSID來模擬登入。
 
