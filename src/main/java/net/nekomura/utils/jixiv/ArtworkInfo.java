@@ -1,5 +1,6 @@
 package net.nekomura.utils.jixiv;
 
+import net.nekomura.utils.jixiv.exception.PixivException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -82,7 +83,7 @@ public class ArtworkInfo {
      * @return 作品說明明文
      */
     public String getRawDescription() {
-        return this.getDescription().replaceAll("<br />", "\r\n").replaceAll("(<)[^<>]+(>)", "");
+        return this.getDescription().replaceAll("(?i)<br[^>]*>", "\r\n").replaceAll("(<)[^<>]+(>)", "");
     }
 
     /**
@@ -254,7 +255,7 @@ public class ArtworkInfo {
      */
     public long getBookmarkId() {
         if (!isBookmarked()) {
-            throw new NullPointerException("你尚未收藏過這個作品");
+            throw new PixivException("你尚未收藏過這個作品");
         }
 
         return Long.parseLong(data.getJSONObject("bookmarkData").getString("id"));
@@ -266,7 +267,7 @@ public class ArtworkInfo {
      */
     public boolean isBookmarkPrivate() {
         if (!isBookmarked()) {
-            throw new NullPointerException("你尚未收藏過這個作品");
+            throw new PixivException("你尚未收藏過這個作品");
         }
 
         return data.getJSONObject("bookmarkData").getBoolean("private");
