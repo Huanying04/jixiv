@@ -349,7 +349,7 @@ public class Pixiv {
 
     /**
      * 獲取已關注用戶的新作品
-     * @param artworkType 作品類型
+     * @param artworkType 作品類型。只能為Illusts(插畫)或Novels(小說)，若是填入Manga(漫畫)則會拋出IllegalArgumentException。
      * @param searchMode 年齡限制
      * @param page 頁碼
      * @return 已關注用戶的新作品
@@ -384,7 +384,7 @@ public class Pixiv {
 
         res.close();
 
-        return new FollowingLatestWork(data.getJSONObject("body"));
+        return new FollowingLatestWork(data.getJSONObject("body"), artworkType.equals(PixivArtworkType.ILLUSTS) ? "illust" : "novel");
     }
 
     /**
