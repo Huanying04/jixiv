@@ -428,39 +428,6 @@ public class Pixiv {
     }
 
     /**
-     * 獲取已關注用戶的新作品
-     * @param page 頁碼
-     * @return 已關注用戶的新作品
-     * @throws IOException 讀取網路資料失敗
-     */
-    @Deprecated
-    public static FollowingNewWork getFollowingNewWorks(int page) throws IOException {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/bookmark_new_illust.php?p=" + page);
-
-        rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
-        rb.addHeader("user-agent", Jixiv.userAgent());
-
-        rb.method("GET", null);
-
-        Response res = okHttpClient.newCall(rb.build()).execute();
-
-        String html = Objects.requireNonNull(res.body()).string();
-
-        res.close();
-
-        String from = "<div id=\"js-mount-point-latest-following\"data-items=\"";
-        String to = "\"style=\"min-height";
-
-        int fromIndex = html.indexOf(from);
-        int toIndex = html.indexOf(to, fromIndex);
-        String target = html.subSequence(fromIndex, toIndex).toString().replace(from, "");
-        target = StringEscapeUtils.unescapeHtml4(target);
-        return new FollowingNewWork(page, target);
-    }
-
-    /**
      * 獲取首頁中與插畫相關的資訊
      * @return 相關資訊的JSON Object
      * @throws IOException 讀取網路資料失敗
