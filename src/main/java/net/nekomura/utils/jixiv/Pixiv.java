@@ -424,7 +424,7 @@ public class Pixiv {
 
         res.close();
 
-        return new MyPixivLatestWork(data.getJSONObject("body"));
+        return new MyPixivLatestWork(data.getJSONObject("body"), artworkType.equals(PixivArtworkType.ILLUSTS) ? "illust" : "novel");
     }
 
     /**

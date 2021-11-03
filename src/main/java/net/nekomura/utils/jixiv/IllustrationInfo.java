@@ -114,6 +114,12 @@ public class IllustrationInfo extends ArtworkInfo {
         return Objects.requireNonNull(res.body()).bytes();
     }
 
+    /**
+     * 獲取動圖此一影格距離下張影格的時間差，或為這張影格的fps
+     * @param page 第幾張影格
+     * @return 此一影格距離下張影格的時間差
+     * @throws IOException 獲取失敗
+     */
     public int getUgoiraPageDelay(int page) throws IOException {
         return getUgoiraMeta().getJSONArray("frames").getJSONObject(page).getInt("delay");
     }
