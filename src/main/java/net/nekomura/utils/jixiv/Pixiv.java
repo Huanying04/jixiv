@@ -279,7 +279,7 @@ public class Pixiv {
      * @return HTTP狀態碼
      * @throws IOException 讀取網路資料失敗
      */
-    public static int addBookmarkUser(int id) throws IOException {
+    public static int followUser(int id) throws IOException {
         String url = "https://www.pixiv.net/bookmark_add.php";
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -318,7 +318,7 @@ public class Pixiv {
      * @return HTTP狀態碼
      * @throws IOException 讀取網路資料失敗
      */
-    public static int removeBookmarkUser(int id) throws IOException {
+    public static int unfollowUser(int id) throws IOException {
         String url = "https://www.pixiv.net/rpc_group_setting.php";
 
         OkHttpClient okHttpClient = new OkHttpClient();
