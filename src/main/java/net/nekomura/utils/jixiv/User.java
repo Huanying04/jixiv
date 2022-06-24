@@ -473,7 +473,7 @@ public class User {
      * 獲取用戶所有公開收藏
      * @param page 頁數 (從1算起)
      * @return 此用戶的收藏第指定頁數
-     * @throws IOException
+     * @throws IOException 網路錯誤
      */
     public Bookmark getBookmarkList(int page) throws IOException {
         return getBookmarkList(page, BookmarkRestrict.SHOW, null);
@@ -484,7 +484,7 @@ public class User {
      * @param page 頁數 (從1算起)
      * @param restrict 收藏限制。分為公開和非公開兩種。非公開僅限自己的收藏，其餘會顯示
      * @return 此用戶的收藏第指定頁數
-     * @throws IOException
+     * @throws IOException 網路錯誤
      */
     public Bookmark getBookmarkList(int page, BookmarkRestrict restrict) throws IOException {
         return getBookmarkList(page, restrict, null);
@@ -496,32 +496,10 @@ public class User {
      * @param restrict 收藏限制。分為公開和非公開兩種。非公開僅限自己的收藏，其餘會顯示
      * @param tag 收藏的標籤名稱
      * @return 此用戶的收藏第指定頁數
-     * @throws IOException
+     * @throws IOException 網路錯誤
      */
     public Bookmark getBookmarkList(int page, BookmarkRestrict restrict, String tag) throws IOException {
-        if (page <= 0) {
-            throw new IllegalArgumentException("The arg 'page' must be a natural number.");
-        }
-
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder();
-        if (tag == null || tag.isEmpty()) {
-            rb = rb.url("https://www.pixiv.net/ajax/user/" + this.getId() +"/illusts/bookmarks?tag=&offset=" + (48 * (page - 1)) + "&limit=48&rest=" + restrict.toString().toLowerCase());
-        }else {
-            rb = rb.url("https://www.pixiv.net/ajax/user/" + this.getId() +"/illusts/bookmarks?tag=" + tag +"&offset=" + (48 * (page - 1)) + "&limit=48&rest=" + restrict.toString().toLowerCase());
-        }
-
-        rb.addHeader("Referer", "https://www.pixiv.net");
-        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
-        rb.addHeader("user-agent", Jixiv.userAgent());
-
-        rb.method("GET", null);
-
-        Response res = okHttpClient.newCall(rb.build()).execute();
-
-        String json = Objects.requireNonNull(res.body()).string();
-
-        return new Bookmark(new JSONObject(json));
+        return getBookmarkList(48 * (page - 1), 48, restrict, tag);
     }
 
     public Bookmark getBookmarkList(int offset, int limit) throws IOException {

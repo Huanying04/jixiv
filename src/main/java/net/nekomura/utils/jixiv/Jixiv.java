@@ -7,7 +7,7 @@ public class Jixiv {
     public static String USER_AGENT;
 
     /**
-     * 儲存PHPSESSID以便之後使用。<br/>
+     * 儲存PHPSESSID以便之後使用。<br>
      * 傳送請求時順便傳送含PHPSESSID的cookie讓pixiv認為傳送這項請求的是你且是有登入的，
      * @param phpsessid 瀏覽器登入後會儲存的一個cookie名叫PHPSESSID，使用此cookie的值可以假裝登入帳號
      */
