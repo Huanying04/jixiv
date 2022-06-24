@@ -471,7 +471,7 @@ public class User {
 
     /**
      * 獲取用戶所有公開收藏
-     * @param page 頁數
+     * @param page 頁數 (從1算起)
      * @return 此用戶的收藏第指定頁數
      * @throws IOException
      */
@@ -481,7 +481,7 @@ public class User {
 
     /**
      * 獲取用戶收藏
-     * @param page 頁數
+     * @param page 頁數 (從1算起)
      * @param restrict 收藏限制。分為公開和非公開兩種。非公開僅限自己的收藏，其餘會顯示
      * @return 此用戶的收藏第指定頁數
      * @throws IOException
@@ -499,7 +499,7 @@ public class User {
      * @throws IOException
      */
     public Bookmark getBookmarkList(int page, BookmarkRestrict restrict, String tag) throws IOException {
-        if (page < 0) {
+        if (page <= 0) {
             throw new IllegalArgumentException("The arg 'page' must be a natural number.");
         }
 
@@ -521,6 +521,36 @@ public class User {
 
         String json = Objects.requireNonNull(res.body()).string();
 
-        return new Bookmark(page, new JSONObject(json));
+        return new Bookmark(new JSONObject(json));
+    }
+
+    public Bookmark getBookmarkList(int offset, int limit) throws IOException {
+        return getBookmarkList(offset, limit, BookmarkRestrict.SHOW, null);
+    }
+
+    public Bookmark getBookmarkList(int offset, int limit, BookmarkRestrict restrict) throws IOException {
+        return getBookmarkList(offset, limit, restrict, null);
+    }
+
+    public Bookmark getBookmarkList(int offset, int limit, BookmarkRestrict restrict, String tag) throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder rb = new Request.Builder();
+        if (tag == null || tag.isEmpty()) {
+            rb = rb.url("https://www.pixiv.net/ajax/user/" + this.getId() +"/illusts/bookmarks?tag=&offset=" + offset + "&limit=" + limit + "&rest=" + restrict.toString().toLowerCase());
+        }else {
+            rb = rb.url("https://www.pixiv.net/ajax/user/" + this.getId() +"/illusts/bookmarks?tag=" + tag +"&offset=" + offset + "&limit=" + limit + "&rest=" + restrict.toString().toLowerCase());
+        }
+
+        rb.addHeader("Referer", "https://www.pixiv.net");
+        rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
+        rb.addHeader("user-agent", Jixiv.userAgent());
+
+        rb.method("GET", null);
+
+        Response res = okHttpClient.newCall(rb.build()).execute();
+
+        String json = Objects.requireNonNull(res.body()).string();
+
+        return new Bookmark(new JSONObject(json));
     }
 }

@@ -4,20 +4,10 @@ import net.nekomura.utils.jixiv.exception.PixivException;
 import org.json.JSONObject;
 
 public class Bookmark {
-    private final int page;
     private final JSONObject data;
 
-    public Bookmark(int page, JSONObject data) {
-        this.page = page;
+    public Bookmark(JSONObject data) {
         this.data = data;
-    }
-
-    /**
-     * 當前頁碼
-     * @return 當前頁碼
-     */
-    public int getPage() {
-        return page;
     }
 
     private JSONObject getData() {
