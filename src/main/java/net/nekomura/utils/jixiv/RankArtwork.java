@@ -94,10 +94,10 @@ public class RankArtwork {
     }
 
     /**
-     * 獲取作品排名
-     * @return 作品排名
+     * 獲取前一日作品排名
+     * @return 前一日的作品排名
      */
-    public int getYesRank() {
+    public int getYesterdayRank() {
         return data.getInt("yes_rank");
     }
 

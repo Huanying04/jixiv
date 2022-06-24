@@ -111,24 +111,14 @@ public class Illustration {
      * @throws IOException POST失敗
      */
     public static int removeBookmark(int id) throws IOException {
-        String url = "https://www.pixiv.net/bookmark_setting.php";
-        String rest;
+        String url = "https://www.pixiv.net/rpc/index.php";
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
-        if (Illustration.getInfo(id).isBookmarkPrivate()) {
-            rest = "hide";
-        }else {
-            rest = "show";
-        }
-
         RequestBody body = new FormBody.Builder()
-                .add("tt", Pixiv.getToken())
-                .add("p", "1")
-                .add("untagged", String.valueOf(id))
-                .add("rest", rest)
-                .add("book_id[]", String.valueOf(Illustration.getInfo(id).getBookmarkId()))
-                .add("del", "1").build();
+                .add("mode", "delete_illust_bookmark")
+                .add("bookmark_id", String.valueOf(Illustration.getInfo(id).getBookmarkId()))
+                .build();
 
         Request.Builder rb = new Request.Builder().url(url);
 

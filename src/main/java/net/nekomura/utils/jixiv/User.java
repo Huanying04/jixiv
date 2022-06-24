@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,7 +43,8 @@ public class User {
                 artworks[artworks.length - 1] = Integer.parseInt(keys.next());
             }
 
-            return reverseBubbleSort(artworks);
+            artworks = Arrays.stream(artworks).boxed().sorted(Collections.reverseOrder()).mapToInt(Integer::intValue).toArray();
+            return artworks;
         }else {
             return new int[0];
         }
@@ -490,7 +492,7 @@ public class User {
 
     /**
      * 獲取用戶收藏
-     * @param page 頁數
+     * @param page 頁數 (從1算起)
      * @param restrict 收藏限制。分為公開和非公開兩種。非公開僅限自己的收藏，其餘會顯示
      * @param tag 收藏的標籤名稱
      * @return 此用戶的收藏第指定頁數
@@ -520,23 +522,5 @@ public class User {
         String json = Objects.requireNonNull(res.body()).string();
 
         return new Bookmark(page, new JSONObject(json));
-    }
-
-    /**
-     * 泡沫排列(大到小)
-     * @param arr 數組
-     * @return 經由泡沫排列排列完成的陣列(大到小)
-     */
-    private static int[] reverseBubbleSort(int[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j < arr.length - 1 - i; j++) {
-                if (arr[j] < arr[j + 1]) {
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
-            }
-        }
-        return arr;
     }
 }
