@@ -6,12 +6,13 @@
 
     <groupId>com.github.huanying04.utils</groupId>
     <artifactId>jixiv</artifactId>
-    <version>0.1.0.15</version>
+    <version>0.1.0.16</version>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -74,24 +75,19 @@
     <packaging>jar</packaging>
 
     <name>jixiv</name>
-    <description>A application that can be uses to crawl Pixiv illustration and novel info.</description>
+    <description>Pixiv infomations crawler library for Java.</description>
     <url>https://github.com/Huanying04/jixiv</url>
 
     <dependencies>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.3</version>
+            <version>4.10.0</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20211205</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>1.9</version>
+            <version>20220320</version>
         </dependency>
     </dependencies>
 
@@ -104,10 +100,9 @@
 
     <developers>
         <developer>
-            <name>Huanying04</name>
+            <name>Huanying04 (貓村幻影)</name>
             <email>ken911230@gmail.com</email>
-            <organization>TEAM-NEKOMURA</organization>
-            <organizationUrl>https://github.com/Huanying04</organizationUrl>
+            <url>https://github.com/Huanying04</url>
         </developer>
     </developers>
 

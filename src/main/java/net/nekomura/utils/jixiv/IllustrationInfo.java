@@ -3,6 +3,7 @@ package net.nekomura.utils.jixiv;
 import net.nekomura.utils.jixiv.enums.artwork.PixivIllustrationType;
 import net.nekomura.utils.jixiv.enums.artwork.PixivImageSize;
 import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.PixivUrlBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -28,7 +29,9 @@ public class IllustrationInfo extends ArtworkInfo {
     }
 
     private JSONObject getUgoiraMeta() throws IOException {
-        String url = "https://www.pixiv.net/ajax/illust/" + getId() + "/ugoira_meta";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/illust/" + getId() + "/ugoira_meta");
+        String url = pub.build();
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);

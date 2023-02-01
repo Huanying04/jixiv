@@ -5,6 +5,7 @@ import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.enums.comment.CommentType;
 import net.nekomura.utils.jixiv.enums.comment.Stamp;
 import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.PixivUrlBuilder;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,7 +33,9 @@ public class Novel {
      * @throws IOException POST失敗
      */
     public static boolean like(int id) throws IOException {
-        String url = "https://www.pixiv.net/ajax/novels/like";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/novels/like");
+        String url = pub.build();
 
         JSONObject postData = new JSONObject();
         postData.put("novel_id", String.valueOf(id));
@@ -71,7 +74,9 @@ public class Novel {
      * @throws IOException POST失敗
      */
     public static String addBookmark(int id) throws IOException {
-        String url = "https://www.pixiv.net/ajax/novels/bookmarks/add";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/novels/bookmarks/add");
+        String url = pub.build();
         JSONObject postData = new JSONObject();
         postData.put("novel_id", String.valueOf(id));
         postData.put("restrict", 0);
@@ -112,7 +117,9 @@ public class Novel {
      * @throws IOException POST失敗
      */
     public static int removeBookmark(int id) throws IOException {
-        String url = "https://www.pixiv.net/novel/bookmark_setting.php";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("novel/bookmark_setting.php");
+        String url = pub.build();
         String rest;
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -156,7 +163,12 @@ public class Novel {
      */
     public static Comments getComments(int id, int offset, int limit) throws IOException {
         List<Comment> comments = new ArrayList<>();
-        String url = "https://www.pixiv.net/ajax/novels/comments/roots?novel_id=" + id + "&offset=" + offset + "&limit=" + limit;
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/novels/comments/roots");
+        pub.addParameter("novel_id", id);
+        pub.addParameter("offset", offset);
+        pub.addParameter("limit", limit);
+        String url = pub.build();
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
@@ -200,7 +212,9 @@ public class Novel {
      * @throws IOException POST失敗
      */
     public static int comment(int id, String comment) throws IOException {
-        String url = "https://www.pixiv.net/rpc/post_comment.php";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("rpc/post_comment.php");
+        String url = pub.build();
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -233,7 +247,9 @@ public class Novel {
      * @throws IOException POST失敗
      */
     public static int comment(int id, Stamp stamp) throws IOException {
-        String url = "https://www.pixiv.net/rpc/post_comment.php";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("rpc/post_comment.php");
+        String url = pub.build();
 
         OkHttpClient okHttpClient = new OkHttpClient();
 

@@ -7,22 +7,23 @@ import net.nekomura.utils.jixiv.enums.rank.PixivRankContent;
 import net.nekomura.utils.jixiv.enums.rank.PixivRankMode;
 import net.nekomura.utils.jixiv.enums.search.*;
 import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.PixivUrlBuilder;
 import okhttp3.*;
-import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class Pixiv {
     private static JSONObject getUserProfile(int id) throws IOException {
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/user/" + id + "/profile/all");
+
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "/profile/all");
+        Request.Builder rb = new Request.Builder().url(pub.build());
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
@@ -36,8 +37,12 @@ public class Pixiv {
     }
 
     private static JSONObject getUserData(int id) throws IOException {
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/user/" + id + "/profile/all");
+        pub.addParameter("full", "1");
+
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "?full=1");
+        Request.Builder rb = new Request.Builder().url(pub.build());
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
@@ -57,7 +62,10 @@ public class Pixiv {
      * @throws IOException 獲取失敗
      */
     public static User getUserInfo(int id) throws IOException {
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/user/" + id + "/profile/all");
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/user/" + id + "/profile/all");
+
+        Request.Builder rb = new Request.Builder().url(pub.build());
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
@@ -69,7 +77,9 @@ public class Pixiv {
     }
 
     public static String getToken() throws IOException {
-        String url = "https://www.pixiv.net/setting_user.php";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("setting_user.php");
+        String url = pub.build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
 
@@ -136,11 +146,23 @@ public class Pixiv {
     public static Rank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content, String date) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
+        PixivUrlBuilder pub = new PixivUrlBuilder();
 
         if (content.equals(PixivRankContent.OVERALL)) {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
+            pub.setPath("ranking.php");
+            pub.addParameter("mode", mode);
+            pub.addParameter("date", date);
+            pub.addParameter("p", page);
+            pub.addParameter("format", "json");
+            url = pub.build();
         }else {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&date=" + date + "&p=" + page + "&format=json";
+            pub.setPath("ranking.php");
+            pub.addParameter("mode", mode);
+            pub.addParameter("content", content);
+            pub.addParameter("date", date);
+            pub.addParameter("p", page);
+            pub.addParameter("format", "json");
+            url = pub.build();
         }
 
         Request.Builder rb = new Request.Builder().url(url);
@@ -171,11 +193,21 @@ public class Pixiv {
     public static Rank rank(int page, PixivRankMode mode, @NotNull PixivRankContent content) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         String url;
+        PixivUrlBuilder pub = new PixivUrlBuilder();
 
         if (content.equals(PixivRankContent.OVERALL)) {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&p=" + page + "&format=json";
+            pub.setPath("ranking.php");
+            pub.addParameter("mode", mode);
+            pub.addParameter("p", page);
+            pub.addParameter("format", "json");
+            url = pub.build();
         }else {
-            url = "https://www.pixiv.net/ranking.php?mode=" + mode.toString().toLowerCase() + "&content=" + content.toString().toLowerCase() + "&p=" + page + "&format=json";
+            pub.setPath("ranking.php");
+            pub.addParameter("mode", mode);
+            pub.addParameter("content", content);
+            pub.addParameter("p", page);
+            pub.addParameter("format", "json");
+            url = pub.build();
         }
 
         Request.Builder rb = new Request.Builder().url(url);
@@ -217,16 +249,18 @@ public class Pixiv {
      * @return 搜尋結果物件
      * @throws IOException 獲取失敗
      */
-    public static SearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artworkType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchSMode sMode, @NotNull PixivSearchType type) throws IOException {
-        String url = String.format("https://www.pixiv.net/ajax/search/%s/%s?word=%s&order=%s&mode=%s&p=%d&s_mode=%s&type=%s&lang=zh_tw",
-                artworkType.toString().toLowerCase(),
-                URLEncoder.encode(keywords, "UTF-8").replace("+", "%20"),
-                URLEncoder.encode(keywords, "UTF-8").replace("+", "%20"),
-                order.toString().toLowerCase(),
-                mode.toString().toLowerCase(),
-                page,
-                sMode.toString().toLowerCase(),
-                type.toString().toLowerCase());
+    public static SearchResult search(String keywords, int page, @NotNull PixivSearchArtworkType artworkType, PixivSearchOrder order, @NotNull PixivSearchMode mode, @NotNull PixivSearchStrictMode sMode, @NotNull PixivSearchType type) throws IOException {
+        String encodedKeywords = URLEncoder.encode(keywords, "UTF-8").replace("+", "%20");
+
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/search/" + artworkType + '/' + encodedKeywords);
+        pub.addParameter("word", encodedKeywords);
+        pub.addParameter("order", order);
+        pub.addParameter("mode", mode);
+        pub.addParameter("p", page);
+        pub.addParameter("s_mode", sMode);
+        pub.addParameter("type", type);
+        String url = pub.build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder rb = new Request.Builder().url(url);
 
@@ -270,7 +304,7 @@ public class Pixiv {
      * @throws IOException 獲取失敗
      */
     public static SearchResult search(String keywords, int page) throws IOException {
-        return search(keywords, page, PixivSearchArtworkType.ILLUSTRATIONS, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchSMode.S_TAG, PixivSearchType.ILLUST);
+        return search(keywords, page, PixivSearchArtworkType.ILLUSTRATIONS, PixivSearchOrder.NEW_TO_OLD, PixivSearchMode.SAFE, PixivSearchStrictMode.S_TAG, PixivSearchType.ILLUST);
     }
 
     /**
@@ -280,7 +314,9 @@ public class Pixiv {
      * @throws IOException 讀取網路資料失敗
      */
     public static int followUser(int id) throws IOException {
-        String url = "https://www.pixiv.net/bookmark_add.php";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("bookmark_add.php");
+        String url = pub.build();
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -319,7 +355,9 @@ public class Pixiv {
      * @throws IOException 讀取網路資料失敗
      */
     public static int unfollowUser(int id) throws IOException {
-        String url = "https://www.pixiv.net/rpc_group_setting.php";
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("rpc_group_setting.php");
+        String url = pub.build();
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -365,8 +403,13 @@ public class Pixiv {
         String type = artworkType.equals(PixivArtworkType.ILLUSTS) ? "illust" : "novel";
         String mode = searchMode.equals(PixivSearchMode.ALL) ? "all" : "r18";
 
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("ajax/follow_latest/" + type);
+        pub.addParameter("mode", mode);
+        pub.addParameter("p", page);
+
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/follow_latest/" + type + "?mode=" + mode + "&p=" + page);
+        Request.Builder rb = new Request.Builder().url(pub.build());
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);
@@ -405,8 +448,13 @@ public class Pixiv {
         String type = artworkType.equals(PixivArtworkType.ILLUSTS) ? "illust" : "novel";
         String mode = searchMode.equals(PixivSearchMode.ALL) ? "all" : "r18";
 
+        PixivUrlBuilder pub = new PixivUrlBuilder();
+        pub.setPath("aajax/mypixiv_latest/" + type);
+        pub.addParameter("mode", mode);
+        pub.addParameter("p", page);
+
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request.Builder rb = new Request.Builder().url("https://www.pixiv.net/ajax/mypixiv_latest/" + type + "?mode=" + mode + "&p=" + page);
+        Request.Builder rb = new Request.Builder().url(pub.build());
 
         rb.addHeader("Referer", "https://www.pixiv.net");
         rb.addHeader("cookie", "PHPSESSID=" + Jixiv.PHPSESSID);

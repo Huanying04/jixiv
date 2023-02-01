@@ -2,6 +2,7 @@ package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.PixivUrlBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -129,9 +130,17 @@ public class Comment {
         List<Reply> replies = new ArrayList<>();
         String url;
         if (type.equals(PixivArtworkType.ILLUSTS)) {
-            url = "https://www.pixiv.net/ajax/illusts/comments/replies?comment_id=" + this.getCommentId() +"&page=" + page;
+            PixivUrlBuilder pub = new PixivUrlBuilder();
+            pub.setPath("ajax/illusts/comments/replies");
+            pub.addParameter("comment_id", "" + this.getCommentId());
+            pub.addParameter("page", "" + page);
+            url = pub.build();
         }else if (type.equals(PixivArtworkType.NOVELS)) {
-            url = "https://www.pixiv.net/ajax/novels/comments/replies?comment_id=" + this.getCommentId() +"&page=" + page;
+            PixivUrlBuilder pub = new PixivUrlBuilder();
+            pub.setPath("ajax/novels/comments/replies");
+            pub.addParameter("comment_id", "" + this.getCommentId());
+            pub.addParameter("page", "" + page);
+            url = pub.build();
         }else {
             throw new IllegalArgumentException();
         }

@@ -22,5 +22,10 @@ public enum PixivRankContent {
     /**
      * 漫畫
      */
-    MANGA
+    MANGA;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

@@ -57,5 +57,10 @@ public enum PixivRankMode {
     /**
      * 受女性歡迎(R18)
      */
-    FEMALE_R18
+    FEMALE_R18;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

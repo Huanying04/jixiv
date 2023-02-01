@@ -17,5 +17,10 @@ public enum PixivSearchMode {
     /**
      * R-18
      */
-    R18
+    R18;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

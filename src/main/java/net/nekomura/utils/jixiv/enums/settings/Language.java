@@ -1,4 +1,4 @@
-package net.nekomura.utils.jixiv.settings;
+package net.nekomura.utils.jixiv.enums.settings;
 
 public enum Language {
     JAPANESE("ja"),

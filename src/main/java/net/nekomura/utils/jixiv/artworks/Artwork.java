@@ -3,6 +3,7 @@ package net.nekomura.utils.jixiv.artworks;
 import net.nekomura.utils.jixiv.Jixiv;
 import net.nekomura.utils.jixiv.enums.artwork.PixivArtworkType;
 import net.nekomura.utils.jixiv.exception.PixivException;
+import net.nekomura.utils.jixiv.utils.PixivUrlBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -20,10 +21,13 @@ public class Artwork {
      */
     public static JSONObject getArtworkData(int id, PixivArtworkType type) throws IOException {
         String url;
+        PixivUrlBuilder pub = new PixivUrlBuilder();
         if (type.equals(PixivArtworkType.ILLUSTS)) {
-            url = "https://www.pixiv.net/ajax/illust/" + id;
+            pub.setPath("ajax/illust/" + id);
+            url = pub.build();
         }else if (type.equals(PixivArtworkType.NOVELS)) {
-            url = "https://www.pixiv.net/ajax/novel/" + id;
+            pub.setPath("ajax/novel/" + id);
+            url = pub.build();
         }else {
             throw new IllegalArgumentException("The type must be PixivArtworkType.Illusts or PixivArtworkType.Novels");
         }

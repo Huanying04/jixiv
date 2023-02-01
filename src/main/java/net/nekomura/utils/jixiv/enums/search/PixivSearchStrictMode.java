@@ -3,7 +3,7 @@ package net.nekomura.utils.jixiv.enums.search;
 /**
  * 搜尋關鍵字限制
  */
-public enum PixivSearchSMode {
+public enum PixivSearchStrictMode {
     /**
      * 完全一致
      */
@@ -17,5 +17,10 @@ public enum PixivSearchSMode {
     /**
      * 標題、說明文字
      */
-    S_TC
+    S_TC;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

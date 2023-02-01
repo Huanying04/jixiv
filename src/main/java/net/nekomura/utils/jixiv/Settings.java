@@ -1,7 +1,7 @@
 package net.nekomura.utils.jixiv;
 
 import net.nekomura.utils.jixiv.exception.PixivException;
-import net.nekomura.utils.jixiv.settings.Language;
+import net.nekomura.utils.jixiv.enums.settings.Language;
 import okhttp3.*;
 import org.json.JSONObject;
 

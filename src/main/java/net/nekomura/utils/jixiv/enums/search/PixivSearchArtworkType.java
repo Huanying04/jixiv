@@ -22,5 +22,10 @@ public enum PixivSearchArtworkType {
     /**
      * 小說
      */
-    NOVELS
+    NOVELS;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

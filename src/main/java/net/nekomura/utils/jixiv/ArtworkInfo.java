@@ -30,38 +30,6 @@ public class ArtworkInfo {
         return data;
     }
 
-    @Deprecated
-    public IllustrationInfo toIllustrationInfo() {
-        AtomicBoolean b = new AtomicBoolean(false);
-        Iterator<String> it = data.getJSONObject("body").keys();
-        it.forEachRemaining((x) -> {
-            if (x.equals("illustId")) {
-                b.set(true);
-            }
-        });
-        if (b.get()) {
-            return new IllustrationInfo(id, data.getJSONObject("body"));
-        }else {
-            throw new IllegalArgumentException("The variable is not an IllustrationInfo");
-        }
-    }
-
-    @Deprecated
-    public NovelInfo toNovelInfo() {
-        AtomicBoolean b = new AtomicBoolean(false);
-        Iterator<String> it = data.getJSONObject("body").keys();
-        it.forEachRemaining((x) -> {
-            if (x.equals("content")) {
-                b.set(true);
-            }
-        });
-        if (b.get()) {
-            return new NovelInfo(id, data.getJSONObject("body"));
-        }else {
-            throw new IllegalArgumentException("The variable is not a NovelInfo");
-        }
-    }
-
     /**
      * 獲取作品標題
      * @return 作品標題
